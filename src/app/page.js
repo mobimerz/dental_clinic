@@ -2,7 +2,6 @@ import MotionProvider from "@/components/common/MotionProvider";
 import FloatingContact from "@/components/common/FloatingContact";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import AnnouncementBar from "@/components/home/AnnouncementBar";
 import Hero from "@/components/home/Hero";
 import TrustStats from "@/components/home/TrustStats";
 import AboutClinic from "@/components/home/AboutClinic";
@@ -22,7 +21,6 @@ export default function HomePage() {
       >
         Skip to content
       </a>
-      <AnnouncementBar />
       <Header />
       <main id="main">
         <Hero />

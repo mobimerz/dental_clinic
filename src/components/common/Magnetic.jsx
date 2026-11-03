@@ -5,14 +5,14 @@ import { motion, useReducedMotion, useSpring, useTransform } from "motion/react"
 
 // Pulls its child towards the cursor while hovered, then springs back.
 // The inner layer travels further than the outer one for a subtle depth effect.
-export default function Magnetic({ children, strength = 0.32, className = "" }) {
+export default function Magnetic({ children, strength = 0.12, className = "" }) {
   const ref = useRef(null);
   const reduce = useReducedMotion();
-  const spring = { stiffness: 230, damping: 16, mass: 0.5 };
+  const spring = { stiffness: 180, damping: 22, mass: 0.5 };
   const x = useSpring(0, spring);
   const y = useSpring(0, spring);
-  const ix = useTransform(x, (v) => v * 0.35);
-  const iy = useTransform(y, (v) => v * 0.35);
+  const ix = useTransform(x, (v) => v * 0.15);
+  const iy = useTransform(y, (v) => v * 0.15);
 
   const onMove = (e) => {
     if (reduce || e.pointerType !== "mouse" || !ref.current) return;

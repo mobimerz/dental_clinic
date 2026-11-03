@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { ArrowRight, CircleCheck } from "lucide-react";
 import Reveal from "@/components/common/Reveal";
 import SplitReveal from "@/components/common/SplitReveal";
+import Magnetic from "@/components/common/Magnetic";
 import { Eyebrow } from "@/components/common/SectionHeading";
 import { FloatingTooth, Sparkle } from "@/components/common/FloatingShapes";
 import { clinicImages } from "@/data/clinic";
@@ -113,18 +114,30 @@ export default function AboutClinic() {
             ))}
           </ul>
 
-          <Reveal delay={0.4}>
-            <a
-              href="#treatments"
-              className="group mt-10 inline-flex items-center gap-3 text-[0.95rem] font-semibold text-secondary"
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-white transition-all duration-500 ease-premium group-hover:bg-primary group-hover:shadow-glow">
-                <ArrowRight className="h-5 w-5 transition-transform duration-500 group-hover:-rotate-45" aria-hidden="true" />
-              </span>
-              <span className="border-b border-secondary/20 pb-0.5 transition-colors group-hover:border-primary group-hover:text-primary">
-                Learn More About Our Care
-              </span>
-            </a>
+          <Reveal delay={0.4} className="mt-10">
+            <Magnetic>
+              <a
+                href="#treatments"
+                className="group relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-white py-1.5 pl-1.5 pr-7 text-[0.95rem] font-semibold text-secondary shadow-soft ring-1 ring-line transition-shadow duration-500 ease-premium hover:shadow-glow hover:ring-primary"
+              >
+                {/* Teal fill grows out of the arrow circle to cover the whole pill */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-y-1.5 left-1.5 w-12 rounded-full bg-gradient-to-r from-primary to-[#0A97A6] transition-[width] duration-700 ease-premium group-hover:w-[calc(100%-0.75rem)]"
+                />
+                <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full text-white">
+                  <ArrowRight
+                    className="h-5 w-5 transition-transform duration-500 ease-premium group-hover:translate-x-8"
+                    aria-hidden="true"
+                  />
+                  <ArrowRight
+                    className="absolute h-5 w-5 -translate-x-8 transition-transform duration-500 ease-premium group-hover:translate-x-0"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="relative transition-colors duration-500 group-hover:text-white">Learn More About Our Care</span>
+              </a>
+            </Magnetic>
           </Reveal>
         </div>
       </div>
