@@ -112,13 +112,11 @@ function ReviewCarousel({ items }) {
             Real patients · Real feedback
           </span>
         </span>
-        <span className="text-sm font-semibold tabular-nums text-muted">
-          <span className="text-secondary">{String(index + 1).padStart(2, "0")}</span> / {String(items.length).padStart(2, "0")}
-        </span>
       </div>
 
       {/* Deck: two ghost cards peek out behind the active review */}
-      <div className="relative mt-6 min-h-[230px] [perspective:1200px]">
+      {/* Fixed height so the box never grows; long reviews scroll inside the card */}
+      <div className="relative mt-6 h-[300px] [perspective:1200px]">
         <span aria-hidden="true" className="absolute inset-x-6 -bottom-3 top-4 rotate-[1.5deg] rounded-3xl bg-soft ring-1 ring-line" />
         <span aria-hidden="true" className="absolute inset-x-3 -bottom-1.5 top-2 -rotate-1 rounded-3xl bg-white ring-1 ring-line" />
 
@@ -137,7 +135,7 @@ function ReviewCarousel({ items }) {
               if (info.offset.x < -70 || info.velocity.x < -400) paginate(1);
               else if (info.offset.x > 70 || info.velocity.x > 400) paginate(-1);
             }}
-            className="relative cursor-grab rounded-3xl bg-white p-6 ring-1 ring-line active:cursor-grabbing sm:p-7"
+            className="relative flex h-full cursor-grab flex-col rounded-3xl bg-white p-6 ring-1 ring-line active:cursor-grabbing sm:p-7"
             aria-live="polite"
           >
             <span className="flex gap-0.5" role="img" aria-label={`${review.rating} out of 5 stars`}>
@@ -154,7 +152,10 @@ function ReviewCarousel({ items }) {
               ))}
             </span>
             <blockquote
-              className={`mt-4 leading-relaxed text-secondary ${review.text.length > 320 ? "text-[0.95rem] sm:text-base" : "text-lg sm:text-xl"}`}
+              data-lenis-prevent
+              tabIndex={0}
+              aria-label={`Review by ${review.name}`}
+              className="scrollbar-soft mt-4 min-h-0 flex-1 cursor-auto overflow-y-auto pb-4 pr-3 text-base leading-relaxed text-secondary [mask-image:linear-gradient(to_bottom,black_calc(100%-1.5rem),transparent)] sm:text-lg"
             >
               <span className="sr-only">{review.text}</span>
               <span aria-hidden="true">
@@ -183,7 +184,7 @@ function ReviewCarousel({ items }) {
                 </a>
               )}
             </blockquote>
-            <figcaption className="mt-6 flex items-center gap-3">
+            <figcaption className="mt-4 flex shrink-0 items-center gap-3">
               <motion.span
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}

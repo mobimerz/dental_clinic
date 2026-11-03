@@ -316,6 +316,13 @@ html.lenis body {
   }
 }
 
+/* Slim teal scrollbar for small scroll areas */
+@utility scrollbar-soft {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) transparent;
+  overscroll-behavior: contain;
+}
+
 /* Fine dotted texture used behind a few sections */
 @utility bg-dots {
   background-image: radial-gradient(rgb(8 127 140 / 0.14) 1px, transparent 1px);
