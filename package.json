@@ -1,0 +1,22 @@
+{
+  "name": "a-zee-dental",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "lucide-react": "^1.67.0",
+    "motion": "^14.9.0",
+    "next": "^16.4.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.4"
+  }
+}

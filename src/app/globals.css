@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #087f8c;
+  --color-primary-dark: #066a75;
+  --color-secondary: #0b3440;
+  --color-soft: #f3fafa;
+  --color-accent: #b9e5e2;
+  --color-ink: #18333b;
+  --color-muted: #6f858a;
+  --color-line: #e2eeee;
+  --color-star: #f5b301;
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-soft: 0 1px 2px rgb(11 52 64 / 0.04), 0 8px 24px -8px rgb(11 52 64 / 0.1);
+  --shadow-lift: 0 2px 4px rgb(11 52 64 / 0.04), 0 24px 48px -16px rgb(11 52 64 / 0.22);
+  --shadow-glow: 0 10px 30px -10px rgb(8 127 140 / 0.55);
+
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-secondary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+/* Fine dotted texture used behind a few sections */
+@utility bg-dots {
+  background-image: radial-gradient(rgb(8 127 140 / 0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
