@@ -13,7 +13,6 @@ import {
   CrownBridgeIcon,
   ImplantIcon,
   RootCanalIcon,
-  ToothIcon,
   WisdomToothIcon,
 } from "@/components/common/DentalIcons";
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from "@/lib/gsap";
@@ -129,61 +128,6 @@ function TreatmentCard({ t, i }) {
   );
 }
 
-// Two rows of treatment names that slide in opposite directions as you scroll,
-// leaning into the direction of travel when scrolling fast.
-function TreatmentMarquee() {
-  const ref = useRef(null);
-  const names = treatments.map((t) => t.title);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add(MOTION_OK, () => {
-        const rows = gsap.utils.toArray(".marquee-row", ref.current);
-        const st = { trigger: ref.current, start: "top bottom", end: "bottom top", scrub: 0.6 };
-        gsap.fromTo(rows[0], { xPercent: 0 }, { xPercent: -28, ease: "none", scrollTrigger: st });
-        gsap.fromTo(rows[1], { xPercent: -28 }, { xPercent: 0, ease: "none", scrollTrigger: st });
-
-        const skew = gsap.quickTo(rows, "skewX", { duration: 0.5, ease: "power3" });
-        ScrollTrigger.create({
-          trigger: ref.current,
-          start: "top bottom",
-          end: "bottom top",
-          onUpdate: (self) => skew(gsap.utils.clamp(-10, 10, self.getVelocity() / -260)),
-          onLeave: () => skew(0),
-          onLeaveBack: () => skew(0),
-        });
-      });
-      return () => mm.revert();
-    },
-    { scope: ref }
-  );
-
-  const Row = ({ outline }) => (
-    <div className="marquee-row flex w-max items-center gap-8 whitespace-nowrap will-change-transform">
-      {[...names, ...names].map((name, i) => (
-        <span key={i} className="flex items-center gap-8">
-          <span
-            className={`text-5xl font-extrabold tracking-tight sm:text-7xl lg:text-8xl ${
-              outline ? "text-transparent [-webkit-text-stroke:1.5px_rgb(8_127_140/0.35)]" : "text-secondary/[0.07]"
-            }`}
-          >
-            {name}
-          </span>
-          <ToothIcon className="h-8 w-8 shrink-0 text-primary/30 sm:h-12 sm:w-12" />
-        </span>
-      ))}
-    </div>
-  );
-
-  return (
-    <div ref={ref} aria-hidden="true" className="mt-24 flex flex-col gap-4 overflow-hidden py-4 select-none">
-      <Row />
-      <Row outline />
-    </div>
-  );
-}
-
 export default function Treatments() {
   const grid = useRef(null);
 
@@ -206,7 +150,7 @@ export default function Treatments() {
   );
 
   return (
-    <section id="treatments" aria-labelledby="treatments-title" className="relative overflow-clip bg-soft pt-24 sm:pt-28 lg:pt-32">
+    <section id="treatments" aria-labelledby="treatments-title" className="relative overflow-clip bg-soft py-24 sm:py-28 lg:py-32">
       <div aria-hidden="true" className="bg-dots absolute inset-x-0 top-0 h-64 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <FloatingTooth className="left-[4%] top-40 hidden text-primary/20 lg:block" size="h-14 w-14" speed={0.5} />
       <FloatingTooth className="right-[6%] top-[45%] hidden text-accent lg:block" size="h-10 w-10" duration={9} speed={-0.4} />
@@ -229,8 +173,6 @@ export default function Treatments() {
         </ul>
       </div>
 
-      <TreatmentMarquee />
-      <div className="h-16 sm:h-20 lg:h-24" />
     </section>
   );
 }

@@ -60,7 +60,6 @@ function RevealImage({ image, className, sizes, delay = 0, caption, position = "
   return (
     <figure
       ref={ref}
-      data-cursor-label="View"
       className={`group relative overflow-hidden rounded-[2rem] bg-accent ${className}`}
     >
       <div className="g-parallax absolute inset-x-0 -inset-y-[9%]">

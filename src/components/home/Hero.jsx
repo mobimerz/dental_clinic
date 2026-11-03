@@ -355,7 +355,6 @@ export default function Hero() {
                   dragElastic={0.5}
                   whileHover={{ scale: 1.07, rotate: -3 }}
                   whileTap={{ scale: 0.95, cursor: "grabbing" }}
-                  data-cursor-label="Drag"
                   className="cursor-grab touch-none"
                 >
                   <motion.div
