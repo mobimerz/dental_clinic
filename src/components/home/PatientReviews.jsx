@@ -98,15 +98,20 @@ function ReviewCarousel({ items }) {
       </span>
 
       <div className="relative flex items-center justify-between">
-        <motion.span
-          key={`q${index}`}
-          initial={{ scale: 0.4, rotate: -30, opacity: 0 }}
-          animate={{ scale: 1, rotate: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 16 }}
-          className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-white shadow-glow"
-        >
-          <Quote className="h-6 w-6" aria-hidden="true" />
-        </motion.span>
+        <span className="flex items-center gap-3">
+          <motion.span
+            key={`q${index}`}
+            initial={{ scale: 0.4, rotate: -30, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 16 }}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-glow"
+          >
+            <Quote className="h-6 w-6" aria-hidden="true" />
+          </motion.span>
+          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-primary sm:text-sm">
+            Real patients · Real feedback
+          </span>
+        </span>
         <span className="text-sm font-semibold tabular-nums text-muted">
           <span className="text-secondary">{String(index + 1).padStart(2, "0")}</span> / {String(items.length).padStart(2, "0")}
         </span>
@@ -148,7 +153,9 @@ function ReviewCarousel({ items }) {
                 </motion.span>
               ))}
             </span>
-            <blockquote className="mt-4 text-lg leading-relaxed text-secondary sm:text-xl">
+            <blockquote
+              className={`mt-4 leading-relaxed text-secondary ${review.text.length > 320 ? "text-[0.95rem] sm:text-base" : "text-lg sm:text-xl"}`}
+            >
               <span className="sr-only">{review.text}</span>
               <span aria-hidden="true">
                 “
