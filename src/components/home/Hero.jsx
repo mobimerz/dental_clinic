@@ -6,10 +6,9 @@ import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } fro
 import { CalendarCheck, MapPin } from "lucide-react";
 import Button from "@/components/common/Button";
 import StarRating from "@/components/common/StarRating";
-import Counter from "@/components/common/Counter";
 import Tilt from "@/components/common/Tilt";
 import Tooth3D, { GlassBubble } from "@/components/common/Tooth3D";
-import { ToothIcon, ImplantIcon } from "@/components/common/DentalIcons";
+import { ToothIcon } from "@/components/common/DentalIcons";
 import { FloatingTooth, GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
 import { gsap, SplitText, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { clinic, clinicImages } from "@/data/clinic";
@@ -63,7 +62,7 @@ export default function Hero() {
         const chars = SplitText.create(q(".hero-line-1"), { type: "chars", charsClass: "inline-block" });
         const copy = SplitText.create(q(".hero-copy"), { type: "words" });
 
-        const tl = gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.15 });
+        const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
         tl.from(q(".hero-badge"), { y: -24, scale: 0.85, opacity: 0, duration: 1 })
           .from(q(".hero-badge-icon"), { rotate: -200, scale: 0, duration: 1.1, ease: "back.out(2)" }, "<0.1")
           .from(
@@ -85,9 +84,7 @@ export default function Hero() {
             "-=1"
           )
           .from(copy.words, { y: 18, opacity: 0, filter: "blur(6px)", duration: 0.9, stagger: 0.025 }, "-=1.1")
-          .from(q(".hero-cta > *"), { y: 34, opacity: 0, scale: 0.9, stagger: 0.12, duration: 1 }, "-=0.85")
-          .from(q(".hero-trust"), { y: 40, opacity: 0, rotateX: -35, transformPerspective: 900, duration: 1.1 }, "-=0.8")
-          .from(q(".hero-trust li"), { y: 18, opacity: 0, stagger: 0.1, duration: 0.8 }, "-=0.8");
+          .from(q(".hero-cta > *"), { y: 34, opacity: 0, scale: 0.9, stagger: 0.12, duration: 1 }, "-=0.85");
 
         // Scrolling away: copy lifts and fades, the portrait sinks and shrinks a touch.
         const out = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
@@ -117,7 +114,7 @@ export default function Hero() {
       >
         {/* Background */}
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-b from-[#E6F5F4] via-soft to-white" />
-        <div aria-hidden="true" className="bg-aurora absolute inset-0 -z-10 opacity-90" />
+        <div aria-hidden="true" className="bg-aurora absolute -inset-[20%] -z-10 opacity-90" />
         <div aria-hidden="true" className="bg-dots absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_60%)]" />
         <GlowOrb className="-left-32 top-10 -z-10 h-[420px] w-[420px] bg-accent/60" x={40} y={30} />
         <GlowOrb className="-right-24 bottom-0 -z-10 h-[380px] w-[380px] bg-primary/15" duration={22} x={-30} y={-20} />
@@ -184,35 +181,6 @@ export default function Hero() {
                   Explore Treatments
                 </Button>
               </div>
-
-              {/* Trust indicators */}
-              <ul className="hero-trust mt-10 grid grid-cols-3 divide-x divide-line rounded-3xl bg-white/70 py-4 shadow-soft ring-1 ring-line backdrop-blur sm:max-w-lg">
-                <li className="group flex flex-col items-center gap-1 px-2 text-center">
-                  <span className="text-xl font-bold text-secondary transition-transform duration-500 ease-premium group-hover:-translate-y-0.5 group-hover:scale-110 sm:text-2xl">
-                    <Counter value={clinic.rating.value} decimals={1} duration={2.2} />
-                  </span>
-                  <StarRating value={clinic.rating.value} size="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                  <span className="text-[0.7rem] font-medium text-muted sm:text-xs">Google Rating</span>
-                </li>
-                <li className="group flex flex-col items-center gap-1 px-2 text-center">
-                  <span className="text-xl font-bold text-secondary transition-transform duration-500 ease-premium group-hover:-translate-y-0.5 group-hover:scale-110 sm:text-2xl">
-                    <Counter value={clinic.rating.count} duration={2.4} />
-                  </span>
-                  <span className="text-[0.7rem] font-medium leading-tight text-muted sm:text-xs">
-                    Patient
-                    <br />
-                    Reviews
-                  </span>
-                </li>
-                <li className="group flex flex-col items-center gap-1 px-2 text-center">
-                  <ImplantIcon className="h-7 w-7 text-primary transition-transform duration-700 ease-premium group-hover:rotate-[360deg] group-hover:scale-110" />
-                  <span className="text-[0.7rem] font-medium leading-tight text-muted sm:text-xs">
-                    Dental &amp;
-                    <br />
-                    Implant Care
-                  </span>
-                </li>
-              </ul>
             </div>
           </div>
 
@@ -239,14 +207,12 @@ export default function Hero() {
               <motion.div
                 aria-hidden="true"
                 initial={{ opacity: 0, scale: 0.4 }}
-                animate={{ opacity: 1, scale: 1, rotate: 360 }}
-                transition={{
-                  opacity: { duration: 0.8, delay: 0.6 },
-                  scale: { duration: 1.2, delay: 0.6, ease },
-                  rotate: { duration: 60, repeat: Infinity, ease: "linear" },
-                }}
-                className="h-full w-full rounded-full border-2 border-dashed border-primary/25"
-              />
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.2, delay: 0.6, ease }}
+                className="h-full w-full"
+              >
+                <div className="anim-spin-slow h-full w-full rounded-full border-2 border-dashed border-primary/25" />
+              </motion.div>
             </Depth>
             <Depth depth={28} className="pointer-events-none absolute inset-0">
               <FloatingTooth className="-left-8 top-16 text-primary/40 sm:-left-14" size="h-12 w-12" />
@@ -326,7 +292,7 @@ export default function Hero() {
                 className="block"
                 aria-label={`Rated ${clinic.rating.value} out of 5 on Google from ${clinic.rating.count} reviews`}
               >
-                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
+                <div className="anim-float">
                   <Tilt max={14} scale={1.06} radius="rounded-2xl" shadow={false}>
                     <div className="flex items-center gap-3 rounded-2xl bg-white p-3 pr-5 shadow-lift ring-1 ring-line transition-shadow hover:ring-accent">
                       <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-soft text-2xl font-extrabold text-primary">
@@ -338,7 +304,7 @@ export default function Hero() {
                       </span>
                     </div>
                   </Tilt>
-                </motion.div>
+                </div>
               </motion.a>
             </Depth>
 
@@ -357,24 +323,19 @@ export default function Hero() {
                   whileTap={{ scale: 0.95, cursor: "grabbing" }}
                   className="cursor-grab touch-none"
                 >
-                  <motion.div
-                    animate={{ y: [0, 8, 0] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                    className="flex items-center gap-2.5 rounded-2xl bg-secondary px-4 py-3 text-white shadow-lift"
+                  <div
+                    className="anim-float flex items-center gap-2.5 rounded-2xl bg-secondary px-4 py-3 text-white shadow-lift"
+                    style={{ "--fy": "8px", animationDuration: "6s", animationDelay: "0.6s" }}
                   >
-                    <motion.span
-                      animate={{ rotate: [0, -12, 10, 0] }}
-                      transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, ease: "easeInOut" }}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10"
-                    >
+                    <span className="anim-wiggle flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
                       <ToothIcon className="h-5 w-5 text-accent" />
-                    </motion.span>
+                    </span>
                     <span className="text-[0.8rem] font-semibold leading-tight">
                       Personalized
                       <br />
                       Dental Care
                     </span>
-                  </motion.div>
+                  </div>
                 </motion.div>
               </motion.div>
             </Depth>
@@ -386,17 +347,12 @@ export default function Hero() {
           aria-label="Scroll to next section"
           className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 lg:block"
         >
-          <motion.span
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-secondary/20 pt-2"
+          <span
+            className="anim-float flex h-10 w-6 items-start justify-center rounded-full border-2 border-secondary/20 pt-2"
+            style={{ "--fy": "6px", animationDuration: "2s" }}
           >
-            <motion.span
-              animate={{ y: [0, 12, 0], opacity: [1, 0.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="h-2 w-1 rounded-full bg-primary"
-            />
-          </motion.span>
+            <span className="anim-scroll-dot h-2 w-1 rounded-full bg-primary" />
+          </span>
         </a>
       </section>
     </PointerContext.Provider>

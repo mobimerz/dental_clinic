@@ -11,8 +11,14 @@ import ClinicGallery from "@/components/home/ClinicGallery";
 import PatientReviews from "@/components/home/PatientReviews";
 import AppointmentCTA from "@/components/home/AppointmentCTA";
 import ContactSection from "@/components/home/ContactSection";
+import { getGoogleReviews } from "@/lib/googleReviews";
 
-export default function HomePage() {
+// Re-fetch Google reviews at most twice a day (keeps the page static and fast).
+export const revalidate = 43200;
+
+export default async function HomePage() {
+  const google = await getGoogleReviews();
+
   return (
     <MotionProvider>
       <a
@@ -29,7 +35,7 @@ export default function HomePage() {
         <Treatments />
         <WhyChooseUs />
         <ClinicGallery />
-        <PatientReviews />
+        <PatientReviews google={google} />
         <AppointmentCTA />
         <ContactSection />
       </main>

@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
 import { CalendarCheck } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import Button from "@/components/common/Button";
@@ -142,17 +141,15 @@ export default function ClinicGallery() {
             variant="tilt"
             className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] bg-primary p-7 text-white md:col-span-3"
           >
-            <motion.span
+            <span
               aria-hidden="true"
-              animate={{ scale: [1, 1.25, 1], rotate: [0, 30, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-white/10"
+              className="anim-sway absolute -right-10 -top-10 h-36 w-36 rounded-full bg-white/10"
+              style={{ "--s": 1.25 }}
             />
-            <motion.span
+            <span
               aria-hidden="true"
-              animate={{ scale: [1, 1.15, 1] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-white/[0.06]"
+              className="anim-sway absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-white/[0.06]"
+              style={{ "--to": "0deg", "--s": 1.15, animationDuration: "6s", animationDelay: "1s" }}
             />
             <p className="relative text-sm font-medium text-white/75">Visit us at</p>
             <div className="relative">
