@@ -4,17 +4,17 @@ import Button from "@/components/common/Button";
 import Reveal from "@/components/common/Reveal";
 import { clinic, whatsappLink } from "@/data/clinic";
 
-function InfoRow({ icon: Icon, title, children }) {
+function InfoRow({ icon: Icon, title, children, delay = 0 }) {
   return (
-    <div className="flex gap-4">
-      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-soft text-primary ring-1 ring-accent/60">
-        <Icon className="h-5 w-5" aria-hidden="true" />
+    <Reveal delay={delay} y={20} className="group flex gap-4">
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-soft text-primary ring-1 ring-accent/60 transition-all duration-500 ease-premium group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-primary group-hover:text-white group-hover:shadow-glow">
+        <Icon className="h-5 w-5 group-hover:icon-draw" aria-hidden="true" />
       </span>
       <div className="min-w-0">
         <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-muted">{title}</h3>
         <div className="mt-1.5 text-[0.98rem] leading-relaxed text-secondary">{children}</div>
       </div>
-    </div>
+    </Reveal>
   );
 }
 
@@ -39,7 +39,7 @@ export default function ContactSection() {
               </address>
             </InfoRow>
 
-            <InfoRow icon={Phone} title="Phone">
+            <InfoRow icon={Phone} title="Phone" delay={0.1}>
               <a href={clinic.phone.tel} className="font-semibold transition-colors hover:text-primary">
                 {clinic.phone.display}
               </a>
@@ -53,7 +53,7 @@ export default function ContactSection() {
               </a>
             </InfoRow>
 
-            <InfoRow icon={Clock} title="Clinic Timings">
+            <InfoRow icon={Clock} title="Clinic Timings" delay={0.2}>
               <dl className="space-y-2.5">
                 {clinic.hours.map((h) => (
                   <div key={h.days} className="flex flex-col sm:flex-row sm:gap-4">
@@ -81,7 +81,7 @@ export default function ContactSection() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.12} className="relative min-h-[380px] overflow-hidden rounded-[2rem] bg-soft shadow-soft ring-1 ring-line lg:min-h-full">
+          <Reveal delay={0.12} variant="clip" className="relative min-h-[380px] overflow-hidden rounded-[2rem] bg-soft shadow-soft ring-1 ring-line lg:min-h-full">
             <iframe
               title={`Map showing the location of ${clinic.name}`}
               src={clinic.links.mapEmbed}
@@ -94,14 +94,15 @@ export default function ContactSection() {
               href={clinic.links.googleMaps}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3 rounded-2xl bg-white/95 p-4 shadow-lift backdrop-blur transition hover:ring-2 hover:ring-accent sm:left-auto sm:max-w-xs"
+              className="group absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3 rounded-2xl bg-white/95 p-4 shadow-lift backdrop-blur transition duration-500 ease-premium hover:-translate-y-1 hover:ring-2 hover:ring-accent sm:left-auto sm:max-w-xs"
             >
               <span className="min-w-0">
                 <span className="block truncate text-sm font-bold text-secondary">{clinic.name}</span>
                 <span className="block text-xs text-muted">Open in Google Maps</span>
               </span>
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-                <MapPin className="h-4 w-4" aria-hidden="true" />
+              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+                <span aria-hidden="true" className="absolute inset-0 animate-ping rounded-full bg-primary/40 [animation-duration:2.2s]" />
+                <MapPin className="relative h-4 w-4 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:scale-110" aria-hidden="true" />
               </span>
             </a>
           </Reveal>

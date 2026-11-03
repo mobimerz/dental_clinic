@@ -1,19 +1,21 @@
 import { ArrowUpRight, Clock, MapPin, MessageCircle, Phone } from "lucide-react";
 import Logo from "@/components/common/Logo";
+import Reveal from "@/components/common/Reveal";
 import StarRating from "@/components/common/StarRating";
 import { clinic, navLinks, whatsappLink } from "@/data/clinic";
 import { treatments } from "@/data/treatments";
 
-function Column({ title, children }) {
+function Column({ title, children, delay = 0 }) {
   return (
-    <div>
+    <Reveal delay={delay} variant="tilt">
       <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-accent">{title}</h2>
       <div className="mt-5">{children}</div>
-    </div>
+    </Reveal>
   );
 }
 
-const linkClass = "text-[0.93rem] text-white/65 transition-colors duration-300 hover:text-white";
+const linkClass =
+  "inline-block text-[0.93rem] text-white/65 transition-all duration-300 ease-premium hover:translate-x-1 hover:text-white";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -21,7 +23,7 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-secondary pb-28 pt-20 text-white sm:pb-10">
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
-      <div aria-hidden="true" className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-primary/25 blur-3xl" />
+      <div aria-hidden="true" data-speed="0.4" className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-primary/25 blur-3xl" />
 
       <div className="container-page relative">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_1fr_1.2fr]">
@@ -45,7 +47,7 @@ export default function Footer() {
             </a>
           </div>
 
-          <Column title="Quick Links">
+          <Column title="Quick Links" delay={0.1}>
             <ul className="space-y-3">
               {navLinks.map((l) => (
                 <li key={l.href}>
@@ -62,7 +64,7 @@ export default function Footer() {
             </ul>
           </Column>
 
-          <Column title="Treatments">
+          <Column title="Treatments" delay={0.2}>
             <ul className="space-y-3">
               {treatments.map((t) => (
                 <li key={t.slug}>
@@ -74,7 +76,7 @@ export default function Footer() {
             </ul>
           </Column>
 
-          <Column title="Contact">
+          <Column title="Contact" delay={0.3}>
             <ul className="space-y-4 text-[0.93rem]">
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />

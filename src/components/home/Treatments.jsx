@@ -1,16 +1,24 @@
 "use client";
 
+import { useRef } from "react";
+import Image from "next/image";
 import { motion } from "motion/react";
 import { ArrowUpRight, ShieldCheck, Smile, Sparkles } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
+import Tilt from "@/components/common/Tilt";
+import Magnetic from "@/components/common/Magnetic";
+import { FloatingTooth, Sparkle } from "@/components/common/FloatingShapes";
 import {
   BracesIcon,
   CrownBridgeIcon,
   ImplantIcon,
   RootCanalIcon,
+  ToothIcon,
   WisdomToothIcon,
 } from "@/components/common/DentalIcons";
+import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { treatments } from "@/data/treatments";
+import { clinicImages } from "@/data/clinic";
 import { selectTreatment } from "@/lib/booking";
 
 const icons = {
@@ -24,19 +32,186 @@ const icons = {
   shield: ShieldCheck,
 };
 
-const card = {
-  hidden: { opacity: 0, y: 30 },
-  show: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: (i % 4) * 0.08, ease: [0.22, 1, 0.36, 1] },
-  }),
+// Clinic photos that bloom in behind a card's content on hover.
+const hoverImages = [
+  clinicImages.treatmentRoom,
+  clinicImages.dentistAtWork,
+  clinicImages.treatmentRoomAlt,
+  clinicImages.reception,
+];
+
+const iconMotion = {
+  rest: { rotate: 0, scale: 1, y: 0 },
+  hover: { rotate: [0, -14, 10, -4, 0], scale: 1.14, y: -2, transition: { duration: 0.8, ease: "easeInOut" } },
 };
 
-export default function Treatments() {
+function TreatmentCard({ t, i }) {
+  const Icon = icons[t.icon];
+  const photo = hoverImages[i % hoverImages.length];
   return (
-    <section id="treatments" aria-labelledby="treatments-title" className="relative bg-soft py-24 sm:py-28 lg:py-32">
+    <Tilt max={10} scale={1.03} className="h-full">
+      <motion.article
+        initial="rest"
+        whileHover="hover"
+        animate="rest"
+        className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white p-7 shadow-soft ring-1 ring-line transition-all duration-500 ease-premium hover:-translate-y-2 hover:shadow-lift hover:ring-accent"
+      >
+        {/* Photo bloom: a circular mask grows from the cursor */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 [clip-path:circle(0%_at_var(--mx,50%)_var(--my,50%))] transition-[clip-path] duration-[900ms] ease-premium group-hover:[clip-path:circle(150%_at_var(--mx,50%)_var(--my,50%))]"
+        >
+          <Image
+            src={photo.src}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 300px, (min-width: 640px) 50vw, 100vw"
+            className="scale-125 object-cover opacity-[0.13] transition-transform duration-[1.4s] ease-premium group-hover:scale-100"
+          />
+          <span className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/70 to-white" />
+        </span>
+        {/* Cursor spotlight */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 [background:radial-gradient(320px_circle_at_var(--mx,50%)_var(--my,50%),rgb(185_229_226/0.55),transparent_45%)]"
+        />
+        {/* Hover wash */}
+        <span
+          aria-hidden="true"
+          className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent/0 blur-2xl transition-all duration-700 group-hover:bg-accent/60"
+        />
+
+        <Magnetic strength={0.5} className="relative self-start">
+          <span className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-soft text-primary ring-1 ring-accent/60 transition-all duration-500 ease-premium group-hover:-rotate-[8deg] group-hover:scale-110 group-hover:bg-primary group-hover:text-white group-hover:shadow-glow">
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 rounded-2xl ring-2 ring-primary/40 opacity-0 group-hover:animate-ping group-hover:opacity-100 [animation-duration:1.4s] [animation-iteration-count:1]"
+            />
+            <motion.span variants={iconMotion} className="flex">
+              <Icon className="h-7 w-7 group-hover:icon-draw" aria-hidden="true" />
+            </motion.span>
+          </span>
+        </Magnetic>
+        <span className="absolute right-7 top-8 overflow-hidden text-sm font-semibold text-line transition-colors duration-500 group-hover:text-accent">
+          <span className="block transition-transform duration-500 ease-premium group-hover:-translate-y-full">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <span aria-hidden="true" className="absolute inset-0 block translate-y-full text-primary transition-transform duration-500 ease-premium group-hover:translate-y-0">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+        </span>
+        <h3 className="relative mt-6 text-lg font-bold text-secondary transition-transform duration-500 ease-premium group-hover:translate-x-1">
+          {t.title}
+        </h3>
+        <p className="relative mt-2.5 flex-1 text-[0.92rem] leading-relaxed text-muted">{t.description}</p>
+        <a
+          href="#appointment"
+          onClick={() => selectTreatment(t.title)}
+          className="relative mt-6 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-primary"
+          aria-label={`Learn more about ${t.title} and send an enquiry`}
+        >
+          <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1.5px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-500 group-hover:bg-[length:100%_1.5px]">
+            Learn More
+          </span>
+          <span className="relative flex h-6 w-6 items-center justify-center overflow-hidden rounded-full transition-colors duration-500 group-hover:bg-primary group-hover:text-white">
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform duration-500 ease-premium group-hover:-translate-y-6 group-hover:translate-x-6"
+              aria-hidden="true"
+            />
+            <ArrowUpRight
+              className="absolute h-4 w-4 -translate-x-6 translate-y-6 transition-transform duration-500 ease-premium group-hover:translate-x-0 group-hover:translate-y-0"
+              aria-hidden="true"
+            />
+          </span>
+        </a>
+      </motion.article>
+    </Tilt>
+  );
+}
+
+// Two rows of treatment names that slide in opposite directions as you scroll,
+// leaning into the direction of travel when scrolling fast.
+function TreatmentMarquee() {
+  const ref = useRef(null);
+  const names = treatments.map((t) => t.title);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add(MOTION_OK, () => {
+        const rows = gsap.utils.toArray(".marquee-row", ref.current);
+        const st = { trigger: ref.current, start: "top bottom", end: "bottom top", scrub: 0.6 };
+        gsap.fromTo(rows[0], { xPercent: 0 }, { xPercent: -28, ease: "none", scrollTrigger: st });
+        gsap.fromTo(rows[1], { xPercent: -28 }, { xPercent: 0, ease: "none", scrollTrigger: st });
+
+        const skew = gsap.quickTo(rows, "skewX", { duration: 0.5, ease: "power3" });
+        ScrollTrigger.create({
+          trigger: ref.current,
+          start: "top bottom",
+          end: "bottom top",
+          onUpdate: (self) => skew(gsap.utils.clamp(-10, 10, self.getVelocity() / -260)),
+          onLeave: () => skew(0),
+          onLeaveBack: () => skew(0),
+        });
+      });
+      return () => mm.revert();
+    },
+    { scope: ref }
+  );
+
+  const Row = ({ outline }) => (
+    <div className="marquee-row flex w-max items-center gap-8 whitespace-nowrap will-change-transform">
+      {[...names, ...names].map((name, i) => (
+        <span key={i} className="flex items-center gap-8">
+          <span
+            className={`text-5xl font-extrabold tracking-tight sm:text-7xl lg:text-8xl ${
+              outline ? "text-transparent [-webkit-text-stroke:1.5px_rgb(8_127_140/0.35)]" : "text-secondary/[0.07]"
+            }`}
+          >
+            {name}
+          </span>
+          <ToothIcon className="h-8 w-8 shrink-0 text-primary/30 sm:h-12 sm:w-12" />
+        </span>
+      ))}
+    </div>
+  );
+
+  return (
+    <div ref={ref} aria-hidden="true" className="mt-24 flex flex-col gap-4 overflow-hidden py-4 select-none">
+      <Row />
+      <Row outline />
+    </div>
+  );
+}
+
+export default function Treatments() {
+  const grid = useRef(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add(MOTION_OK, () => {
+        const cards = gsap.utils.toArray(".treatment-card", grid.current);
+        gsap.set(cards, { opacity: 0, y: 90, rotateX: -32, transformPerspective: 1000, transformOrigin: "50% 0%" });
+        ScrollTrigger.batch(cards, {
+          start: "top 92%",
+          once: true,
+          onEnter: (batch) =>
+            gsap.to(batch, { opacity: 1, y: 0, rotateX: 0, duration: 1.2, stagger: 0.1, ease: "expo.out", overwrite: true }),
+        });
+      });
+      return () => mm.revert();
+    },
+    { scope: grid }
+  );
+
+  return (
+    <section id="treatments" aria-labelledby="treatments-title" className="relative overflow-clip bg-soft pt-24 sm:pt-28 lg:pt-32">
       <div aria-hidden="true" className="bg-dots absolute inset-x-0 top-0 h-64 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+      <FloatingTooth className="left-[4%] top-40 hidden text-primary/20 lg:block" size="h-14 w-14" speed={0.5} />
+      <FloatingTooth className="right-[6%] top-[45%] hidden text-accent lg:block" size="h-10 w-10" duration={9} speed={-0.4} />
+      <Sparkle className="right-[18%] top-28 hidden h-5 w-5 text-primary/50 md:block" speed={0.3} />
+
       <div className="container-page relative">
         <SectionHeading
           id="treatments-title"
@@ -45,52 +220,17 @@ export default function Treatments() {
           description="From preventive check-ups to implants and smile makeovers, explore the treatments available at A-Zee Dental."
         />
 
-        <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {treatments.map((t, i) => {
-            const Icon = icons[t.icon];
-            return (
-              <motion.li
-                key={t.slug}
-                custom={i}
-                variants={card}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-60px" }}
-              >
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white p-7 shadow-soft ring-1 ring-line transition-all duration-500 ease-premium hover:-translate-y-2 hover:shadow-lift hover:ring-accent">
-                  {/* Hover wash */}
-                  <span
-                    aria-hidden="true"
-                    className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent/0 blur-2xl transition-all duration-700 group-hover:bg-accent/60"
-                  />
-                  <span className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-soft text-primary ring-1 ring-accent/60 transition-all duration-500 ease-premium group-hover:-rotate-[8deg] group-hover:scale-110 group-hover:bg-primary group-hover:text-white group-hover:shadow-glow">
-                    <Icon className="h-7 w-7" aria-hidden="true" />
-                  </span>
-                  <span className="absolute right-7 top-8 text-sm font-semibold text-line transition-colors duration-500 group-hover:text-accent">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="relative mt-6 text-lg font-bold text-secondary">{t.title}</h3>
-                  <p className="relative mt-2.5 flex-1 text-[0.92rem] leading-relaxed text-muted">{t.description}</p>
-                  <a
-                    href="#appointment"
-                    onClick={() => selectTreatment(t.title)}
-                    className="relative mt-6 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-primary"
-                    aria-label={`Learn more about ${t.title} and send an enquiry`}
-                  >
-                    <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1.5px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-500 group-hover:bg-[length:100%_1.5px]">
-                      Learn More
-                    </span>
-                    <ArrowUpRight
-                      className="h-4 w-4 transition-transform duration-500 ease-premium group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </article>
-              </motion.li>
-            );
-          })}
+        <ul ref={grid} className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {treatments.map((t, i) => (
+            <li key={t.slug} className="treatment-card">
+              <TreatmentCard t={t} i={i} />
+            </li>
+          ))}
         </ul>
       </div>
+
+      <TreatmentMarquee />
+      <div className="h-16 sm:h-20 lg:h-24" />
     </section>
   );
 }

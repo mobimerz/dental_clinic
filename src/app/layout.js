@@ -79,6 +79,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={jakarta.variable}>
       <body>
+        <noscript>
+          <style>{`.hero-intro{visibility:visible}`}</style>
+        </noscript>
         {children}
         <script
           type="application/ld+json"

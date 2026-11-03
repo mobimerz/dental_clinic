@@ -8,13 +8,19 @@ import Button from "@/components/common/Button";
 import Reveal from "@/components/common/Reveal";
 import StarRating from "@/components/common/StarRating";
 import Counter from "@/components/common/Counter";
+import Tilt from "@/components/common/Tilt";
 import { clinic } from "@/data/clinic";
 import { reviews } from "@/data/reviews";
 
 function RatingSummary() {
   return (
     <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-[2rem] bg-secondary p-8 text-white sm:p-10">
-      <span aria-hidden="true" className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-primary/40 blur-2xl" />
+      <motion.span
+        aria-hidden="true"
+        animate={{ scale: [1, 1.3, 1], x: [0, -20, 0], y: [0, 20, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-primary/40 blur-2xl"
+      />
       <div className="relative">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent">Google Rating</p>
         <p className="mt-4 flex items-end gap-2">
@@ -130,7 +136,14 @@ function ReviewCarousel() {
 function ReviewsCallout() {
   return (
     <div className="relative flex h-full flex-col justify-center overflow-hidden rounded-[2rem] bg-white p-8 shadow-lift ring-1 ring-line sm:p-12">
-      <Quote aria-hidden="true" className="absolute -right-4 -top-4 h-40 w-40 rotate-12 text-soft" />
+      <motion.span
+        aria-hidden="true"
+        className="absolute -right-4 -top-4"
+        animate={{ rotate: [12, 22, 12], scale: [1, 1.08, 1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <Quote className="h-40 w-40 text-soft" />
+      </motion.span>
       <div className="relative">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary">Real patients · Real feedback</p>
         <h3 className="mt-4 max-w-md text-balance text-2xl font-bold leading-snug text-secondary sm:text-3xl">
@@ -156,7 +169,7 @@ function ReviewsCallout() {
 export default function PatientReviews() {
   return (
     <section id="reviews" aria-labelledby="reviews-title" className="relative overflow-hidden bg-soft py-24 sm:py-28 lg:py-32">
-      <div aria-hidden="true" className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+      <div aria-hidden="true" data-speed="0.2" className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
       <div className="container-page relative">
         <SectionHeading
           id="reviews-title"
@@ -165,10 +178,16 @@ export default function PatientReviews() {
           description={`Rated ${clinic.rating.value} out of ${clinic.rating.outOf} across ${clinic.rating.count} reviews on Google.`}
         />
         <div className="mt-14 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-          <Reveal>
-            <RatingSummary />
+          <Reveal variant="tilt">
+            <Tilt max={6} radius="rounded-[2rem]" shadow={false} className="h-full">
+              <RatingSummary />
+            </Tilt>
           </Reveal>
-          <Reveal delay={0.12}>{reviews.length > 0 ? <ReviewCarousel /> : <ReviewsCallout />}</Reveal>
+          <Reveal delay={0.12} variant="tilt">
+            <Tilt max={4} scale={1.01} radius="rounded-[2rem]" shadow={false} className="h-full">
+              {reviews.length > 0 ? <ReviewCarousel /> : <ReviewsCallout />}
+            </Tilt>
+          </Reveal>
         </div>
       </div>
     </section>
