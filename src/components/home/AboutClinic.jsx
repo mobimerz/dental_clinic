@@ -93,7 +93,7 @@ export default function AboutClinic() {
           <SplitReveal
             as="h2"
             id="about-title"
-            className="mt-5 text-balance text-[2rem] font-bold leading-[1.1] tracking-tight text-secondary sm:text-4xl lg:text-[2.85rem]"
+            className="mt-5 text-balance text-[1.75rem] font-bold leading-[1.1] tracking-tight text-secondary sm:text-4xl lg:text-[2.85rem]"
           >
             Care That Makes You <span className="text-primary">Smile.</span>
           </SplitReveal>

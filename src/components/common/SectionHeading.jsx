@@ -32,7 +32,7 @@ export default function SectionHeading({ eyebrow, title, description, align = "c
       <SplitReveal
         as="h2"
         id={id}
-        className={`text-balance text-[2rem] font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.85rem] ${
+        className={`text-balance text-[1.75rem] font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.85rem] ${
           inverted ? "text-white" : "text-secondary"
         }`}
       >

@@ -135,13 +135,13 @@ export default function Hero() {
                   <span className="hero-badge-icon inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
                     <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
                   </span>
-                  Dental &amp; Implant Centre · Pai Layout, Bengaluru
+                  <span className="text-balance">Dental &amp; Implant Centre&nbsp;· Pai Layout, Bengaluru</span>
                 </span>
               </div>
 
               <h1
                 id="hero-title"
-                className="mt-6 text-[2.85rem] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] min-[400px]:text-[3.25rem] sm:text-6xl lg:text-[4.4rem]"
+                className="mt-6 text-[clamp(2.2rem,11.4vw,2.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] min-[400px]:text-[3.25rem] sm:text-6xl lg:text-[4.4rem]"
               >
                 <span className="hero-line-1 inline-block">Your Smile,</span>
                 <br />

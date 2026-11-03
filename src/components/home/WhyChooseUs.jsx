@@ -127,15 +127,15 @@ export default function WhyChooseUs() {
 
         <ol className="why-list relative">
           {/* Rail and its scroll-driven fill, running through the centre of the icon nodes */}
-          <span aria-hidden="true" className="absolute bottom-7 left-7 top-7 w-0.5 -translate-x-1/2 rounded-full bg-white/10" />
+          <span aria-hidden="true" className="absolute bottom-6 left-6 top-6 w-0.5 sm:bottom-7 sm:left-7 sm:top-7 -translate-x-1/2 rounded-full bg-white/10" />
           <span
             aria-hidden="true"
-            className="why-progress absolute bottom-7 left-7 top-7 w-0.5 -translate-x-1/2 origin-top rounded-full bg-gradient-to-b from-accent via-[#0A97A6] to-accent shadow-[0_0_14px_rgb(185_229_226/0.6)]"
+            className="why-progress absolute bottom-6 left-6 top-6 w-0.5 sm:bottom-7 sm:left-7 sm:top-7 -translate-x-1/2 origin-top rounded-full bg-gradient-to-b from-accent via-[#0A97A6] to-accent shadow-[0_0_14px_rgb(185_229_226/0.6)]"
           />
 
           {features.map(({ icon: Icon, title, text }, i) => (
-            <li key={title} className="why-item group relative grid grid-cols-[3.5rem_1fr] gap-5 pb-10 last:pb-0 sm:gap-7 sm:pb-14">
-              <span className="why-node relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-accent ring-1 ring-white/15 transition-all duration-500 ease-premium group-hover:scale-110 group-[.is-active]:bg-gradient-to-br group-[.is-active]:from-primary group-[.is-active]:to-[#0A97A6] group-[.is-active]:text-white group-[.is-active]:shadow-glow group-[.is-active]:ring-accent/60">
+            <li key={title} className="why-item group relative grid grid-cols-[3rem_1fr] gap-4 pb-10 sm:grid-cols-[3.5rem_1fr] last:pb-0 sm:gap-7 sm:pb-14">
+              <span className="why-node relative z-10 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-secondary text-accent ring-1 ring-white/15 transition-all duration-500 ease-premium group-hover:scale-110 group-[.is-active]:bg-gradient-to-br group-[.is-active]:from-primary group-[.is-active]:to-[#0A97A6] group-[.is-active]:text-white group-[.is-active]:shadow-glow group-[.is-active]:ring-accent/60">
                 <span
                   aria-hidden="true"
                   className="absolute inset-0 rounded-full ring-2 ring-accent/50 opacity-0 group-[.is-active]:animate-ping group-[.is-active]:opacity-100 [animation-duration:2.4s]"
@@ -150,7 +150,7 @@ export default function WhyChooseUs() {
                     {String(i + 1).padStart(2, "0")}
                     <span aria-hidden="true" className="h-px w-8 bg-accent/40 transition-all duration-500 group-hover:w-14 group-[.is-active]:w-14" />
                   </span>
-                  <h3 className="mt-3 text-xl font-bold leading-snug sm:text-2xl">{title}</h3>
+                  <h3 className="mt-3 text-[clamp(0.85rem,4.3vw,1.05rem)] font-bold leading-snug min-[400px]:text-lg sm:text-2xl">{title}</h3>
                   <p className="mt-3 max-w-md text-[0.97rem] leading-relaxed text-white/65">{text}</p>
                 </div>
               </div>

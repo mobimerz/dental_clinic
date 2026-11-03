@@ -36,7 +36,7 @@ export default function AppointmentCTA() {
           <SplitReveal
             as="h2"
             id="appointment-title"
-            className="mt-5 text-balance text-[2rem] font-bold leading-[1.1] tracking-tight text-secondary sm:text-4xl lg:text-[2.85rem]"
+            className="mt-5 text-balance text-[1.75rem] font-bold leading-[1.1] tracking-tight text-secondary sm:text-4xl lg:text-[2.85rem]"
           >
             Ready to Give Your Smile the Care It Deserves?
           </SplitReveal>
