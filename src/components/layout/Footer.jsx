@@ -50,10 +50,14 @@ export default function Footer() {
           <Column title="Quick Links" delay={0.1}>
             <ul className="space-y-3">
               {navLinks.map((l) => (
-                <li key={l.href}>
-                  <a href={l.href} className={linkClass}>
-                    {l.label}
-                  </a>
+                <li key={l.label}>
+                  {l.href ? (
+                    <a href={l.href} className={linkClass}>
+                      {l.label}
+                    </a>
+                  ) : (
+                    <span className="inline-block text-[0.93rem] text-white/65">{l.label}</span>
+                  )}
                 </li>
               ))}
               <li>

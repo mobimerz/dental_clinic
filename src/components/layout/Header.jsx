@@ -89,22 +89,23 @@ export default function Header() {
         <nav aria-label="Primary" className="hidden lg:block">
           <ul className="flex items-center gap-1" onMouseLeave={() => setHovered(null)}>
             {navLinks.map((link, i) => {
-              const isActive = active === link.href;
+              const isActive = !!link.href && active === link.href;
+              const Tag = link.href ? "a" : "span";
               return (
                 <motion.li
-                  key={link.href}
+                  key={link.label}
                   initial={{ opacity: 0, y: -14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 + i * 0.06, ease }}
                 >
-                  <a
+                  <Tag
                     href={link.href}
-                    onMouseEnter={() => setHovered(link.href)}
+                    onMouseEnter={() => link.href && setHovered(link.href)}
                     className={`relative block rounded-full px-4 py-2 text-[0.92rem] font-medium transition-colors duration-300 ${
-                      isActive ? "text-primary" : "text-ink/80 hover:text-primary"
+                      isActive ? "text-primary" : link.href ? "text-ink/80 hover:text-primary" : "cursor-default text-ink/80"
                     }`}
                   >
-                    {hovered === link.href && !isActive && (
+                    {link.href && hovered === link.href && !isActive && (
                       <motion.span
                         layoutId="nav-hover"
                         className="absolute inset-0 -z-10 rounded-full bg-secondary/[0.05]"
@@ -126,7 +127,7 @@ export default function Header() {
                       />
                     )}
                     {link.label}
-                  </a>
+                  </Tag>
                 </motion.li>
               );
             })}
@@ -179,8 +180,10 @@ export default function Header() {
             className="overflow-hidden border-t border-line bg-white lg:hidden"
           >
             <ul className="container-page flex flex-col gap-1 py-5">
-              {navLinks.map((link, i) => (
-                <li key={link.href} className="overflow-hidden">
+              {navLinks.map((link, i) => {
+                const Tag = link.href ? "a" : "span";
+                return (
+                <li key={link.label} className="overflow-hidden">
                   <motion.div
                     initial={{ y: "110%", rotate: 4, opacity: 0 }}
                     animate={{ y: "0%", rotate: 0, opacity: 1 }}
@@ -188,21 +191,26 @@ export default function Header() {
                     transition={{ duration: 0.7, delay: 0.15 + 0.06 * i, ease }}
                     className="origin-left"
                   >
-                    <a
+                    <Tag
                       href={link.href}
-                      onClick={() => setOpen(false)}
-                      className={`group flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-semibold transition-all duration-300 active:scale-[0.98] ${
-                        active === link.href ? "bg-soft text-primary" : "text-secondary hover:bg-soft hover:pl-6"
+                      onClick={link.href ? () => setOpen(false) : undefined}
+                      className={`group flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-semibold transition-all duration-300 ${
+                        !link.href
+                          ? "cursor-default text-secondary"
+                          : active === link.href
+                            ? "bg-soft text-primary active:scale-[0.98]"
+                            : "text-secondary hover:bg-soft hover:pl-6 active:scale-[0.98]"
                       }`}
                     >
                       {link.label}
                       <span aria-hidden="true" className="text-sm font-medium text-accent transition-transform duration-300 group-hover:translate-x-1">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                    </a>
+                    </Tag>
                   </motion.div>
                 </li>
-              ))}
+                );
+              })}
               <motion.li
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}

@@ -10,7 +10,6 @@ import WhyChooseUs from "@/components/home/WhyChooseUs";
 import ClinicGallery from "@/components/home/ClinicGallery";
 import PatientReviews from "@/components/home/PatientReviews";
 import AppointmentCTA from "@/components/home/AppointmentCTA";
-import ContactSection from "@/components/home/ContactSection";
 import { getGoogleReviews } from "@/lib/googleReviews";
 
 // Re-fetch Google reviews at most twice a day (keeps the page static and fast).
@@ -37,7 +36,6 @@ export default async function HomePage() {
         <ClinicGallery />
         <PatientReviews google={google} />
         <AppointmentCTA />
-        <ContactSection />
       </main>
       <Footer />
       <FloatingContact />

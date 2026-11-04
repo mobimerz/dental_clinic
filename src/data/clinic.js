@@ -50,12 +50,13 @@ export const clinic = {
   hoursNote: "Timings are subject to change. Please call ahead to confirm.",
 };
 
+// Only Home is a real link; the other items are shown as plain text.
 export const navLinks = [
   { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Treatments", href: "#treatments" },
-  { label: "Why Choose Us", href: "#why-choose-us" },
-  { label: "Contact", href: "#contact" },
+  { label: "About" },
+  { label: "Treatments" },
+  { label: "Why Choose Us" },
+  { label: "Contact" },
 ];
 
 export const whatsappLink = (message = "Hello A-Zee Dental, I would like to enquire about an appointment.") =>

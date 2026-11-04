@@ -7,7 +7,7 @@ import SectionHeading from "@/components/common/SectionHeading";
 import Button from "@/components/common/Button";
 import Reveal from "@/components/common/Reveal";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
-import { clinicImages } from "@/data/clinic";
+import { clinic, clinicImages } from "@/data/clinic";
 
 // Starting masks for each reveal direction.
 const masks = {
@@ -156,7 +156,7 @@ export default function ClinicGallery() {
               <p className="text-2xl font-bold leading-tight transition-transform duration-500 ease-premium group-hover:-translate-y-1">
                 Pai Layout,<br />Old Madras Road
               </p>
-              <a href="#contact" className="group/dir mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:text-white">
+              <a href={clinic.links.directions} target="_blank" rel="noopener noreferrer" className="group/dir mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:text-white">
                 Get directions <span className="inline-block transition-transform duration-300 group-hover/dir:translate-x-1.5">→</span>
               </a>
             </div>
