@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { CalendarCheck, MessageSquareText, Phone, X } from "lucide-react";
+import { MessageSquareText, Phone, X } from "lucide-react";
 import WhatsAppIcon from "./WhatsAppIcon";
 import { clinic, whatsappLink } from "@/data/clinic";
 
@@ -20,18 +20,11 @@ const actions = [
     icon: Phone,
     className: "bg-secondary text-white hover:bg-[#0e4252]",
   },
-  {
-    label: "Book Appointment",
-    href: "#appointment",
-    icon: CalendarCheck,
-    className: "bg-white text-primary ring-1 ring-line hover:bg-soft",
-  },
 ];
 
 export default function FloatingContact() {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
-  const [nearForm, setNearForm] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 480);
@@ -40,20 +33,7 @@ export default function FloatingContact() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Step out of the way while the appointment form is on screen
-  useEffect(() => {
-    const target = document.getElementById("appointment-form");
-    if (!target) return;
-    const observer = new IntersectionObserver(([entry]) => setNearForm(entry.isIntersecting), { threshold: 0.15 });
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (nearForm) setOpen(false);
-  }, [nearForm]);
-
-  const show = visible && !nearForm;
+  const show = visible;
 
   return (
     <AnimatePresence>

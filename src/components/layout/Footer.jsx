@@ -61,7 +61,7 @@ export default function Footer() {
                 </li>
               ))}
               <li>
-                <a href="#appointment" className={linkClass}>
+                <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className={linkClass}>
                   Book Appointment
                 </a>
               </li>

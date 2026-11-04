@@ -11,7 +11,7 @@ import Tooth3D, { GlassBubble } from "@/components/common/Tooth3D";
 import { ToothIcon } from "@/components/common/DentalIcons";
 import { FloatingTooth, GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
 import { gsap, SplitText, useGSAP, MOTION_OK } from "@/lib/gsap";
-import { clinic, clinicImages } from "@/data/clinic";
+import { clinic, clinicImages, whatsappLink } from "@/data/clinic";
 
 const ease = [0.22, 1, 0.36, 1];
 
@@ -174,7 +174,7 @@ export default function Hero() {
               </p>
 
               <div className="hero-cta mt-8 flex flex-col gap-3 min-[420px]:flex-row">
-                <Button href="#appointment" icon={CalendarCheck}>
+                <Button href={whatsappLink()} external icon={CalendarCheck}>
                   Book Your Appointment
                 </Button>
                 <Button href="#treatments" variant="secondary" arrow>

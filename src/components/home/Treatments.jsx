@@ -17,8 +17,7 @@ import {
 } from "@/components/common/DentalIcons";
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { treatments } from "@/data/treatments";
-import { clinicImages } from "@/data/clinic";
-import { selectTreatment } from "@/lib/booking";
+import { clinicImages, whatsappLink } from "@/data/clinic";
 
 const icons = {
   implant: ImplantIcon,
@@ -104,8 +103,9 @@ function TreatmentCard({ t, i }) {
         </h3>
         <p className="relative mt-2.5 flex-1 text-[0.92rem] leading-relaxed text-muted">{t.description}</p>
         <a
-          href="#appointment"
-          onClick={() => selectTreatment(t.title)}
+          href={whatsappLink(`Hello A-Zee Dental, I would like to know more about ${t.title}.`)}
+          target="_blank"
+          rel="noopener noreferrer"
           className="relative mt-6 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-primary"
           aria-label={`Learn more about ${t.title} and send an enquiry`}
         >

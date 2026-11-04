@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { CalendarCheck, Phone } from "lucide-react";
 import Logo from "@/components/common/Logo";
 import Button from "@/components/common/Button";
-import { clinic, navLinks } from "@/data/clinic";
+import { clinic, navLinks, whatsappLink } from "@/data/clinic";
 import { getLenis } from "@/lib/lenis";
 
 const ease = [0.22, 1, 0.36, 1];
@@ -148,7 +148,7 @@ export default function Header() {
             {clinic.phone.display}
           </a>
           <div className="hidden sm:block">
-            <Button href="#appointment" icon={CalendarCheck} className="!px-5 !py-3">
+            <Button href={whatsappLink()} external icon={CalendarCheck} className="!px-5 !py-3">
               Book Appointment
             </Button>
           </div>
@@ -217,7 +217,7 @@ export default function Header() {
                 transition={{ duration: 0.6, delay: 0.2 + navLinks.length * 0.06, ease }}
                 className="mt-3 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2"
               >
-                <Button href="#appointment" icon={CalendarCheck} onClick={() => setOpen(false)}>
+                <Button href={whatsappLink()} external icon={CalendarCheck} onClick={() => setOpen(false)}>
                   Book Appointment
                 </Button>
                 <Button href={clinic.phone.tel} variant="secondary" icon={Phone}>

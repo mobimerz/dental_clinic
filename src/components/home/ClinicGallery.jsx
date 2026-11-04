@@ -7,7 +7,7 @@ import SectionHeading from "@/components/common/SectionHeading";
 import Button from "@/components/common/Button";
 import Reveal from "@/components/common/Reveal";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
-import { clinic, clinicImages } from "@/data/clinic";
+import { clinic, clinicImages, whatsappLink } from "@/data/clinic";
 
 // Starting masks for each reveal direction.
 const masks = {
@@ -104,7 +104,7 @@ export default function ClinicGallery() {
             align="left"
           />
           <Reveal delay={0.1} className="hidden lg:block">
-            <Button href="#appointment" icon={CalendarCheck}>
+            <Button href={whatsappLink()} external icon={CalendarCheck}>
               Plan Your Visit
             </Button>
           </Reveal>
