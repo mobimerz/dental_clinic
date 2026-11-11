@@ -19,7 +19,6 @@ export default function AboutPage() {
   return (
     <SiteShell>
       <PageHero
-        crumb="About"
         eyebrow={`Since ${clinic.established}`}
         title="Caring for Smiles"
         highlight={`Since ${clinic.established}.`}
@@ -28,7 +27,6 @@ export default function AboutPage() {
         imagePosition="object-[50%_35%]"
         chips={[
           { icon: "star", value: `${clinic.rating.value} / 5`, label: `${clinic.rating.count} Google reviews` },
-          { icon: "award", value: `${clinic.doctor.experienceYears}+ years`, label: "of smile care" },
         ]}
       >
         <Button href="/treatments" arrow>
@@ -43,7 +41,7 @@ export default function AboutPage() {
       <ValuesStack />
       <CareForAll />
       <ClinicGallery />
-      <CtaBanner title="Let's Look After Your Smile, Together." />
+      <CtaBanner title="Let's Look After Your Smile, Together." flushTop />
     </SiteShell>
   );
 }

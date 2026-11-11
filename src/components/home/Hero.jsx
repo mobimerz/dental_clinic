@@ -3,17 +3,19 @@
 import { createContext, useContext, useRef } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
-import { CalendarCheck, MapPin } from "lucide-react";
+import { CalendarCheck, Clock, MapPin } from "lucide-react";
 import Button from "@/components/common/Button";
 import StarRating from "@/components/common/StarRating";
 import Tilt from "@/components/common/Tilt";
 import Tooth3D, { GlassBubble } from "@/components/common/Tooth3D";
-import { ToothIcon } from "@/components/common/DentalIcons";
 import { FloatingTooth, GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
 import { gsap, SplitText, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { clinic, clinicImages, whatsappLink } from "@/data/clinic";
 
 const ease = [0.22, 1, 0.36, 1];
+
+// Monday to Saturday share one set of timings; Sunday's shorter hours are listed on the Contact page.
+const weekdayHours = clinic.hours[0];
 
 // Smoothed pointer position across the hero, from -1 to 1 on each axis.
 const PointerContext = createContext(null);
@@ -86,10 +88,11 @@ export default function Hero() {
           .from(copy.words, { y: 18, opacity: 0, filter: "blur(6px)", duration: 0.9, stagger: 0.025 }, "-=1.1")
           .from(q(".hero-cta > *"), { y: 34, opacity: 0, scale: 0.9, stagger: 0.12, duration: 1 }, "-=0.85");
 
-        // Scrolling away: copy lifts and fades, the portrait sinks and shrinks a touch.
+        // Scrolling away: both columns lift together by the same distance (so they stay aligned
+        // and nothing slides toward the next section); the copy fades, the portrait shrinks a touch.
         const out = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
-        gsap.to(q(".hero-copy-wrap"), { yPercent: -18, opacity: 0.35, ease: "none", scrollTrigger: out });
-        gsap.to(q(".hero-visual"), { yPercent: 10, scale: 0.94, ease: "none", scrollTrigger: out });
+        gsap.to(q(".hero-copy-wrap"), { y: -80, opacity: 0.35, ease: "none", scrollTrigger: out });
+        gsap.to(q(".hero-visual"), { y: -80, scale: 0.94, ease: "none", scrollTrigger: out });
         gsap.to(q(".hero-photo"), { yPercent: 12, ease: "none", scrollTrigger: out });
 
         return () => {
@@ -110,14 +113,16 @@ export default function Hero() {
         aria-labelledby="hero-title"
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
-        className="relative -mt-20 overflow-hidden pt-20"
+        className="relative -mt-20 overflow-hidden pt-20 lg:flex lg:min-h-[min(calc(100svh-98px),860px)] lg:flex-col"
       >
         {/* Background */}
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-b from-[#E6F5F4] via-soft to-white" />
-        <div aria-hidden="true" className="bg-aurora absolute -inset-[20%] -z-10 opacity-90" />
-        <div aria-hidden="true" className="bg-dots absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_60%)]" />
-        <GlowOrb className="-left-32 top-10 -z-10 h-[420px] w-[420px] bg-accent/60" x={40} y={30} />
-        <GlowOrb className="-right-24 bottom-0 -z-10 h-[380px] w-[380px] bg-primary/15" duration={22} x={-30} y={-20} />
+        <div aria-hidden="true" className="fade-out-bottom pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#E6F5F4] via-soft to-white" />
+          <div className="bg-aurora absolute -inset-[20%] opacity-90" />
+          <div className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_60%)]" />
+          <GlowOrb className="-left-32 top-10 h-[420px] w-[420px] bg-accent/60" x={40} y={30} />
+          <GlowOrb className="-right-24 bottom-0 h-[380px] w-[380px] bg-primary/15" duration={22} x={-30} y={-20} />
+        </div>
 
         {/* Far-field floating elements */}
         <Depth depth={-18} className="pointer-events-none absolute inset-0 -z-10">
@@ -126,22 +131,37 @@ export default function Hero() {
           <Sparkle className="left-[40%] top-[70%] hidden h-4 w-4 text-primary/50 lg:block" delay={0.6} />
         </Depth>
 
-        <div className="container-page grid items-center gap-12 pb-16 pt-8 sm:pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:pb-24 lg:pt-14">
+        {/* On desktop the photo takes the copy block's height, so both columns start and end on the same lines
+            without stretching the gaps inside the copy. */}
+        <div className="container-page grid gap-12 pb-16 pt-8 sm:pt-12 lg:w-full lg:flex-1 lg:grid-cols-[minmax(0,1fr)_420px] lg:content-center lg:items-stretch lg:gap-10 lg:pb-16 lg:pt-6">
           {/* Copy */}
-          <div className="hero-copy-wrap relative max-w-xl">
-            <div className="hero-intro">
+          <div className="hero-copy-wrap relative max-w-xl xl:max-w-[44rem]">
+            <div className="hero-intro lg:flex lg:h-full lg:flex-col lg:justify-center">
+              {/* Address and Mon–Sat timings share one two-line pill, so adding the timings
+                  does not push the heading down. Narrower screens stack them, icons in one column. */}
               <div className="hero-badge">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/80 py-1.5 pl-1.5 pr-4 text-[0.8rem] font-semibold text-secondary shadow-soft ring-1 ring-line backdrop-blur">
-                  <span className="hero-badge-icon inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white">
-                    <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[1.25rem] xl:flex-nowrap bg-white/80 py-1.5 pl-1.5 pr-4 text-[0.8rem] font-semibold leading-snug text-secondary shadow-soft ring-1 ring-line backdrop-blur">
+                  <span className="flex min-w-0 basis-full items-center gap-2.5 xl:flex-1 xl:basis-auto">
+                    <span className="hero-badge-icon inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+                      <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                    </span>
+                    <span className="text-balance">{clinic.address.full}</span>
                   </span>
-                  <span className="text-balance">Dental &amp; Implant Centre&nbsp;· Pai Layout, Bengaluru</span>
+                  <span className="flex shrink-0 items-center gap-2.5 xl:border-l xl:border-line xl:pl-3">
+                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-soft text-primary ring-1 ring-accent/60">
+                      <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+                    </span>
+                    <span>
+                      <span className="block">{weekdayHours.days}</span>
+                      <span className="block font-medium text-muted">{weekdayHours.slots.map((s) => s.replace(/:00/g, "")).join(" · ")}</span>
+                    </span>
+                  </span>
                 </span>
               </div>
 
               <h1
                 id="hero-title"
-                className="mt-6 text-[clamp(2.2rem,11.4vw,2.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] min-[400px]:text-[3.25rem] sm:text-6xl lg:text-[4.4rem]"
+                className="mt-6 text-[clamp(2.2rem,11.4vw,2.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] min-[400px]:text-[3.25rem] sm:text-6xl lg:text-[4.1rem]"
               >
                 <span className="hero-line-1 inline-block">Your Smile,</span>
                 <br />
@@ -185,7 +205,7 @@ export default function Hero() {
           </div>
 
           {/* Visual */}
-          <div className="hero-visual relative mx-auto w-full max-w-[460px] lg:mr-0 lg:max-w-[500px]">
+          <div className="hero-visual relative mx-auto w-full max-w-[460px] lg:mr-0 lg:max-w-[420px] lg:self-stretch">
             {/* Decorative backdrop shapes */}
             <Depth depth={-10} className="absolute inset-0">
               <motion.div
@@ -220,14 +240,13 @@ export default function Hero() {
               <Sparkle className="-left-3 bottom-1/3 h-6 w-6 text-primary" />
               <Sparkle className="right-10 -top-4 h-5 w-5 text-[#0A97A6]" delay={1.5} />
             </Depth>
-
             {/* Image reveal: mask opens upward, then two colour curtains lift off the photo */}
-            <Depth depth={8} className="relative">
+            <Depth depth={8} className="relative lg:h-full">
               <motion.div
                 initial={{ clipPath: "inset(100% 0% 0% 0% round 44px)" }}
                 animate={{ clipPath: "inset(0% 0% 0% 0% round 44px)" }}
                 transition={{ duration: 1.3, ease, delay: 0.25 }}
-                className="relative aspect-[4/5] overflow-hidden rounded-[2.75rem] bg-accent shadow-lift"
+                className="relative aspect-[4/5] overflow-hidden rounded-[2.75rem] bg-accent shadow-lift lg:aspect-auto lg:h-full"
               >
                 <div className="hero-photo absolute inset-x-0 -inset-y-[6%]">
                   <motion.div
@@ -241,7 +260,7 @@ export default function Hero() {
                       alt={img.alt}
                       fill
                       priority
-                      sizes="(min-width: 1024px) 500px, (min-width: 640px) 460px, 92vw"
+                      sizes="(min-width: 1024px) 420px, (min-width: 640px) 460px, 92vw"
                       className="object-cover object-[50%_22%]"
                     />
                   </motion.div>
@@ -272,14 +291,13 @@ export default function Hero() {
                 </motion.div>
               </motion.div>
             </Depth>
-
             {/* 3D teeth orbiting the portrait */}
             <Depth depth={42} className="pointer-events-none absolute inset-0">
               <Tooth3D className="-right-6 top-[38%] sm:-right-14" size={68} delay={1.5} />
               <Tooth3D className="-left-4 -top-6 sm:-left-10" size={46} duration={11} delay={1.8} tint="#9FD9D4" />
-              <GlassBubble className="-bottom-4 right-[30%]" size={30} delay={2} />
+              {/* Sits in the gap below the photo, clear of the rating card and the name badge */}
+              <GlassBubble className="-bottom-7 right-[44%]" size={30} delay={2} />
             </Depth>
-
             {/* Floating rating card */}
             <Depth depth={34} className="absolute -left-3 bottom-8 sm:-left-12">
               <motion.a
@@ -307,53 +325,8 @@ export default function Hero() {
                 </div>
               </motion.a>
             </Depth>
-
-            {/* Floating chip — can be flicked around and springs back */}
-            <Depth depth={-30} className="absolute -right-2 top-10 sm:-right-8">
-              <motion.div
-                initial={{ opacity: 0, y: -30, scale: 0.8, rotate: 8 }}
-                animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-                transition={{ duration: 1, delay: 1.5, ease }}
-              >
-                <motion.div
-                  drag
-                  dragSnapToOrigin
-                  dragElastic={0.5}
-                  whileHover={{ scale: 1.07, rotate: -3 }}
-                  whileTap={{ scale: 0.95, cursor: "grabbing" }}
-                  className="cursor-grab touch-none"
-                >
-                  <div
-                    className="anim-float flex items-center gap-2.5 rounded-2xl bg-secondary px-4 py-3 text-white shadow-lift"
-                    style={{ "--fy": "8px", animationDuration: "6s", animationDelay: "0.6s" }}
-                  >
-                    <span className="anim-wiggle flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
-                      <ToothIcon className="h-5 w-5 text-accent" />
-                    </span>
-                    <span className="text-[0.8rem] font-semibold leading-tight">
-                      Personalized
-                      <br />
-                      Dental Care
-                    </span>
-                  </div>
-                </motion.div>
-              </motion.div>
-            </Depth>
           </div>
         </div>
-
-        <a
-          href="#trust"
-          aria-label="Scroll to next section"
-          className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 lg:block"
-        >
-          <span
-            className="anim-float flex h-10 w-6 items-start justify-center rounded-full border-2 border-secondary/20 pt-2"
-            style={{ "--fy": "6px", animationDuration: "2s" }}
-          >
-            <span className="anim-scroll-dot h-2 w-1 rounded-full bg-primary" />
-          </span>
-        </a>
       </section>
     </PointerContext.Provider>
   );

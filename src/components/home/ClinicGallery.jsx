@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { CalendarCheck } from "lucide-react";
+import { ArrowUpRight, CalendarCheck, MapPin } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import Button from "@/components/common/Button";
 import Reveal from "@/components/common/Reveal";
@@ -93,74 +93,78 @@ function RevealImage({ image, className, sizes, delay = 0, caption, position = "
 
 export default function ClinicGallery() {
   return (
-    <section id="gallery" aria-labelledby="gallery-title" className="relative py-16 sm:py-20 lg:py-24">
-      <div className="container-page">
-        <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
-          <SectionHeading
-            id="gallery-title"
-            eyebrow="Inside the Clinic"
-            title="A Welcoming Space for Better Dental Care."
-            description="Step inside A-Zee Dental: a calm reception, well-equipped treatment rooms and a team focused on making every visit comfortable."
-            align="left"
-          />
-          <Reveal delay={0.1} className="hidden lg:block">
-            <Button href={whatsappLink()} external icon={CalendarCheck}>
-              Plan Your Visit
-            </Button>
+    <section id="gallery" aria-labelledby="gallery-title" className="relative section-y">
+      {/* Desktop: a text panel on the left (heading at the top, "Visit us" card at the bottom) beside a
+          photo mosaic. The mosaic's height follows the screen so the whole section fits in one view. */}
+      <div className="container-page grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] lg:gap-12">
+        <div className="flex flex-col gap-8 lg:justify-between">
+          <div className="flex flex-col items-start gap-6">
+            <SectionHeading id="gallery-title" eyebrow="Inside the Clinic" title="A Welcoming Space for Better Dental Care." align="left" />
+            <Reveal delay={0.15} className="flex flex-col items-start gap-6">
+              <p className="text-base leading-relaxed text-muted sm:text-lg">
+                Step inside A-Zee Dental: a calm reception, well-equipped treatment rooms and a team focused on making
+                every visit comfortable.
+              </p>
+              <Button href={whatsappLink()} external icon={CalendarCheck}>
+                Plan Your Visit
+              </Button>
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.3} variant="tilt">
+            <a
+              href={clinic.links.directions}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative flex items-center gap-4 overflow-hidden rounded-[1.75rem] bg-primary p-5 text-white shadow-lift transition-shadow duration-500 hover:shadow-glow sm:p-6"
+            >
+              <span
+                aria-hidden="true"
+                className="anim-sway absolute -right-10 -top-12 h-32 w-32 rounded-full bg-white/10"
+                style={{ "--s": 1.25 }}
+              />
+              <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/20">
+                <MapPin className="h-5 w-5 text-accent" aria-hidden="true" />
+              </span>
+              <span className="relative min-w-0 flex-1">
+                <span className="block text-sm font-medium text-white/70">Visit us at</span>
+                <span className="block text-lg font-bold leading-snug">Pai Layout, Old Madras Road</span>
+              </span>
+              <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-primary transition-transform duration-500 ease-premium group-hover:rotate-45">
+                <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
+                <span className="sr-only">Get directions</span>
+              </span>
+            </a>
           </Reveal>
         </div>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-12 md:grid-rows-[260px_260px] lg:grid-rows-[300px_300px]">
+        <div className="grid gap-4 sm:grid-cols-[1.1fr_1fr] sm:grid-rows-2 sm:h-[460px] lg:h-[clamp(510px,calc(100svh-150px),640px)]">
           <RevealImage
             image={clinicImages.dentistAtWork}
             caption="Gentle care for every age"
-            sizes="(min-width: 768px) 40vw, 100vw"
+            sizes="(min-width: 1024px) 34vw, (min-width: 640px) 50vw, 100vw"
             position="object-[50%_45%]"
             from="up"
-            className="aspect-[4/5] md:col-span-5 md:row-span-2 md:aspect-auto"
-          />
-          <RevealImage
-            image={clinicImages.treatmentRoomAlt}
-            caption="Treatment room"
-            delay={0.15}
-            from="right"
-            sizes="(min-width: 768px) 58vw, 100vw"
-            className="aspect-[4/3] md:col-span-7 md:aspect-auto"
+            className="aspect-[4/5] sm:row-span-2 sm:aspect-auto"
           />
           <RevealImage
             image={clinicImages.treatmentRoom}
             caption="Modern dental chair"
+            delay={0.15}
+            from="right"
+            sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+            position="object-[50%_60%]"
+            className="aspect-[4/3] sm:aspect-auto"
+          />
+          <RevealImage
+            image={clinicImages.treatmentRoomAlt}
+            caption="Treatment room"
             delay={0.25}
             from="center"
-            sizes="(min-width: 768px) 30vw, 100vw"
-            position="object-[50%_60%]"
-            className="aspect-[4/3] md:col-span-4 md:aspect-auto"
+            sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+            position="object-[70%_60%]"
+            className="aspect-[4/3] sm:aspect-auto"
           />
-          <Reveal
-            delay={0.35}
-            variant="tilt"
-            className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] bg-primary p-7 text-white md:col-span-3"
-          >
-            <span
-              aria-hidden="true"
-              className="anim-sway absolute -right-10 -top-10 h-36 w-36 rounded-full bg-white/10"
-              style={{ "--s": 1.25 }}
-            />
-            <span
-              aria-hidden="true"
-              className="anim-sway absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-white/[0.06]"
-              style={{ "--to": "0deg", "--s": 1.15, animationDuration: "6s", animationDelay: "1s" }}
-            />
-            <p className="relative text-sm font-medium text-white/75">Visit us at</p>
-            <div className="relative">
-              <p className="text-2xl font-bold leading-tight transition-transform duration-500 ease-premium group-hover:-translate-y-1">
-                Pai Layout,<br />Old Madras Road
-              </p>
-              <a href={clinic.links.directions} target="_blank" rel="noopener noreferrer" className="group/dir mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:text-white">
-                Get directions <span className="inline-block transition-transform duration-300 group-hover/dir:translate-x-1.5">→</span>
-              </a>
-            </div>
-          </Reveal>
         </div>
       </div>
     </section>

@@ -2,9 +2,8 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "motion/react";
-import { Award, CalendarCheck, ChevronRight, Clock, MapPin, ShieldCheck, Smile, Star } from "lucide-react";
+import { Award, CalendarCheck, Clock, MapPin, ShieldCheck, Smile, Star } from "lucide-react";
 import { Eyebrow } from "@/components/common/SectionHeading";
 import Tooth3D, { GlassBubble } from "@/components/common/Tooth3D";
 import { FloatingTooth, GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
@@ -20,8 +19,8 @@ const chipIcons = { award: Award, calendar: CalendarCheck, clock: Clock, pin: Ma
 // curtains with floating chips. Scrolling away lifts the copy and sinks the photo.
 //   title      – first line of the heading
 //   highlight  – second line, shown in the teal gradient with a drawn underline
-//   chips      – up to two small floating cards: { icon: "star" | "award" | …, label, value }
-export default function PageHero({ crumb, eyebrow, title, highlight, description, image, imagePosition = "object-center", chips = [], children }) {
+//   chips      – one small floating card on the photo: { icon: "star" | "award" | …, label, value }
+export default function PageHero({ eyebrow, title, highlight, description, image, imagePosition = "object-center", chips = [], children }) {
   const root = useRef(null);
 
   useGSAP(
@@ -35,8 +34,7 @@ export default function PageHero({ crumb, eyebrow, title, highlight, description
         const copy = SplitText.create(q(".ph-copy"), { type: "words" });
 
         const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-        tl.from(q(".ph-crumb > *"), { x: -16, opacity: 0, stagger: 0.08, duration: 0.8 })
-          .from(q(".ph-eyebrow"), { y: -18, scale: 0.85, opacity: 0, duration: 0.9 }, "<0.1")
+        tl.from(q(".ph-eyebrow"), { y: -18, scale: 0.85, opacity: 0, duration: 0.9 })
           .from(
             chars.chars,
             {
@@ -59,8 +57,9 @@ export default function PageHero({ crumb, eyebrow, title, highlight, description
           .from(q(".ph-extra > *"), { y: 30, opacity: 0, scale: 0.94, stagger: 0.1, duration: 0.9 }, "-=0.8");
 
         const out = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
-        gsap.to(q(".ph-copy-wrap"), { yPercent: -16, opacity: 0.4, ease: "none", scrollTrigger: out });
-        gsap.to(q(".ph-visual"), { yPercent: 8, scale: 0.95, ease: "none", scrollTrigger: out });
+        // Both columns lift by the same distance so they stay aligned while the hero scrolls away.
+        gsap.to(q(".ph-copy-wrap"), { y: -70, opacity: 0.4, ease: "none", scrollTrigger: out });
+        gsap.to(q(".ph-visual"), { y: -70, scale: 0.95, ease: "none", scrollTrigger: out });
         gsap.to(q(".ph-photo"), { yPercent: 10, ease: "none", scrollTrigger: out });
 
         return () => {
@@ -74,46 +73,38 @@ export default function PageHero({ crumb, eyebrow, title, highlight, description
   );
 
   return (
-    <section ref={root} aria-labelledby="page-title" className="relative -mt-20 overflow-hidden pt-20">
+    <section
+      ref={root}
+      aria-labelledby="page-title"
+      className="relative -mt-20 overflow-hidden pt-20"
+    >
       {/* Background */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-b from-[#E6F5F4] via-soft to-white" />
-      <div aria-hidden="true" className="bg-aurora absolute -inset-[20%] -z-10 opacity-90" />
-      <div aria-hidden="true" className="bg-dots absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_60%)]" />
-      <GlowOrb className="-left-32 top-10 -z-10 h-[420px] w-[420px] bg-accent/60" x={40} y={30} />
-      <GlowOrb className="-right-24 bottom-0 -z-10 h-[380px] w-[380px] bg-primary/15" duration={22} x={-30} y={-20} />
+      <div aria-hidden="true" className="fade-out-bottom pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#E6F5F4] via-soft to-white" />
+        <div className="bg-aurora absolute -inset-[20%] opacity-90" />
+        <div className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_60%)]" />
+        <GlowOrb className="-left-32 top-10 h-[420px] w-[420px] bg-accent/60" x={40} y={30} />
+        <GlowOrb className="-right-24 bottom-0 h-[380px] w-[380px] bg-primary/15" duration={22} x={-30} y={-20} />
+      </div>
       <GlassBubble className="left-[46%] top-[22%] hidden lg:block" size={30} delay={1.4} />
       <Sparkle className="left-[42%] top-[72%] hidden h-4 w-4 text-primary/50 lg:block" delay={0.6} />
 
       <div
-        className={`container-page grid items-center gap-12 pb-20 pt-10 sm:pt-14 lg:gap-10 lg:pb-28 lg:pt-16 ${
-          image ? "lg:grid-cols-[1.1fr_0.9fr]" : ""
+        className={`container-page grid gap-12 pb-16 pt-8 sm:pt-12 lg:gap-10 ${
+          image
+            ? "lg:grid-cols-[minmax(0,1fr)_420px] lg:items-stretch lg:pb-20 lg:pt-10"
+            : "lg:pb-20 lg:pt-14"
         }`}
       >
-        <div className={`ph-copy-wrap relative ${image ? "max-w-xl" : "mx-auto max-w-3xl text-center"}`}>
-          <div className="hero-intro">
-            <nav aria-label="Breadcrumb">
-              <ol className={`ph-crumb flex items-center gap-1.5 text-sm font-medium text-muted ${image ? "" : "justify-center"}`}>
-                <li>
-                  <Link href="/" className="transition-colors hover:text-primary">
-                    Home
-                  </Link>
-                </li>
-                <li aria-hidden="true">
-                  <ChevronRight className="h-3.5 w-3.5" />
-                </li>
-                <li aria-current="page" className="text-secondary">
-                  {crumb}
-                </li>
-              </ol>
-            </nav>
-
-            <div className="ph-eyebrow mt-6">
+        <div className={`ph-copy-wrap relative ${image ? "max-w-xl xl:max-w-[44rem]" : "mx-auto max-w-3xl text-center"}`}>
+          <div className={`hero-intro ${image ? "lg:flex lg:h-full lg:flex-col lg:justify-center" : ""}`}>
+            <div className="ph-eyebrow">
               <Eyebrow>{eyebrow}</Eyebrow>
             </div>
 
             <h1
               id="page-title"
-              className="mt-5 text-balance text-[clamp(2.1rem,10vw,2.75rem)] font-extrabold leading-[1.04] tracking-[-0.03em] text-secondary [perspective:700px] sm:text-[3.4rem] lg:text-[4rem]"
+              className="mt-6 text-balance text-[clamp(2.1rem,10vw,2.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] sm:text-[3.4rem] lg:text-[4.1rem]"
             >
               <span className="ph-line-1 inline-block">{title}</span>
               <br />
@@ -150,29 +141,36 @@ export default function PageHero({ crumb, eyebrow, title, highlight, description
         </div>
 
         {image && (
-          <div className="ph-visual relative mx-auto w-full max-w-[440px] lg:mr-0">
+          <div className="ph-visual relative mx-auto w-full max-w-[460px] lg:mr-0 lg:max-w-[420px] lg:self-stretch">
             <motion.div
               aria-hidden="true"
               initial={{ opacity: 0, scale: 0.85, rotate: -10 }}
-              animate={{ opacity: 1, scale: 1, rotate: -5 }}
+              animate={{ opacity: 1, scale: 1, rotate: -6 }}
               transition={{ duration: 1.2, ease, delay: 0.2 }}
-              className="absolute inset-0 translate-x-4 translate-y-4 rounded-[2.5rem] bg-gradient-to-br from-accent to-primary/40"
+              className="absolute inset-0 translate-x-4 translate-y-4 rounded-[2.75rem] bg-gradient-to-br from-accent to-primary/40"
+            />
+            <motion.div
+              aria-hidden="true"
+              initial={{ opacity: 0, scale: 1.15, rotate: 8 }}
+              animate={{ opacity: 1, scale: 1, rotate: 3 }}
+              transition={{ duration: 1.5, ease, delay: 0.45 }}
+              className="absolute inset-0 -translate-x-4 -translate-y-4 rounded-[2.75rem] border-2 border-primary/20"
             />
             <motion.div
               aria-hidden="true"
               initial={{ opacity: 0, scale: 0.4 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.6, ease }}
-              className="absolute -right-8 -top-8 h-32 w-32"
+              className="absolute -right-10 -top-10 h-40 w-40"
             >
               <div className="anim-spin-slow h-full w-full rounded-full border-2 border-dashed border-primary/25" />
             </motion.div>
 
             <motion.div
-              initial={{ clipPath: "inset(100% 0% 0% 0% round 40px)" }}
-              animate={{ clipPath: "inset(0% 0% 0% 0% round 40px)" }}
+              initial={{ clipPath: "inset(100% 0% 0% 0% round 44px)" }}
+              animate={{ clipPath: "inset(0% 0% 0% 0% round 44px)" }}
               transition={{ duration: 1.3, ease, delay: 0.25 }}
-              className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-accent shadow-lift"
+              className="relative aspect-[4/5] overflow-hidden rounded-[2.75rem] bg-accent shadow-lift lg:aspect-auto lg:h-full"
             >
               <div className="ph-photo absolute inset-x-0 -inset-y-[6%]">
                 <motion.div
@@ -186,7 +184,7 @@ export default function PageHero({ crumb, eyebrow, title, highlight, description
                     alt={image.alt}
                     fill
                     priority
-                    sizes="(min-width: 1024px) 440px, 92vw"
+                    sizes="(min-width: 1024px) 420px, (min-width: 640px) 460px, 92vw"
                     className={`object-cover ${imagePosition}`}
                   />
                 </motion.div>

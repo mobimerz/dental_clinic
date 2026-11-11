@@ -25,18 +25,18 @@ export default function AboutClinic() {
   const inset = clinicImages.treatmentRoom;
 
   return (
-    <section id="about" aria-labelledby="about-title" className="relative overflow-hidden py-16 sm:py-20 lg:py-24">
-      <div className="container-page grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+    <section id="about" aria-labelledby="about-title" className="relative overflow-hidden section-y">
+      <div className="container-page grid gap-14 lg:grid-cols-2 lg:items-stretch lg:gap-20">
         {/* Images */}
-        <div className="relative mx-auto w-full max-w-[540px] pb-16 pr-10 sm:pr-16 lg:mx-0">
+        <div className="relative mx-auto w-full max-w-[540px] pb-16 pr-10 sm:pr-16 lg:mx-0 lg:self-start xl:flex xl:flex-col xl:self-stretch">
           {/* The observer sits on an unclipped wrapper: a fully clipped target never reports as in view */}
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }}>
+          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="xl:flex xl:flex-1 xl:flex-col">
             <motion.div
               variants={{
                 hidden: { clipPath: "inset(0% 100% 0% 0% round 36px)" },
                 show: { clipPath: "inset(0% 0% 0% 0% round 36px)", transition: { duration: 1.2, ease } },
               }}
-              className="relative aspect-square overflow-hidden rounded-[2.25rem] shadow-lift"
+              className="relative aspect-square overflow-hidden rounded-[2.25rem] shadow-lift xl:aspect-auto xl:flex-1"
             >
               <motion.div
                 variants={{ hidden: { scale: 1.35 }, show: { scale: 1, transition: { duration: 1.8, ease } } }}
@@ -87,7 +87,7 @@ export default function AboutClinic() {
         </div>
 
         {/* Copy */}
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start lg:justify-center">
           <Reveal>
             <Eyebrow>About the Clinic</Eyebrow>
           </Reveal>

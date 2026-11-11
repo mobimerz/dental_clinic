@@ -20,7 +20,7 @@ export default async function HomePage() {
       <TrustStats />
       <AboutClinic />
       <Treatments />
-      <WhyChooseUs linkToPage />
+      <WhyChooseUs linkToPage backdrop="bg-soft" />
       <ClinicGallery />
       <PatientReviews google={google} />
     </SiteShell>

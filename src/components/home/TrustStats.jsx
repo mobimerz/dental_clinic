@@ -32,11 +32,15 @@ const stats = [
   },
 ];
 
-export default function TrustStats() {
+// The stats card overlaps the hero above it. When the next section has its own surface
+// (e.g. a dark band), `spaced` gives the card the standard section gap below it.
+export default function TrustStats({ spaced = false }) {
   return (
-    <section id="trust" aria-label="Why patients trust A-Zee Dental" className="relative z-10 -mt-6 lg:-mt-10">
+    <section id="trust" aria-label="Why patients trust A-Zee Dental" className={`relative z-10 -mt-6 lg:-mt-10 ${spaced ? "section-pb" : ""}`}>
       <div className="container-page">
-        <Reveal variant="tilt" className="grid grid-cols-2 overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-line lg:grid-cols-4">
+        {/* The card sits on the first screen, so it must reveal as soon as any of it is visible
+            (the default -80px margin would leave it hidden until the user scrolls). */}
+        <Reveal variant="tilt" delay={0.3} viewport={{ once: true, margin: "0px" }} className="grid grid-cols-2 overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-line lg:grid-cols-4">
           {stats.map(({ icon: Icon, value, label, href }, i) => {
             const Tag = href ? motion.a : motion.div;
             return (
@@ -47,7 +51,7 @@ export default function TrustStats() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.8, delay: 0.25 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                 {...(href ? { href, target: "_blank", rel: "noopener noreferrer" } : {})}
-                className={`group relative flex flex-col items-start gap-4 p-5 transition-colors duration-300 hover:bg-soft sm:flex-row sm:items-center sm:p-7 ${
+                className={`group relative flex flex-col items-start gap-4 p-5 transition-colors duration-300 hover:bg-soft sm:flex-row sm:items-center sm:p-7 lg:py-5 ${
                   i % 2 === 0 ? "border-r border-line" : ""
                 } ${i < 2 ? "border-b border-line lg:border-b-0" : ""} ${i === 1 ? "lg:border-r" : ""}`}
               >

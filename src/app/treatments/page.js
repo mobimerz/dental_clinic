@@ -46,7 +46,6 @@ export default function TreatmentsPage() {
   return (
     <SiteShell>
       <PageHero
-        crumb="Treatments"
         eyebrow="Our Treatments"
         title="Complete Dental Care,"
         highlight="Under One Roof."
@@ -55,7 +54,6 @@ export default function TreatmentsPage() {
         imagePosition="object-[50%_60%]"
         chips={[
           { icon: "shield", value: "Painless", label: "Comfort-first care" },
-          { icon: "smile", value: `${treatments.length} treatments`, label: "For every age" },
         ]}
       >
         <Button href="#explorer" arrow>

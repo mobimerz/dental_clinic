@@ -9,7 +9,11 @@ import Reveal from "@/components/common/Reveal";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { clinic } from "@/data/clinic";
 
-const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+// Monday to Saturday share the same hours, so they are listed as one row (day 0 = Sunday).
+const DAY_GROUPS = [
+  { label: "Monday – Saturday", days: [1, 2, 3, 4, 5, 6] },
+  { label: "Sunday", days: [0] },
+];
 const toMinutes = (hhmm) => {
   const [h, m] = hhmm.split(":").map(Number);
   return h * 60 + m;
@@ -103,7 +107,7 @@ export default function VisitInfo() {
   );
 
   return (
-    <section ref={root} aria-labelledby="visit-title" className="relative py-16 sm:py-20 lg:py-24">
+    <section ref={root} aria-labelledby="visit-title" className="relative section-y">
       <div className="container-page grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
         <div>
           <SectionHeading
@@ -164,21 +168,21 @@ export default function VisitInfo() {
                 </div>
 
                 <ul className="mt-5 space-y-1">
-                  {DAYS.map((name, d) => {
-                    const today = status?.day === d;
+                  {DAY_GROUPS.map(({ label, days }) => {
+                    const today = days.includes(status?.day);
                     return (
                       <li
-                        key={name}
+                        key={label}
                         className={`flex items-start justify-between gap-4 rounded-xl px-3 py-2 text-[0.95rem] transition-colors ${
                           today ? "bg-soft font-semibold text-secondary ring-1 ring-accent/60" : "text-ink"
                         }`}
                       >
                         <span>
-                          {name}
+                          {label}
                           {today && <span className="ml-2 text-xs font-semibold text-primary">Today</span>}
                         </span>
                         <span className="text-right text-muted">
-                          {clinic.schedule[d].map(([o, c]) => (
+                          {clinic.schedule[days[0]].map(([o, c]) => (
                             <span key={o} className="block">
                               {format(o)} – {format(c)}
                             </span>
@@ -194,8 +198,9 @@ export default function VisitInfo() {
           </Reveal>
         </div>
 
-        <div className="relative lg:pt-4">
-          <div className="map-frame relative h-[420px] overflow-hidden rounded-[2rem] bg-accent shadow-lift ring-1 ring-line sm:h-[520px] lg:sticky lg:top-28 lg:h-[640px]">
+        {/* Desktop: the map matches the height of the address and timings column */}
+        <div className="relative">
+          <div className="map-frame relative h-[420px] overflow-hidden rounded-[2rem] bg-accent shadow-lift ring-1 ring-line sm:h-[520px] lg:h-full lg:min-h-[480px]">
             <iframe
               title={`Map showing ${clinic.name}`}
               src={clinic.links.mapEmbed}

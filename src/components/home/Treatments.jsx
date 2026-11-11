@@ -134,7 +134,7 @@ export default function Treatments() {
   );
 
   return (
-    <section id="treatments" aria-labelledby="treatments-title" className="relative overflow-clip bg-soft py-16 sm:py-20 lg:py-24">
+    <section id="treatments" aria-labelledby="treatments-title" className="relative overflow-clip bg-soft section-y">
       <div aria-hidden="true" className="bg-dots absolute inset-x-0 top-0 h-64 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <FloatingTooth className="left-[4%] top-40 hidden text-primary/20 lg:block" size="h-14 w-14" speed={0.5} />
       <FloatingTooth className="right-[6%] top-[45%] hidden text-accent lg:block" size="h-10 w-10" duration={9} speed={-0.4} />

@@ -95,6 +95,16 @@ function DetailPanel({ t, index }) {
 export default function TreatmentDetails() {
   const root = useRef(null);
   const [active, setActive] = useState(treatments[0].slug);
+  // A menu click highlights its item straight away, and the panels the page passes on the way
+  // (the scroll itself is handled site-wide in SmoothScroll) don't flicker the highlight.
+  const jumping = useRef(false);
+  const jumpTimer = useRef(null);
+  const goTo = (slug) => {
+    setActive(slug);
+    jumping.current = true;
+    clearTimeout(jumpTimer.current);
+    jumpTimer.current = setTimeout(() => (jumping.current = false), 1600);
+  };
 
   useGSAP(
     () => {
@@ -105,7 +115,7 @@ export default function TreatmentDetails() {
           trigger: panel,
           start: "top 45%",
           end: "bottom 45%",
-          onToggle: (self) => self.isActive && setActive(panel.id),
+          onToggle: (self) => self.isActive && !jumping.current && setActive(panel.id),
         });
       });
 
@@ -138,7 +148,7 @@ export default function TreatmentDetails() {
   );
 
   return (
-    <section ref={root} aria-labelledby="details-title" className="relative py-16 sm:py-20 lg:py-24">
+    <section ref={root} aria-labelledby="details-title" className="relative section-y">
       <div className="container-page">
         <SectionHeading
           id="details-title"
@@ -156,6 +166,7 @@ export default function TreatmentDetails() {
                   <li key={t.slug}>
                     <a
                       href={`#${t.slug}`}
+                      onClick={() => goTo(t.slug)}
                       aria-current={isActive ? "true" : undefined}
                       className={`relative flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-semibold transition-colors duration-300 ${
                         isActive ? "text-white" : "text-secondary hover:text-primary"
@@ -168,7 +179,7 @@ export default function TreatmentDetails() {
                           transition={{ type: "spring", stiffness: 380, damping: 34 }}
                         />
                       )}
-                      <span className={`relative text-xs ${isActive ? "text-accent" : "text-muted"}`}>{String(i + 1).padStart(2, "0")}</span>
+                      <span className={`relative w-5 shrink-0 text-xs tabular-nums ${isActive ? "text-accent" : "text-muted"}`}>{String(i + 1).padStart(2, "0")}</span>
                       <span className="relative">{t.title}</span>
                     </a>
                   </li>

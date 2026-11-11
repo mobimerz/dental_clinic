@@ -71,6 +71,33 @@
   }
 }
 
+/* Section rhythm: one vertical spacing scale for every content section (64 / 80 / 96px).
+   Sections own their padding, so adjacent sections never rely on each other's margins. */
+@utility section-y {
+  padding-block: 4rem;
+  @media (width >= 40rem) {
+    padding-block: 5rem;
+  }
+  @media (width >= 64rem) {
+    padding-block: 6rem;
+  }
+}
+@utility section-pb {
+  padding-bottom: 4rem;
+  @media (width >= 40rem) {
+    padding-bottom: 5rem;
+  }
+  @media (width >= 64rem) {
+    padding-bottom: 6rem;
+  }
+}
+
+/* Lets a section's decorative background (washes, orbs, dots) dissolve before the section edge,
+   so it ends cleanly instead of being hard-clipped against the next section. */
+@utility fade-out-bottom {
+  mask-image: linear-gradient(to bottom, black 65%, transparent);
+}
+
 @utility text-balance {
   text-wrap: balance;
 }
@@ -229,12 +256,6 @@ html.lenis body {
   }
 }
 
-@keyframes marquee {
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
 @keyframes review-progress {
   from {
     transform: scaleX(0);
@@ -277,9 +298,6 @@ html.lenis body {
 }
 @utility anim-sway {
   animation: sway 8s ease-in-out infinite;
-}
-@utility anim-marquee {
-  animation: marquee 40s linear infinite;
 }
 
 /* Shimmer that slides through a gradient-clipped headline */

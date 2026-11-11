@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowDown } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
@@ -9,6 +9,7 @@ import Tilt from "@/components/common/Tilt";
 import { FloatingTooth, Sparkle } from "@/components/common/FloatingShapes";
 import { treatmentIcons } from "@/components/common/treatmentIcons";
 import { treatmentCategories, treatments } from "@/data/treatments";
+import { ScrollTrigger } from "@/lib/gsap";
 
 const ease = [0.22, 1, 0.36, 1];
 const categoryLabel = Object.fromEntries(treatmentCategories.map((c) => [c.id, c.label]));
@@ -55,8 +56,15 @@ export default function TreatmentExplorer() {
   const [category, setCategory] = useState("all");
   const visible = category === "all" ? treatments : treatments.filter((t) => t.category === category);
 
+  // Filtering changes this section's height, which moves everything below it; recompute scroll
+  // positions once the cards have settled so reveals and the guide's highlight stay in sync.
+  useEffect(() => {
+    const id = setTimeout(() => ScrollTrigger.refresh(), 700);
+    return () => clearTimeout(id);
+  }, [category]);
+
   return (
-    <section id="explorer" aria-labelledby="explorer-title" className="relative overflow-clip bg-soft py-16 sm:py-20 lg:py-24">
+    <section id="explorer" aria-labelledby="explorer-title" className="relative overflow-clip bg-soft section-y">
       <div aria-hidden="true" className="bg-dots absolute inset-x-0 top-0 h-64 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <FloatingTooth className="left-[4%] top-40 hidden text-primary/20 lg:block" size="h-14 w-14" speed={0.5} />
       <Sparkle className="right-[14%] top-28 hidden h-5 w-5 text-primary/50 md:block" speed={0.3} />
@@ -77,7 +85,6 @@ export default function TreatmentExplorer() {
           >
             {treatmentCategories.map((c) => {
               const active = c.id === category;
-              const count = c.id === "all" ? treatments.length : treatments.filter((t) => t.category === c.id).length;
               return (
                 <button
                   key={c.id}
@@ -96,10 +103,7 @@ export default function TreatmentExplorer() {
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}
-                  <span className="relative flex items-center gap-2">
-                    {c.label}
-                    <span className={`text-xs ${active ? "text-accent" : "text-muted"}`}>{count}</span>
-                  </span>
+                  <span className="relative">{c.label}</span>
                 </button>
               );
             })}
