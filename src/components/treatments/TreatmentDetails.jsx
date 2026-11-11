@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { CircleCheck } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
@@ -10,6 +10,7 @@ import { treatmentIcons } from "@/components/common/treatmentIcons";
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { treatmentCategories, treatments } from "@/data/treatments";
 import { whatsappLink } from "@/data/clinic";
+import { JUMP_EVENT } from "@/lib/lenis";
 
 const categoryLabel = Object.fromEntries(treatmentCategories.map((c) => [c.id, c.label]));
 
@@ -95,16 +96,30 @@ function DetailPanel({ t, index }) {
 export default function TreatmentDetails() {
   const root = useRef(null);
   const [active, setActive] = useState(treatments[0].slug);
-  // A menu click highlights its item straight away, and the panels the page passes on the way
-  // (the scroll itself is handled site-wide in SmoothScroll) don't flicker the highlight.
+  const reveals = useRef({});
   const jumping = useRef(false);
-  const jumpTimer = useRef(null);
-  const goTo = (slug) => {
-    setActive(slug);
-    jumping.current = true;
-    clearTimeout(jumpTimer.current);
-    jumpTimer.current = setTimeout(() => (jumping.current = false), 1600);
-  };
+
+  // A jump to a panel (side menu or a "Read details" card; the scroll itself runs in SmoothScroll):
+  // highlight it straight away, keep the panels passed on the way from flickering the highlight, and
+  // start its entrance now so it has finished building in by the time the scroll arrives.
+  useEffect(() => {
+    let timer;
+    const onJump = (e) => {
+      const { id, duration } = e.detail;
+      const tl = reveals.current[id];
+      if (!tl) return;
+      setActive(id);
+      jumping.current = true;
+      clearTimeout(timer);
+      timer = setTimeout(() => (jumping.current = false), duration * 1000 + 200);
+      if (tl.progress() === 0 && !tl.isActive()) tl.play(0);
+    };
+    window.addEventListener(JUMP_EVENT, onJump);
+    return () => {
+      window.removeEventListener(JUMP_EVENT, onJump);
+      clearTimeout(timer);
+    };
+  }, []);
 
   useGSAP(
     () => {
@@ -127,6 +142,7 @@ export default function TreatmentDetails() {
             defaults: { ease: "expo.out" },
             scrollTrigger: { trigger: panel, start: "top 82%", once: true },
           });
+          reveals.current[panel.id] = tl;
           tl.from(panel, { y: 80, opacity: 0, scale: 0.96, duration: 1.2 })
             .from(q(".detail-icon"), { scale: 0, rotate: -120, duration: 1, ease: "back.out(1.8)" }, "-=0.9")
             .from(q(".detail-num"), { xPercent: 40, opacity: 0, duration: 1.4 }, "<")
@@ -166,7 +182,6 @@ export default function TreatmentDetails() {
                   <li key={t.slug}>
                     <a
                       href={`#${t.slug}`}
-                      onClick={() => goTo(t.slug)}
                       aria-current={isActive ? "true" : undefined}
                       className={`relative flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-semibold transition-colors duration-300 ${
                         isActive ? "text-white" : "text-secondary hover:text-primary"

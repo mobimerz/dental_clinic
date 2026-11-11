@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger, MOTION_OK } from "@/lib/gsap";
-import { HEADER_OFFSET, setLenis } from "@/lib/lenis";
+import { jumpTo, setLenis } from "@/lib/lenis";
 
 // Lenis smooth scrolling driven by GSAP's ticker, plus the site-wide `data-speed` parallax.
 export default function SmoothScroll() {
@@ -33,7 +33,7 @@ export default function SmoothScroll() {
         // The "skip to content" link keeps native behaviour so keyboard focus moves with it.
         if (!el || el.tagName === "MAIN") return;
         e.preventDefault();
-        lenis.scrollTo(el, { offset: HEADER_OFFSET, duration: 1.4 });
+        jumpTo(el);
         window.history.replaceState(null, "", url.hash);
       };
       document.addEventListener("click", onClick, true);
@@ -44,7 +44,7 @@ export default function SmoothScroll() {
         const el = id && document.getElementById(id);
         if (!el) return;
         ScrollTrigger.refresh();
-        lenis.scrollTo(el, { offset: HEADER_OFFSET, immediate: true, force: true });
+        jumpTo(el, { immediate: true });
       };
       const hashTimer = setTimeout(landOnHash, 400);
       const tick = (time) => lenis.raf(time * 1000);
