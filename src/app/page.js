@@ -1,7 +1,4 @@
-import MotionProvider from "@/components/common/MotionProvider";
-import FloatingContact from "@/components/common/FloatingContact";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import SiteShell from "@/components/layout/SiteShell";
 import Hero from "@/components/home/Hero";
 import TrustStats from "@/components/home/TrustStats";
 import AboutClinic from "@/components/home/AboutClinic";
@@ -18,25 +15,14 @@ export default async function HomePage() {
   const google = await getGoogleReviews();
 
   return (
-    <MotionProvider>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:shadow-lift"
-      >
-        Skip to content
-      </a>
-      <Header />
-      <main id="main">
-        <Hero />
-        <TrustStats />
-        <AboutClinic />
-        <Treatments />
-        <WhyChooseUs />
-        <ClinicGallery />
-        <PatientReviews google={google} />
-      </main>
-      <Footer />
-      <FloatingContact />
-    </MotionProvider>
+    <SiteShell>
+      <Hero />
+      <TrustStats />
+      <AboutClinic />
+      <Treatments />
+      <WhyChooseUs linkToPage />
+      <ClinicGallery />
+      <PatientReviews google={google} />
+    </SiteShell>
   );
 }

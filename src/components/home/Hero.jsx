@@ -177,7 +177,7 @@ export default function Hero() {
                 <Button href={whatsappLink()} external icon={CalendarCheck}>
                   Book Your Appointment
                 </Button>
-                <Button href="#treatments" variant="secondary" arrow>
+                <Button href="/treatments" variant="secondary" arrow>
                   Explore Treatments
                 </Button>
               </div>

@@ -7,6 +7,15 @@ export const clinic = {
   tagline: "Dental & Implant Care in Bengaluru",
   description:
     "Personalized dental care, dental implants, root canal treatment, cosmetic dentistry and more in Pai Layout, Bengaluru.",
+  established: 2011,
+
+  // As listed on the clinic's Google Business Profile and social profiles.
+  doctor: {
+    name: "Dr. Aysha Aslam Sait",
+    shortName: "Dr. Aysha",
+    focus: "Painless, family dentistry",
+    experienceYears: 18,
+  },
 
   phone: {
     display: "+91 97313 76106",
@@ -38,7 +47,7 @@ export const clinic = {
   rating: {
     value: 4.9,
     outOf: 5,
-    count: 311,
+    count: 314,
     checkedOn: "November 2026",
   },
 
@@ -47,16 +56,25 @@ export const clinic = {
     { days: "Monday – Saturday", slots: ["10:30 AM – 2:00 PM", "5:00 PM – 9:00 PM"] },
     { days: "Sunday", slots: ["10:30 AM – 1:00 PM"] },
   ],
+  // Same timings in 24h form (day 0 = Sunday), used for the live "open now" status.
+  schedule: {
+    0: [["10:30", "13:00"]],
+    1: [["10:30", "14:00"], ["17:00", "21:00"]],
+    2: [["10:30", "14:00"], ["17:00", "21:00"]],
+    3: [["10:30", "14:00"], ["17:00", "21:00"]],
+    4: [["10:30", "14:00"], ["17:00", "21:00"]],
+    5: [["10:30", "14:00"], ["17:00", "21:00"]],
+    6: [["10:30", "14:00"], ["17:00", "21:00"]],
+  },
   hoursNote: "Timings are subject to change. Please call ahead to confirm.",
 };
 
-// Only Home is a real link; the other items are shown as plain text.
 export const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About" },
-  { label: "Treatments" },
-  { label: "Why Choose Us" },
-  { label: "Contact" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Treatments", href: "/treatments" },
+  { label: "Why Choose Us", href: "/why-choose-us" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const whatsappLink = (message = "Hello A-Zee Dental, I would like to enquire about an appointment.") =>

@@ -93,7 +93,7 @@ function RevealImage({ image, className, sizes, delay = 0, caption, position = "
 
 export default function ClinicGallery() {
   return (
-    <section id="gallery" aria-labelledby="gallery-title" className="relative py-24 sm:py-28 lg:py-36">
+    <section id="gallery" aria-labelledby="gallery-title" className="relative py-16 sm:py-20 lg:py-24">
       <div className="container-page">
         <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
           <SectionHeading

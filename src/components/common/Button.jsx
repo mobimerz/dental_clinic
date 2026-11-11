@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Magnetic from "./Magnetic";
 
@@ -71,6 +72,10 @@ export default function Button({
     <button type="button" className={classes} {...rest}>
       {content}
     </button>
+  ) : href.startsWith("/") ? (
+    <Link href={href} className={classes} {...rest}>
+      {content}
+    </Link>
   ) : (
     <a
       href={href}

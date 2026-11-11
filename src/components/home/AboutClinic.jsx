@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, CircleCheck } from "lucide-react";
 import Reveal from "@/components/common/Reveal";
@@ -24,7 +25,7 @@ export default function AboutClinic() {
   const inset = clinicImages.treatmentRoom;
 
   return (
-    <section id="about" aria-labelledby="about-title" className="relative overflow-hidden py-24 sm:py-28 lg:py-32">
+    <section id="about" aria-labelledby="about-title" className="relative overflow-hidden py-16 sm:py-20 lg:py-24">
       <div className="container-page grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
         {/* Images */}
         <div className="relative mx-auto w-full max-w-[540px] pb-16 pr-10 sm:pr-16 lg:mx-0">
@@ -116,8 +117,8 @@ export default function AboutClinic() {
 
           <Reveal delay={0.4} className="mt-10">
             <Magnetic>
-              <a
-                href="#treatments"
+              <Link
+                href="/about"
                 className="group relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-white py-1.5 pl-1.5 pr-7 text-[0.95rem] font-semibold text-secondary shadow-soft ring-1 ring-line transition-shadow duration-500 ease-premium hover:shadow-glow hover:ring-primary"
               >
                 {/* Teal fill grows out of the arrow circle to cover the whole pill */}
@@ -136,7 +137,7 @@ export default function AboutClinic() {
                   />
                 </span>
                 <span className="relative transition-colors duration-500 group-hover:text-white">Learn More About Our Care</span>
-              </a>
+              </Link>
             </Magnetic>
           </Reveal>
         </div>

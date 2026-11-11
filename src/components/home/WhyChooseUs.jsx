@@ -3,6 +3,8 @@
 import { useRef } from "react";
 import { ClipboardList, HeartHandshake, ShieldCheck, Stethoscope } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
+import Button from "@/components/common/Button";
+import Reveal from "@/components/common/Reveal";
 import { GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
 import { ToothIcon } from "@/components/common/DentalIcons";
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from "@/lib/gsap";
@@ -30,7 +32,8 @@ const features = [
   },
 ];
 
-export default function WhyChooseUs() {
+// `linkToPage` adds a button to the full Why Choose Us page (used on the home page).
+export default function WhyChooseUs({ linkToPage = false }) {
   const root = useRef(null);
 
   useGSAP(
@@ -102,7 +105,7 @@ export default function WhyChooseUs() {
       ref={root}
       id="why-choose-us"
       aria-labelledby="why-title"
-      className="relative overflow-clip bg-secondary py-24 text-white sm:py-28 lg:py-32"
+      className="relative overflow-clip bg-secondary py-16 text-white sm:py-20 lg:py-24"
     >
       <GlowOrb className="-right-40 -top-40 h-[520px] w-[520px] bg-primary/40" speed={0.4} />
       <GlowOrb className="-bottom-48 -left-40 h-[460px] w-[460px] bg-[#0A97A6]/25" duration={24} x={-40} speed={-0.3} />
@@ -123,6 +126,13 @@ export default function WhyChooseUs() {
             align="left"
             inverted
           />
+          {linkToPage && (
+            <Reveal delay={0.3} className="mt-8">
+              <Button href="/why-choose-us" variant="ghost" arrow>
+                See What Sets Us Apart
+              </Button>
+            </Reveal>
+          )}
         </div>
 
         <ol className="why-list relative">

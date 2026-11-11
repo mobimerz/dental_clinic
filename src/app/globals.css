@@ -229,6 +229,12 @@ html.lenis body {
   }
 }
 
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 @keyframes review-progress {
   from {
     transform: scaleX(0);
@@ -271,6 +277,9 @@ html.lenis body {
 }
 @utility anim-sway {
   animation: sway 8s ease-in-out infinite;
+}
+@utility anim-marquee {
+  animation: marquee 40s linear infinite;
 }
 
 /* Shimmer that slides through a gradient-clipped headline */

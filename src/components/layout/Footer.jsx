@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { ArrowUpRight, Clock, MapPin, MessageCircle, Phone } from "lucide-react";
 import Logo from "@/components/common/Logo";
 import Reveal from "@/components/common/Reveal";
 import StarRating from "@/components/common/StarRating";
 import { clinic, navLinks, whatsappLink } from "@/data/clinic";
-import { treatments } from "@/data/treatments";
+import { featuredTreatments } from "@/data/treatments";
 
 function Column({ title, children, delay = 0 }) {
   return (
@@ -51,13 +52,9 @@ export default function Footer() {
             <ul className="space-y-3">
               {navLinks.map((l) => (
                 <li key={l.label}>
-                  {l.href ? (
-                    <a href={l.href} className={linkClass}>
-                      {l.label}
-                    </a>
-                  ) : (
-                    <span className="inline-block text-[0.93rem] text-white/65">{l.label}</span>
-                  )}
+                  <Link href={l.href} className={linkClass}>
+                    {l.label}
+                  </Link>
                 </li>
               ))}
               <li>
@@ -70,11 +67,11 @@ export default function Footer() {
 
           <Column title="Treatments" delay={0.2}>
             <ul className="space-y-3">
-              {treatments.map((t) => (
+              {featuredTreatments.map((t) => (
                 <li key={t.slug}>
-                  <a href="#treatments" className={linkClass}>
+                  <Link href={`/treatments#${t.slug}`} className={linkClass}>
                     {t.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

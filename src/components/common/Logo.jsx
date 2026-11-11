@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { clinic } from "@/data/clinic";
 
 export function LogoMark({ className = "h-10 w-10" }) {
@@ -21,7 +22,7 @@ export function LogoMark({ className = "h-10 w-10" }) {
 
 export default function Logo({ inverted = false }) {
   return (
-    <a href="#home" className="group flex items-center gap-3" aria-label={`${clinic.name} — back to top`}>
+    <Link href="/" className="group flex items-center gap-3" aria-label={`${clinic.name} — home`}>
       <LogoMark className="h-10 w-10 shrink-0 transition-transform duration-500 ease-premium group-hover:-rotate-6" />
       <span className="flex flex-col whitespace-nowrap leading-none">
         <span className={`text-[1.2rem] font-extrabold tracking-tight ${inverted ? "text-white" : "text-secondary"}`}>
@@ -31,6 +32,6 @@ export default function Logo({ inverted = false }) {
           & Implant Centre
         </span>
       </span>
-    </a>
+    </Link>
   );
 }

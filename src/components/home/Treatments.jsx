@@ -2,33 +2,19 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowUpRight, ShieldCheck, Smile, Sparkles } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
+import Button from "@/components/common/Button";
+import Reveal from "@/components/common/Reveal";
 import Tilt from "@/components/common/Tilt";
 import Magnetic from "@/components/common/Magnetic";
 import { FloatingTooth, Sparkle } from "@/components/common/FloatingShapes";
-import {
-  BracesIcon,
-  CrownBridgeIcon,
-  ImplantIcon,
-  RootCanalIcon,
-  WisdomToothIcon,
-} from "@/components/common/DentalIcons";
+import { treatmentIcons as icons } from "@/components/common/treatmentIcons";
 import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from "@/lib/gsap";
-import { treatments } from "@/data/treatments";
-import { clinicImages, whatsappLink } from "@/data/clinic";
-
-const icons = {
-  implant: ImplantIcon,
-  rootCanal: RootCanalIcon,
-  smile: Smile,
-  sparkles: Sparkles,
-  braces: BracesIcon,
-  crown: CrownBridgeIcon,
-  wisdom: WisdomToothIcon,
-  shield: ShieldCheck,
-};
+import { featuredTreatments } from "@/data/treatments";
+import { clinicImages } from "@/data/clinic";
 
 // Clinic photos that bloom in behind a card's content on hover.
 const hoverImages = [
@@ -102,12 +88,10 @@ function TreatmentCard({ t, i }) {
           {t.title}
         </h3>
         <p className="relative mt-2.5 flex-1 text-[0.92rem] leading-relaxed text-muted">{t.description}</p>
-        <a
-          href={whatsappLink(`Hello A-Zee Dental, I would like to know more about ${t.title}.`)}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href={`/treatments#${t.slug}`}
           className="relative mt-6 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-primary"
-          aria-label={`Learn more about ${t.title} and send an enquiry`}
+          aria-label={`Learn more about ${t.title}`}
         >
           <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1.5px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-500 group-hover:bg-[length:100%_1.5px]">
             Learn More
@@ -122,7 +106,7 @@ function TreatmentCard({ t, i }) {
               aria-hidden="true"
             />
           </span>
-        </a>
+        </Link>
       </motion.article>
     </Tilt>
   );
@@ -150,7 +134,7 @@ export default function Treatments() {
   );
 
   return (
-    <section id="treatments" aria-labelledby="treatments-title" className="relative overflow-clip bg-soft py-24 sm:py-28 lg:py-32">
+    <section id="treatments" aria-labelledby="treatments-title" className="relative overflow-clip bg-soft py-16 sm:py-20 lg:py-24">
       <div aria-hidden="true" className="bg-dots absolute inset-x-0 top-0 h-64 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <FloatingTooth className="left-[4%] top-40 hidden text-primary/20 lg:block" size="h-14 w-14" speed={0.5} />
       <FloatingTooth className="right-[6%] top-[45%] hidden text-accent lg:block" size="h-10 w-10" duration={9} speed={-0.4} />
@@ -165,12 +149,18 @@ export default function Treatments() {
         />
 
         <ul ref={grid} className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {treatments.map((t, i) => (
+          {featuredTreatments.map((t, i) => (
             <li key={t.slug} className="treatment-card">
               <TreatmentCard t={t} i={i} />
             </li>
           ))}
         </ul>
+
+        <Reveal delay={0.1} className="mt-12 flex justify-center">
+          <Button href="/treatments" variant="secondary" arrow>
+            View All Treatments
+          </Button>
+        </Reveal>
       </div>
 
     </section>
