@@ -6,6 +6,8 @@ import { ChevronLeft, ChevronRight, ExternalLink, Quote, Star } from "lucide-rea
 import SectionHeading from "@/components/common/SectionHeading";
 import Button from "@/components/common/Button";
 import Reveal from "@/components/common/Reveal";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
 import StarRating from "@/components/common/StarRating";
 import Counter from "@/components/common/Counter";
 import Tilt from "@/components/common/Tilt";
@@ -14,11 +16,10 @@ import { reviews } from "@/data/reviews";
 
 function RatingSummary({ rating, count, live }) {
   return (
-    <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-[2rem] bg-secondary p-8 text-white sm:p-10">
+    <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-[2rem] bg-secondary p-6 text-white md:p-8">
       <span
         aria-hidden="true"
-        className="anim-orb absolute -right-16 -top-16 h-56 w-56 rounded-full bg-primary/40 blur-2xl"
-        style={{ animationDuration: "10s", "--ox": "-20px", "--oy": "20px" }}
+        className="anim-orb absolute -right-16 -top-16 h-56 w-56 rounded-full bg-primary/40 blur-2xl [animation-duration:10s]! [--ox:-20px] [--oy:20px]"
       />
       <div className="relative">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent">Google Rating</p>
@@ -46,7 +47,8 @@ function RatingSummary({ rating, count, live }) {
   );
 }
 
-const AUTOPLAY_MS = 6500;
+// Autoplay: each review shows for 6.5s; the active dot's progress bar (review-progress) runs for the same time
+// and advances the carousel when it ends.
 const ease = [0.22, 1, 0.36, 1];
 
 // Each review card swings in like the next card of a deck, its words rise in sequence
@@ -83,7 +85,7 @@ function ReviewCarousel({ items }) {
 
   return (
     <div
-      className="relative flex h-full flex-col justify-between overflow-hidden rounded-[2rem] bg-white p-8 shadow-lift ring-1 ring-line sm:p-12"
+      className="relative flex h-full flex-col justify-between overflow-hidden rounded-[2rem] bg-white p-6 shadow-lift ring-1 ring-line md:p-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
@@ -91,8 +93,7 @@ function ReviewCarousel({ items }) {
     >
       <span
         aria-hidden="true"
-        className="anim-sway absolute -right-6 -top-6"
-        style={{ "--from": "12deg", "--to": "22deg", "--s": 1.08 }}
+        className="anim-sway absolute -right-6 -top-6 [--from:12deg] [--s:1.08] [--to:22deg]"
       >
         <Quote className="h-36 w-36 text-soft" />
       </span>
@@ -135,7 +136,7 @@ function ReviewCarousel({ items }) {
               if (info.offset.x < -70 || info.velocity.x < -400) paginate(1);
               else if (info.offset.x > 70 || info.velocity.x > 400) paginate(-1);
             }}
-            className="relative flex h-full cursor-grab flex-col rounded-3xl bg-white p-6 ring-1 ring-line active:cursor-grabbing sm:p-7"
+            className="relative flex h-full cursor-grab flex-col rounded-3xl bg-white p-6 ring-1 ring-line active:cursor-grabbing"
             aria-live="polite"
           >
             <span className="flex gap-0.5" role="img" aria-label={`${review.rating} out of 5 stars`}>
@@ -234,11 +235,7 @@ function ReviewCarousel({ items }) {
                 <span
                   key={index}
                   onAnimationEnd={() => paginate(1)}
-                  className="absolute inset-y-0 left-0 w-full origin-left bg-primary"
-                  style={{
-                    animation: `review-progress ${AUTOPLAY_MS}ms linear forwards`,
-                    animationPlayState: paused ? "paused" : "running",
-                  }}
+                  className={`absolute inset-y-0 left-0 w-full origin-left bg-primary [animation:review-progress_6500ms_linear_forwards] ${paused ? "[animation-play-state:paused]" : ""}`}
                 />
               )}
             </button>
@@ -272,17 +269,16 @@ function ReviewCarousel({ items }) {
 // Shown while there are no live Google reviews and none in data/reviews.js.
 function ReviewsCallout() {
   return (
-    <div className="relative flex h-full flex-col justify-center overflow-hidden rounded-[2rem] bg-white p-8 shadow-lift ring-1 ring-line sm:p-12">
+    <div className="relative flex h-full flex-col justify-center overflow-hidden rounded-[2rem] bg-white p-6 shadow-lift ring-1 ring-line md:p-8">
       <span
         aria-hidden="true"
-        className="anim-sway absolute -right-4 -top-4"
-        style={{ "--from": "12deg", "--to": "22deg", "--s": 1.08 }}
+        className="anim-sway absolute -right-4 -top-4 [--from:12deg] [--s:1.08] [--to:22deg]"
       >
         <Quote className="h-40 w-40 text-soft" />
       </span>
       <div className="relative">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary">Real patients · Real feedback</p>
-        <h3 className="mt-4 max-w-md text-balance text-2xl font-bold leading-snug text-secondary sm:text-3xl">
+        <h3 className="mt-4 max-w-md text-balance text-h3-lg text-secondary">
           Read what our patients have shared about their visits on Google.
         </h3>
         <p className="mt-4 max-w-md leading-relaxed text-muted">
@@ -309,16 +305,16 @@ export default function PatientReviews({ google = null }) {
   const count = google?.count ?? clinic.rating.count;
 
   return (
-    <section id="reviews" aria-labelledby="reviews-title" className="relative overflow-hidden bg-soft section-y">
+    <Section bg="soft" id="reviews" aria-labelledby="reviews-title" className="overflow-hidden">
       <div aria-hidden="true" data-speed="0.2" className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
-      <div className="container-page relative">
-        <SectionHeading
+      <Container className="relative">
+        <SectionHeading rhythm="hero"
           id="reviews-title"
           eyebrow="Patient Reviews"
           title="What Our Patients Say."
           description={`Rated ${rating} out of ${clinic.rating.outOf} across ${count} reviews on Google.`}
         />
-        <div className="mt-14 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="header-gap grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
           <Reveal variant="tilt">
             <Tilt max={6} radius="rounded-[2rem]" shadow={false} className="h-full">
               <RatingSummary rating={rating} count={count} live={!!google} />
@@ -330,7 +326,7 @@ export default function PatientReviews({ google = null }) {
             </Tilt>
           </Reveal>
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

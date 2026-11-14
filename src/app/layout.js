@@ -13,8 +13,9 @@ const description =
   "Visit A-Zee Dental & Implant Centre in Pai Layout, Bengaluru for personalized dental care, dental implants, root canal treatment, cosmetic dentistry and more.";
 
 export const metadata = {
-  // Set NEXT_PUBLIC_SITE_URL to the live domain once it is known.
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  // NEXT_PUBLIC_SITE_URL can point at a custom domain later; the fallback is the live Vercel URL,
+  // so Open Graph / Twitter image URLs never resolve to localhost in production.
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://dental-clinic-omega-five.vercel.app"),
   title: {
     default: title,
     template: `%s | ${clinic.name}`,

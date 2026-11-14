@@ -4,6 +4,8 @@ import { motion } from "motion/react";
 import { HeartHandshake, MapPin, MessageSquareText, Star } from "lucide-react";
 import Counter from "@/components/common/Counter";
 import Reveal from "@/components/common/Reveal";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
 import { clinic } from "@/data/clinic";
 
 const stats = [
@@ -32,12 +34,12 @@ const stats = [
   },
 ];
 
-// The stats card overlaps the hero above it. When the next section has its own surface
-// (e.g. a dark band), `spaced` gives the card the standard section gap below it.
+// The stats card uses the overlap pattern: it pulls up into the banner above it. When the next
+// section has its own surface (e.g. a dark band), `spaced` keeps the compact gap below it.
 export default function TrustStats({ spaced = false }) {
   return (
-    <section id="trust" aria-label="Why patients trust A-Zee Dental" className={`relative z-10 -mt-6 lg:-mt-10 ${spaced ? "section-pb" : ""}`}>
-      <div className="container-page">
+    <Section variant="overlap" spaced={spaced} id="trust" aria-label="Why patients trust A-Zee Dental">
+      <Container>
         {/* The card sits on the first screen, so it must reveal as soon as any of it is visible
             (the default -80px margin would leave it hidden until the user scrolls). */}
         <Reveal variant="tilt" delay={0.3} viewport={{ once: true, margin: "0px" }} className="grid grid-cols-2 overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-line lg:grid-cols-4">
@@ -51,7 +53,7 @@ export default function TrustStats({ spaced = false }) {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.8, delay: 0.25 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                 {...(href ? { href, target: "_blank", rel: "noopener noreferrer" } : {})}
-                className={`group relative flex flex-col items-start gap-4 p-5 transition-colors duration-300 hover:bg-soft sm:flex-row sm:items-center sm:p-7 lg:py-5 ${
+                className={`group relative flex flex-col items-start gap-4 p-6 transition-colors duration-300 hover:bg-soft sm:flex-row sm:items-center sm:p-8 lg:py-6 ${
                   i % 2 === 0 ? "border-r border-line" : ""
                 } ${i < 2 ? "border-b border-line lg:border-b-0" : ""} ${i === 1 ? "lg:border-r" : ""}`}
               >
@@ -67,13 +69,13 @@ export default function TrustStats({ spaced = false }) {
                 </motion.span>
                 <span className="flex flex-col">
                   <span className="text-xl font-bold tracking-tight text-secondary sm:text-[1.6rem]">{value}</span>
-                  <span className="text-[0.82rem] leading-snug text-muted sm:text-sm">{label}</span>
+                  <span className="text-small text-muted">{label}</span>
                 </span>
               </Tag>
             );
           })}
         </Reveal>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }
