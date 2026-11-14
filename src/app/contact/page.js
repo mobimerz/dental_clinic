@@ -39,7 +39,6 @@ export default function ContactPage() {
   return (
     <SiteShell>
       <PageHero
-        crumb="Contact"
         eyebrow="Get in Touch"
         title="We're Here to Help"
         highlight="Your Smile Shine."

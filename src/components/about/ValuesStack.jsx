@@ -77,7 +77,7 @@ export default function ValuesStack() {
   );
 
   return (
-    <section ref={root} aria-labelledby="values-title" className="relative py-16 sm:py-20 lg:py-24">
+    <section ref={root} aria-labelledby="values-title" className="relative section-y">
       <div className="container-page">
         <SectionHeading
           id="values-title"
@@ -88,7 +88,7 @@ export default function ValuesStack() {
 
         <ol className="mt-16">
           {values.map(({ word, icon: Icon, title, text, points, theme, muted, chip }, i) => (
-            <li key={word} className="value-card sticky pb-8" style={{ top: `${110 + i * 28}px` }}>
+            <li key={word} className="value-card sticky pb-8 last:pb-0" style={{ top: `${110 + i * 28}px` }}>
               <article className={`value-inner relative origin-top overflow-hidden rounded-[2.5rem] p-8 shadow-lift sm:p-12 lg:p-14 ${theme}`}>
                 <ToothIcon aria-hidden="true" className="pointer-events-none absolute -bottom-10 -right-6 h-56 w-56 opacity-[0.07] sm:h-72 sm:w-72" />
                 <div className="relative grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-14">

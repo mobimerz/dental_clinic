@@ -24,7 +24,6 @@ export default async function WhyChooseUsPage() {
   return (
     <SiteShell>
       <PageHero
-        crumb="Why Choose Us"
         eyebrow="Why Patients Choose Us"
         title="Trusted by Families,"
         highlight={`Rated ${clinic.rating.value} on Google.`}
@@ -32,7 +31,6 @@ export default async function WhyChooseUsPage() {
         image={clinicImages.reception}
         chips={[
           { icon: "star", value: `${clinic.rating.value} / 5`, label: `${clinic.rating.count} Google reviews` },
-          { icon: "clock", value: "Till 9 PM", label: "Evening appointments" },
         ]}
       >
         <Button href="#reviews" arrow>
@@ -42,9 +40,7 @@ export default async function WhyChooseUsPage() {
           Plan Your Visit
         </Button>
       </PageHero>
-      <div className="pb-16 sm:pb-20 lg:pb-24">
-        <TrustStats />
-      </div>
+      <TrustStats spaced />
       <WhyChooseUs />
       <VisitJourney />
       <ComfortGrid />

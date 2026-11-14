@@ -76,7 +76,7 @@ export default function FaqSection({ eyebrow = "FAQs", title, description, items
   const [open, setOpen] = useState(0);
 
   return (
-    <section aria-labelledby={`${id}-title`} className="relative overflow-clip bg-soft py-16 sm:py-20 lg:py-24">
+    <section aria-labelledby={`${id}-title`} className="relative overflow-clip bg-soft section-y">
       <div aria-hidden="true" className="bg-dots absolute inset-x-0 top-0 h-64 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <FloatingTooth className="left-[5%] top-32 hidden text-primary/15 lg:block" size="h-14 w-14" speed={0.4} />
       <Sparkle className="right-[10%] top-24 hidden h-5 w-5 text-primary/40 md:block" />

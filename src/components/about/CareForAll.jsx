@@ -37,7 +37,7 @@ const ease = [0.22, 1, 0.36, 1];
 
 export default function CareForAll() {
   return (
-    <section aria-labelledby="care-title" className="relative py-16 sm:py-20 lg:py-24">
+    <section aria-labelledby="care-title" className="relative bg-soft section-y">
       <div className="container-page">
         <SectionHeading
           id="care-title"
@@ -71,8 +71,8 @@ export default function CareForAll() {
                     </span>
                   </div>
                   <h3 className="relative mt-6 text-xl font-bold text-secondary sm:text-2xl">{title}</h3>
-                  <p className="relative mt-3 text-[0.95rem] leading-relaxed text-muted">{text}</p>
-                  <ul className="relative mt-6 flex flex-1 flex-col justify-end gap-1 border-t border-line pt-5">
+                  <p className="relative mt-3 text-[0.95rem] leading-relaxed text-muted md:min-h-[4.875em]">{text}</p>
+                  <ul className="relative mt-6 flex flex-1 flex-col gap-1 border-t border-line pt-5">
                     {slugs.map((slug) => (
                       <li key={slug}>
                         <Link

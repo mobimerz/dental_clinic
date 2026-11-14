@@ -17,6 +17,8 @@ export default function CtaBanner({
   title = "Ready for a Healthier, Happier Smile?",
   description = "Message us on WhatsApp or give us a call. We'll help you find a time that suits you.",
   message,
+  // Drop the top padding when the section above is also white, so the gap is not doubled.
+  flushTop = false,
 }) {
   const root = useRef(null);
 
@@ -48,7 +50,7 @@ export default function CtaBanner({
   );
 
   return (
-    <section ref={root} aria-labelledby="cta-title" className="relative py-16 sm:py-20 lg:py-24">
+    <section ref={root} aria-labelledby="cta-title" className={`relative section-y ${flushTop ? "!pt-0" : ""}`}>
       <div className="container-page">
         <div className="cta-panel relative overflow-hidden rounded-[2.5rem] bg-secondary px-6 py-16 text-white sm:px-12 sm:py-20 lg:px-20">
           <GlowOrb className="-right-32 -top-32 h-[420px] w-[420px] bg-primary/50" />
@@ -61,8 +63,8 @@ export default function CtaBanner({
           <Sparkle className="right-[30%] top-10 h-5 w-5 text-accent/60" delay={0.4} />
           <Sparkle className="bottom-12 left-[40%] h-4 w-4 text-accent/40" delay={1.6} />
 
-          <div className="relative grid items-center gap-10 lg:grid-cols-[1.3fr_1fr]">
-            <div>
+          <div className="relative grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-stretch">
+            <div className="lg:flex lg:flex-col lg:justify-center">
               <SplitReveal
                 as="h2"
                 id="cta-title"
@@ -83,8 +85,8 @@ export default function CtaBanner({
               </Reveal>
             </div>
 
-            <Reveal variant="tilt" delay={0.2}>
-              <div className="rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10 backdrop-blur sm:p-7">
+            <Reveal variant="tilt" delay={0.2} className="lg:h-full">
+              <div className="rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10 backdrop-blur sm:p-7 lg:flex lg:h-full lg:flex-col lg:justify-center">
                 <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-accent">
                   <Clock className="h-4 w-4" aria-hidden="true" /> Clinic Timings
                 </p>

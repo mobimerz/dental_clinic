@@ -61,9 +61,9 @@ export default function AboutStory() {
   );
 
   return (
-    <section ref={root} aria-labelledby="story-title" className="relative overflow-hidden py-16 sm:py-20 lg:py-24">
-      <div className="container-page relative grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
-        <div className="flex flex-col items-start">
+    <section ref={root} aria-labelledby="story-title" className="relative overflow-hidden section-y">
+      <div className="container-page relative grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch lg:gap-20">
+        <div className="flex flex-col items-start lg:justify-center">
           <Reveal>
             <Eyebrow>Our Story</Eyebrow>
           </Reveal>
@@ -87,8 +87,8 @@ export default function AboutStory() {
           </SplitReveal>
         </div>
 
-        <div className="story-photos relative mx-auto w-full max-w-[520px] pb-20 pl-8 sm:pl-16">
-          <div className="story-photo-a relative aspect-[4/5] overflow-hidden rounded-[2rem] shadow-lift">
+        <div className="story-photos relative mx-auto w-full max-w-[520px] pb-20 pl-8 sm:pl-16 lg:flex lg:flex-col lg:self-stretch">
+          <div className="story-photo-a relative aspect-[4/5] overflow-hidden rounded-[2rem] shadow-lift lg:aspect-auto lg:min-h-[320px] lg:flex-1">
             <Image
               src={clinicImages.treatmentRoomAlt.src}
               alt={clinicImages.treatmentRoomAlt.alt}

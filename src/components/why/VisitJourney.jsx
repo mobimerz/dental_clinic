@@ -103,7 +103,7 @@ export default function VisitJourney() {
 
   return (
     <section ref={root} aria-labelledby="journey-title" className="relative overflow-clip bg-soft">
-      <div className="journey-pin relative flex min-h-screen flex-col justify-center py-16 sm:py-20 lg:py-24">
+      <div className="journey-pin relative flex flex-col lg:min-h-screen justify-center section-y">
         <GlowOrb className="-right-40 top-10 h-[460px] w-[460px] bg-accent/70" />
         <div className="container-page relative">
           <SectionHeading

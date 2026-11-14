@@ -309,7 +309,7 @@ export default function PatientReviews({ google = null }) {
   const count = google?.count ?? clinic.rating.count;
 
   return (
-    <section id="reviews" aria-labelledby="reviews-title" className="relative overflow-hidden bg-soft py-16 sm:py-20 lg:py-24">
+    <section id="reviews" aria-labelledby="reviews-title" className="relative overflow-hidden bg-soft section-y">
       <div aria-hidden="true" data-speed="0.2" className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
       <div className="container-page relative">
         <SectionHeading
