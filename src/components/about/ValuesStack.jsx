@@ -19,10 +19,10 @@ const values = [
     chip: "bg-soft text-primary ring-1 ring-accent/60",
   },
   {
-    word: "Painless",
+    word: "Comfortable",
     icon: Syringe,
-    title: "Gentle at every step.",
-    text: "Local anaesthesia, a calm pace and a team that checks in with you throughout, so even root canals and extractions feel manageable.",
+    title: "Your comfort comes first.",
+    text: "We believe dental care should feel reassuring at every step. With a gentle approach, clear communication and attention to your needs, we strive to make every visit a relaxed and positive experience.",
     points: ["Comfort-first techniques", "Nothing rushed", "Clear aftercare"],
     theme: "bg-primary text-white",
     muted: "text-white/75",
@@ -82,7 +82,7 @@ export default function ValuesStack() {
         <SectionHeading
           id="values-title"
           eyebrow="Our Philosophy"
-          title="Preventive. Painless. Personalized."
+          title="Preventive. Comfortable. Personalized."
           description="Three words that shape every appointment at A-Zee Dental, whether it's a quick check-up or a full smile makeover."
         />
 

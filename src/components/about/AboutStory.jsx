@@ -75,14 +75,15 @@ export default function AboutStory() {
             A Family Dental Clinic, <span className="text-primary">Rooted in Pai Layout.</span>
           </SplitReveal>
           <SplitReveal as="p" mode="scrub" className="mt-6 text-base leading-relaxed text-muted sm:text-lg">
-            Established in {clinic.established}, A-Zee Dental &amp; Implant Centre is a family dental clinic in Bengaluru
-            providing comprehensive dental care for children and adults. For over {yearsOpen} years, families from Pai
-            Layout, Old Madras Road and nearby neighbourhoods have trusted us with everything from their first check-up to
-            implants and smile makeovers.
+            Established in {clinic.established}, <strong className="font-semibold text-secondary">A-Zee Dental &amp; Implant Centre</strong> has
+            been providing quality dental care to individuals and families across Bengaluru for over {yearsOpen} years.
           </SplitReveal>
           <SplitReveal as="p" mode="lines" delay={0.1} className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-            Our focus has stayed the same since day one: preventive, painless and personalized dental care that helps
-            every patient keep a healthy, confident smile.
+            With a focus on preventive, restorative and advanced dentistry, we combine clinical expertise with modern
+            techniques and personalised care to make every dental visit comfortable and reassuring.
+          </SplitReveal>
+          <SplitReveal as="p" mode="lines" delay={0.2} className="mt-5 text-base font-semibold leading-relaxed text-primary sm:text-lg">
+            Our commitment is simple — healthy smiles, lasting trust and confident lives.
           </SplitReveal>
         </div>
 

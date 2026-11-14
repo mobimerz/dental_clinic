@@ -50,6 +50,3 @@ export async function sendEmail(config, { to, subject, html, text, replyTo }) {
   }
   return res.json();
 }
-
-export const escapeHtml = (s = "") =>
-  String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);

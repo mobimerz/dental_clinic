@@ -1,4 +1,5 @@
-import { brevoConfig, sendEmail, escapeHtml } from "@/lib/brevo";
+import { brevoConfig, sendEmail } from "@/lib/brevo";
+import { clinicNotificationEmail, patientConfirmationEmail } from "@/lib/emailTemplates";
 import { clinic } from "@/data/clinic";
 
 export const runtime = "nodejs";
@@ -43,35 +44,17 @@ export async function POST(request) {
   if (data.email && !EMAIL_RE.test(data.email)) errors.email = "Please enter a valid email.";
   if (Object.keys(errors).length) return Response.json({ error: "Please check the form.", errors }, { status: 422 });
 
-  const rows = [
-    ["Name", data.name],
-    ["Phone", data.phone],
-    ["Email", data.email || "—"],
-    ["Treatment", data.treatment || "Not sure / general check-up"],
-    ["Preferred date", data.date || "Any"],
-    ["Preferred time", data.time || "Any"],
-    ["Message", data.message || "—"],
-  ];
-
   const clinicMail = sendEmail(config, {
     to: { email: config.inbox, name: clinic.shortName },
     replyTo: data.email ? { email: data.email, name: data.name } : undefined,
-    subject: `New appointment request: ${data.name}`,
-    html: `<h2>New appointment request</h2><table cellpadding="6" style="border-collapse:collapse">${rows
-      .map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${escapeHtml(v).replace(/\n/g, "<br>")}</td></tr>`)
-      .join("")}</table>`,
-    text: rows.map(([k, v]) => `${k}: ${v}`).join("\n"),
+    ...clinicNotificationEmail(data),
   });
 
   const patientMail = data.email
     ? sendEmail(config, {
         to: { email: data.email, name: data.name },
-        subject: `We've received your appointment request – ${clinic.shortName}`,
-        html: `<p>Hi ${escapeHtml(data.name)},</p>
-<p>Thank you for contacting ${escapeHtml(clinic.name)}. We've received your appointment request and will call you on <strong>${escapeHtml(data.phone)}</strong> to confirm a time.</p>
-<p>Need us sooner? Call <a href="${clinic.phone.tel}">${clinic.phone.display}</a>.</p>
-<p>${escapeHtml(clinic.address.full)}</p>`,
-        text: `Hi ${data.name},\n\nThank you for contacting ${clinic.name}. We've received your appointment request and will call you on ${data.phone} to confirm a time.\n\nNeed us sooner? Call ${clinic.phone.display}.\n\n${clinic.address.full}`,
+        replyTo: { email: config.inbox, name: clinic.shortName },
+        ...patientConfirmationEmail(data),
       })
     : null;
 

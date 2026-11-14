@@ -48,7 +48,7 @@ function DetailPanel({ t, index }) {
 
       <div className="relative mt-8 grid gap-6 md:grid-cols-2">
         <div className="rounded-3xl bg-soft p-6 ring-1 ring-accent/50">
-          <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-secondary">May help if you have</h4>
+          <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-secondary">{t.helpsWithTitle || "May help if you have"}</h4>
           <ul className="mt-4 space-y-3">
             {t.helpsWith.map((item) => (
               <li key={item} className="detail-check flex items-start gap-3 text-[0.95rem] text-ink">

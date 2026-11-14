@@ -44,7 +44,7 @@ export const treatments = [
     description:
       "Treatment for infected or painful teeth that aims to relieve discomfort and preserve your natural tooth.",
     summary:
-      "When the inner pulp of a tooth is infected or inflamed, a root canal cleans and seals it so the tooth can be saved. Our focus is on keeping the procedure as comfortable and painless as possible.",
+      "When the inner pulp of a tooth is infected or inflamed, a root canal treatment cleans and seals it so the tooth can be saved. Our focus is on keeping the procedure as comfortable and painless as possible.",
     helpsWith: [
       "Lingering pain or sensitivity to hot and cold",
       "A deep cavity or a cracked tooth",
@@ -257,16 +257,19 @@ export const treatments = [
     description: "Gentle, friendly dental care for children, from first check-ups to space maintainers.",
     summary:
       "Little teeth deserve big care. Cavities in children can progress quickly and affect eating and comfort, so we focus on early check-ups, prevention and treatments like space maintainers that keep growing smiles on track.",
+    helpsWithTitle: "How we can help",
     helpsWith: [
-      "First dental visits and routine check-ups",
-      "Cavities in milk teeth",
-      "Early tooth loss, where a space maintainer helps",
+      "First dental visits & routine check-ups",
+      "Milk tooth cavities",
+      "Pulpotomy, pulpectomy & pulp capping",
+      "Preventive treatments & pit and fissure sealants",
+      "Space maintainers for early tooth loss",
     ],
     steps: [
-      "A relaxed introduction to the dental chair",
-      "A gentle check-up of teeth and growth",
-      "Treatment explained to parents and child",
-      "Prevention tips for brushing and diet",
+      "A friendly introduction",
+      "Gentle dental examination",
+      "Treatment options explained to parents",
+      "Brushing & dietary guidance",
     ],
   },
 ];
