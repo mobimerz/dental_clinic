@@ -1,5 +1,5 @@
 import SiteShell from "@/components/layout/SiteShell";
-import PageHero from "@/components/sections/PageHero";
+import PageBanner from "@/components/sections/PageBanner";
 import CtaBanner from "@/components/sections/CtaBanner";
 import FaqSection from "@/components/sections/FaqSection";
 import TreatmentExplorer from "@/components/treatments/TreatmentExplorer";
@@ -45,7 +45,8 @@ const faqs = [
 export default function TreatmentsPage() {
   return (
     <SiteShell>
-      <PageHero
+      <PageBanner
+        crumb="Treatments"
         eyebrow="Our Treatments"
         title="Complete Dental Care,"
         highlight="Under One Roof."
@@ -62,16 +63,17 @@ export default function TreatmentsPage() {
         <Button href="/contact" variant="secondary">
           Book a Consultation
         </Button>
-      </PageHero>
+      </PageBanner>
       <TreatmentExplorer />
       <TreatmentDetails />
       <FaqSection
+        rhythm="hero"
         id="treatment-faq"
         title="Questions About Treatment?"
         description="A few things patients often ask before their first visit. Anything else, just message us."
         items={faqs}
       />
-      <CtaBanner title="Not Sure Where to Start? Let's Talk." message="Hello A-Zee Dental, I would like to book a consultation." />
+      <CtaBanner rhythm="hero" bg="white" title="Not Sure Where to Start? Let's Talk." message="Hello A-Zee Dental, I would like to book a consultation." />
     </SiteShell>
   );
 }
