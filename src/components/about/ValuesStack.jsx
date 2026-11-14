@@ -3,6 +3,9 @@
 import { useRef } from "react";
 import { HandHeart, ShieldPlus, Syringe } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import { panel } from "@/components/ui/styles";
 import { ToothIcon } from "@/components/common/DentalIcons";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
@@ -39,6 +42,9 @@ const values = [
     chip: "bg-white/10 text-accent ring-1 ring-white/15",
   },
 ];
+
+// Sticky offsets: each card stops 28px below the one before it, so the stack stays readable.
+const stickyTop = ["top-[110px]", "top-[138px]", "top-[166px]"];
 
 // Cards stack on top of each other while scrolling; each one settles back and dims
 // as the next slides over it.
@@ -77,26 +83,27 @@ export default function ValuesStack() {
   );
 
   return (
-    <section ref={root} aria-labelledby="values-title" className="relative section-y">
-      <div className="container-page">
+    <Section ref={root} aria-labelledby="values-title">
+      <Container>
         <SectionHeading
+          rhythm="hero"
           id="values-title"
           eyebrow="Our Philosophy"
           title="Preventive. Comfortable. Personalized."
           description="Three words that shape every appointment at A-Zee Dental, whether it's a quick check-up or a full smile makeover."
         />
 
-        <ol className="mt-16">
+        <ol className="header-gap">
           {values.map(({ word, icon: Icon, title, text, points, theme, muted, chip }, i) => (
-            <li key={word} className="value-card sticky pb-8 last:pb-0" style={{ top: `${110 + i * 28}px` }}>
-              <article className={`value-inner relative origin-top overflow-hidden rounded-[2.5rem] p-8 shadow-lift sm:p-12 lg:p-14 ${theme}`}>
+            <li key={word} className={`value-card sticky pb-8 last:pb-0 ${stickyTop[i]}`}>
+              <article className={`value-inner relative origin-top overflow-hidden shadow-lift ${panel} ${theme}`}>
                 <ToothIcon aria-hidden="true" className="pointer-events-none absolute -bottom-10 -right-6 h-56 w-56 opacity-[0.07] sm:h-72 sm:w-72" />
-                <div className="relative grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-14">
+                <div className="relative grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
                   <div>
                     <span className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${chip}`}>
                       <Icon className="h-7 w-7" aria-hidden="true" />
                     </span>
-                    <p className="value-word mt-6 text-[clamp(2rem,9vw,5.5rem)] font-extrabold leading-none tracking-[-0.04em]">
+                    <p className="value-word mt-6 text-[clamp(2rem,9vw,4.1rem)] font-extrabold leading-none tracking-[-0.04em]">
                       {word}
                     </p>
                     <p className={`mt-3 text-sm font-semibold uppercase tracking-[0.2em] ${muted}`}>
@@ -104,9 +111,9 @@ export default function ValuesStack() {
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold sm:text-3xl">{title}</h3>
-                    <p className={`mt-4 text-base leading-relaxed sm:text-lg ${muted}`}>{text}</p>
-                    <ul className="mt-7 flex flex-wrap gap-2.5">
+                    <h3 className="text-h3-lg">{title}</h3>
+                    <p className={`mt-4 text-lead ${muted}`}>{text}</p>
+                    <ul className="mt-6 flex flex-wrap gap-2">
                       {points.map((p) => (
                         <li key={p} className={`rounded-full px-4 py-2 text-sm font-semibold ${chip}`}>
                           {p}
@@ -119,7 +126,7 @@ export default function ValuesStack() {
             </li>
           ))}
         </ol>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

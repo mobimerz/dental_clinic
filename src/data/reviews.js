@@ -12,7 +12,7 @@ export const reviews = [
     name: "Rakesh Bhargava",
     rating: 5,
     date: "a month ago",
-    text: "Dr.Aysha is not just an excellent dentist but a truly kind human being. After my tooth extraction treatment, she personally helped me get to the auto and made sure I was comfortable. You don't see such compassion these days. Highly skilled, gentle, and genuinely caring. 5 stars are not enough!-Rakesh Kumar Bhargava",
+    text: "Dr. Aysha is not just an excellent dentist but a truly kind human being. After my tooth extraction treatment, she personally helped me get to the auto and made sure I was comfortable. You don't see such compassion these days. Highly skilled, gentle, and genuinely caring. 5 stars are not enough!-Rakesh Kumar Bhargava",
   },
   {
     name: "surya durga prasad",

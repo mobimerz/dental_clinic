@@ -6,10 +6,13 @@ import { motion } from "motion/react";
 import { Baby, HeartPulse, Quote, Smile } from "lucide-react";
 import Button from "@/components/common/Button";
 import Reveal from "@/components/common/Reveal";
-import SplitReveal from "@/components/common/SplitReveal";
 import StarRating from "@/components/common/StarRating";
 import WhatsAppIcon from "@/components/common/WhatsAppIcon";
-import { Eyebrow } from "@/components/common/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import TwoColumn from "@/components/ui/TwoColumn";
+import { photo, photoFrame } from "@/components/ui/styles";
 import { GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { clinic, clinicImages, whatsappLink } from "@/data/clinic";
@@ -67,12 +70,13 @@ export default function DoctorSpotlight() {
   );
 
   return (
-    <section ref={root} aria-labelledby="doctor-title" className="relative overflow-hidden bg-soft section-y">
+    <Section ref={root} bg="soft" aria-labelledby="doctor-title" className="overflow-hidden">
       <div aria-hidden="true" className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_left,black,transparent_60%)]" />
       <GlowOrb className="-left-32 top-20 h-[420px] w-[420px] bg-accent/70" />
 
-      <div className="container-page relative grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch lg:gap-20">
-        <div className="relative mx-auto w-full max-w-[420px] lg:self-start xl:flex xl:max-w-none xl:flex-col xl:self-stretch">
+      <Container className="relative">
+        <TwoColumn layout="media" reverse>
+        <div className="relative mx-auto w-full max-w-[460px] lg:max-w-none">
           <motion.div
             aria-hidden="true"
             initial={{ opacity: 0, rotate: -14, scale: 0.85 }}
@@ -81,9 +85,9 @@ export default function DoctorSpotlight() {
             transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0 -translate-x-5 translate-y-5 rounded-[2.75rem] bg-gradient-to-br from-primary/30 to-accent"
           />
-          <div className="doc-frame relative aspect-[4/5] overflow-hidden rounded-[2.75rem] bg-accent shadow-lift xl:aspect-auto xl:flex-1">
+          <div className={`doc-frame ${photo} ${photoFrame}`}>
             <div className="doc-photo absolute inset-x-0 -inset-y-[8%]">
-              <Image src={img.src} alt={img.alt} fill sizes="(min-width: 1024px) 520px, 90vw" className="object-cover object-[50%_20%]" />
+              <Image src={img.src} alt={img.alt} fill sizes="(min-width: 1024px) 420px, 90vw" className="object-cover object-[50%_20%]" />
             </div>
             <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-secondary/80 to-transparent" />
             <div className="absolute inset-x-5 bottom-5 text-white">
@@ -98,40 +102,35 @@ export default function DoctorSpotlight() {
         </div>
 
         <div className="flex flex-col items-start">
-          <Reveal>
-            <Eyebrow>Meet Your Dentist</Eyebrow>
-          </Reveal>
-          <SplitReveal
-            as="h2"
+          <SectionHeading
+            rhythm="hero"
+            align="left"
             id="doctor-title"
-            className="mt-5 text-balance text-[1.75rem] font-bold leading-[1.1] tracking-tight text-secondary sm:text-4xl lg:text-[2.85rem]"
-          >
-            {`${clinic.doctor.name}.`}
-          </SplitReveal>
-          <SplitReveal as="p" mode="lines" delay={0.15} className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
-            With {clinic.doctor.experienceYears} years of trusted smile care, {clinic.doctor.shortName} leads the clinic
-            with a simple belief: dental visits should feel calm, clear and comfortable. Patients often mention how she
-            listens, explains every step and makes sure they are at ease before anything begins.
-          </SplitReveal>
+            eyebrow="Meet Your Dentist"
+            eyebrowY={28}
+            title={`${clinic.doctor.name}.`}
+            description={`With ${clinic.doctor.experienceYears} years of trusted smile care, ${clinic.doctor.shortName} leads the clinic with a simple belief: dental visits should feel calm, clear and comfortable. Patients often mention how she listens, explains every step and makes sure they are at ease before anything begins.`}
+            descriptionDelay={0.15}
+          />
 
-          <ul className="mt-8 grid w-full gap-3 lg:mt-6 lg:gap-2.5">
+          <ul className="mt-8 grid w-full gap-3">
             {highlights.map(({ icon: Icon, title, text }, i) => (
               <Reveal as="li" key={title} delay={0.15 + i * 0.1} y={18}>
-                <div className="group flex items-start gap-4 rounded-2xl bg-white p-4 ring-1 ring-line transition-all duration-500 ease-premium hover:translate-x-2 hover:shadow-lift hover:ring-accent sm:p-5 lg:py-3.5">
+                <div className="group flex items-start gap-4 rounded-2xl bg-white p-4 ring-1 ring-line transition-all duration-500 ease-premium hover:translate-x-2 hover:shadow-lift hover:ring-accent">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-soft text-primary ring-1 ring-accent/60 transition-all duration-500 ease-premium group-hover:rotate-[-8deg] group-hover:bg-primary group-hover:text-white">
                     <Icon className="h-5 w-5 group-hover:icon-draw" aria-hidden="true" />
                   </span>
                   <span>
                     <span className="block font-bold text-secondary">{title}</span>
-                    <span className="mt-1 block text-[0.92rem] leading-relaxed text-muted">{text}</span>
+                    <span className="mt-1 block text-small text-muted">{text}</span>
                   </span>
                 </div>
               </Reveal>
             ))}
           </ul>
 
-          <Reveal delay={0.3} className="mt-8 w-full lg:mt-6">
-            <figure className="relative overflow-hidden rounded-3xl bg-secondary p-6 text-white sm:p-7 lg:px-7 lg:py-5">
+          <Reveal delay={0.3} className="mt-8 w-full">
+            <figure className="relative overflow-hidden rounded-[2rem] bg-secondary p-6 text-white">
               <Quote className="absolute -right-2 -top-2 h-20 w-20 text-white/[0.06]" aria-hidden="true" />
               <StarRating value={5} size="h-4 w-4" />
               <blockquote className="mt-2.5 text-lg font-semibold leading-snug">
@@ -141,13 +140,14 @@ export default function DoctorSpotlight() {
             </figure>
           </Reveal>
 
-          <Reveal delay={0.4} className="mt-8 lg:mt-6">
+          <Reveal delay={0.4} className="mt-8">
             <Button href={whatsappLink(`Hello ${clinic.doctor.shortName}, I would like to book a consultation.`)} external icon={WhatsAppIcon}>
               Book a Consultation
             </Button>
           </Reveal>
         </div>
-      </div>
-    </section>
+        </TwoColumn>
+      </Container>
+    </Section>
   );
 }

@@ -9,6 +9,7 @@ import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import { ToothIcon } from "@/components/common/DentalIcons";
 import { FloatingTooth, GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
+import { cardDark } from "@/components/ui/styles";
 import { clinic, whatsappLink } from "@/data/clinic";
 
 // Closing call-to-action for inner pages: a dark panel that opens out as it scrolls in,
@@ -17,10 +18,16 @@ export default function CtaBanner({
   title = "Ready for a Healthier, Happier Smile?",
   description = "Message us on WhatsApp or give us a call. We'll help you find a time that suits you.",
   message,
-  // Drop the top padding when the section above is also white, so the gap is not doubled.
+  // Drop the top padding when the section above is also white, so the gap is not doubled (legacy only).
   flushTop = false,
+  // rhythm="hero": layout system — a compact band (40 / 48 / 56px) on its own surface, one panel
+  // padding (40 / 48 / 64px), the shared H2 and lead sizes, and the hero's two-column gap.
+  rhythm = "legacy",
+  bg = "soft",
 }) {
   const root = useRef(null);
+  const hero = rhythm === "hero";
+  const radius = hero ? "32px" : "40px";
 
   useGSAP(
     () => {
@@ -31,7 +38,7 @@ export default function CtaBanner({
           q(".cta-panel"),
           { clipPath: "inset(8% 10% 8% 10% round 64px)", scale: 0.96 },
           {
-            clipPath: "inset(0% 0% 0% 0% round 40px)",
+            clipPath: `inset(0% 0% 0% 0% round ${radius})`,
             scale: 1,
             ease: "none",
             scrollTrigger: { trigger: root.current, start: "top bottom", end: "top 40%", scrub: true },
@@ -50,9 +57,17 @@ export default function CtaBanner({
   );
 
   return (
-    <section ref={root} aria-labelledby="cta-title" className={`relative section-y ${flushTop ? "!pt-0" : ""}`}>
+    <section
+      ref={root}
+      aria-labelledby="cta-title"
+      className={hero ? `relative section-compact ${bg === "soft" ? "bg-soft" : ""}` : `relative section-y ${flushTop ? "!pt-0" : ""}`}
+    >
       <div className="container-page">
-        <div className="cta-panel relative overflow-hidden rounded-[2.5rem] bg-secondary px-6 py-16 text-white sm:px-12 sm:py-20 lg:px-20">
+        <div
+          className={`cta-panel relative overflow-hidden bg-secondary text-white ${
+            hero ? "rounded-[2rem] px-6 py-10 md:p-12 lg:p-16" : "rounded-[2.5rem] px-6 py-16 sm:px-12 sm:py-20 lg:px-20"
+          }`}
+        >
           <GlowOrb className="-right-32 -top-32 h-[420px] w-[420px] bg-primary/50" />
           <GlowOrb className="-bottom-40 -left-24 h-[360px] w-[360px] bg-[#0A97A6]/30" duration={22} x={-30} />
           <ToothIcon
@@ -63,16 +78,16 @@ export default function CtaBanner({
           <Sparkle className="right-[30%] top-10 h-5 w-5 text-accent/60" delay={0.4} />
           <Sparkle className="bottom-12 left-[40%] h-4 w-4 text-accent/40" delay={1.6} />
 
-          <div className="relative grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-stretch">
+          <div className={`relative grid lg:items-stretch ${hero ? "gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-10" : "gap-10 lg:grid-cols-[1.3fr_1fr]"}`}>
             <div className="lg:flex lg:flex-col lg:justify-center">
               <SplitReveal
                 as="h2"
                 id="cta-title"
-                className="text-balance text-[1.9rem] font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl"
+                className={`text-balance ${hero ? "text-h2" : "text-[1.9rem] font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl"}`}
               >
                 {title}
               </SplitReveal>
-              <SplitReveal as="p" mode="lines" delay={0.2} className="mt-5 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
+              <SplitReveal as="p" mode="lines" delay={0.2} className={`max-w-lg text-white/70 ${hero ? "mt-7 text-lead" : "mt-5 text-base leading-relaxed sm:text-lg"}`}>
                 {description}
               </SplitReveal>
               <Reveal delay={0.3} className="mt-8 flex flex-col gap-3 min-[420px]:flex-row">
@@ -86,7 +101,7 @@ export default function CtaBanner({
             </div>
 
             <Reveal variant="tilt" delay={0.2} className="lg:h-full">
-              <div className="rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10 backdrop-blur sm:p-7 lg:flex lg:h-full lg:flex-col lg:justify-center">
+              <div className={`backdrop-blur lg:flex lg:h-full lg:flex-col lg:justify-center ${hero ? cardDark : "rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10 sm:p-7"}`}>
                 <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-accent">
                   <Clock className="h-4 w-4" aria-hidden="true" /> Clinic Timings
                 </p>

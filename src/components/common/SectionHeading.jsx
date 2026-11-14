@@ -44,7 +44,7 @@ export default function SectionHeading({
   const centered = align === "center";
   const hero = rhythm === "hero";
   return (
-    <div className={`flex flex-col ${hero ? "" : "gap-4"} ${centered ? "mx-auto max-w-2xl items-center text-center" : "max-w-xl items-start"} ${className}`}>
+    <div className={`flex flex-col ${hero ? "" : "gap-4 "}${centered ? "mx-auto max-w-2xl items-center text-center" : "max-w-xl items-start"} ${className}`}>
       {eyebrow && (
         <Reveal y={eyebrowY}>
           <Eyebrow inverted={inverted}>{eyebrow}</Eyebrow>

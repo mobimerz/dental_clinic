@@ -4,6 +4,9 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowUpRight, Baby, User, Users } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import { card, cardFill } from "@/components/ui/styles";
 import Tilt from "@/components/common/Tilt";
 import { treatments } from "@/data/treatments";
 
@@ -37,16 +40,17 @@ const ease = [0.22, 1, 0.36, 1];
 
 export default function CareForAll() {
   return (
-    <section aria-labelledby="care-title" className="relative bg-soft section-y">
-      <div className="container-page">
+    <Section bg="soft" aria-labelledby="care-title">
+      <Container>
         <SectionHeading
+          rhythm="hero"
           id="care-title"
           eyebrow="Care for Every Age"
           title="One Clinic for the Whole Family."
           description="As a family dental clinic, we look after children, adults and seniors under one roof, so everyone's care stays joined up."
         />
 
-        <ul className="mt-14 grid gap-5 lg:grid-cols-3">
+        <ul className="header-gap grid gap-6 lg:grid-cols-3">
           {groups.map(({ icon: Icon, title, tag, text, slugs }, i) => (
             <motion.li
               key={title}
@@ -56,7 +60,7 @@ export default function CareForAll() {
               transition={{ duration: 1.1, delay: i * 0.12, ease }}
             >
               <Tilt max={8} scale={1.02} className="h-full">
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] bg-white p-7 shadow-soft ring-1 ring-line transition-all duration-500 ease-premium hover:shadow-lift hover:ring-accent sm:p-8">
+                <article className={`group relative overflow-hidden ${card} ${cardFill} transition-all duration-500 ease-premium hover:shadow-lift hover:ring-accent`}>
                   {/* Teal fill rises from the bottom on hover */}
                   <span
                     aria-hidden="true"
@@ -70,14 +74,14 @@ export default function CareForAll() {
                       {tag}
                     </span>
                   </div>
-                  <h3 className="relative mt-6 text-xl font-bold text-secondary sm:text-2xl">{title}</h3>
-                  <p className="relative mt-3 text-[0.95rem] leading-relaxed text-muted md:min-h-[4.875em]">{text}</p>
-                  <ul className="relative mt-6 flex flex-1 flex-col gap-1 border-t border-line pt-5">
+                  <h3 className="relative mt-6 text-h3 text-secondary">{title}</h3>
+                  <p className="relative mt-3 text-body text-muted md:min-h-[4.875em]">{text}</p>
+                  <ul className="relative mt-6 flex flex-1 flex-col gap-1 border-t border-line pt-6">
                     {slugs.map((slug) => (
                       <li key={slug}>
                         <Link
                           href={`/treatments#${slug}`}
-                          className="group/link flex items-center justify-between rounded-xl px-3 py-2.5 text-[0.95rem] font-semibold text-secondary transition-all duration-300 hover:bg-white hover:pl-4 hover:text-primary hover:shadow-soft"
+                          className="group/link flex items-center justify-between rounded-xl px-3 py-2.5 text-body font-semibold text-secondary transition-all duration-300 hover:bg-white hover:pl-4 hover:text-primary hover:shadow-soft"
                         >
                           {bySlug[slug].title}
                           <ArrowUpRight
@@ -93,7 +97,7 @@ export default function CareForAll() {
             </motion.li>
           ))}
         </ul>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }
