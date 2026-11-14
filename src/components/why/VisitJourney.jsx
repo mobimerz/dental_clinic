@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { CalendarCheck, ClipboardList, HeartHandshake, MessageCircle, Stethoscope } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
+import { card } from "@/components/ui/styles";
 import { GlowOrb } from "@/components/common/FloatingShapes";
 import { gsap, useGSAP } from "@/lib/gsap";
 
@@ -103,10 +104,12 @@ export default function VisitJourney() {
 
   return (
     <section ref={root} aria-labelledby="journey-title" className="relative overflow-clip bg-soft">
-      <div className="journey-pin relative flex flex-col lg:min-h-screen justify-center section-y">
+      {/* Pinned on desktop while the track scrolls sideways, so this wrapper keeps its full-screen height */}
+      <div className="journey-pin relative flex flex-col justify-center section-default lg:min-h-screen">
         <GlowOrb className="-right-40 top-10 h-[460px] w-[460px] bg-accent/70" />
         <div className="container-page relative">
           <SectionHeading
+            rhythm="hero"
             id="journey-title"
             eyebrow="Your Visit, Step by Step"
             title="No Surprises. Just Clear, Gentle Care."
@@ -115,13 +118,13 @@ export default function VisitJourney() {
           />
         </div>
 
-        <div className="container-page relative mt-12 lg:mt-14">
+        <div className="container-page header-gap relative">
           <div className="lg:overflow-visible">
-            <ol className="journey-track flex flex-col gap-5 lg:w-max lg:flex-row lg:gap-6 lg:pr-[10vw]">
+            <ol className="journey-track flex flex-col gap-6 lg:w-max lg:flex-row lg:pr-[10vw]">
               {steps.map(({ icon: Icon, title, text }, i) => (
                 <li
                   key={title}
-                  className="journey-card group relative flex flex-col overflow-hidden rounded-[2rem] bg-white p-7 shadow-soft ring-1 ring-line transition-[translate,box-shadow] duration-500 ease-premium hover:-translate-y-2 hover:shadow-lift hover:ring-accent sm:p-8 lg:h-[340px] lg:w-[360px]"
+                  className={`journey-card group relative flex flex-col overflow-hidden ${card} transition-[translate,box-shadow] duration-500 ease-premium hover:-translate-y-2 hover:shadow-lift hover:ring-accent lg:h-[340px] lg:w-[360px]`}
                 >
                   <span
                     aria-hidden="true"
@@ -135,13 +138,13 @@ export default function VisitJourney() {
                   <span className="relative mt-auto pt-8 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                     Step {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="relative mt-2 text-xl font-bold text-secondary sm:text-2xl">{title}</h3>
-                  <p className="relative mt-3 text-[0.95rem] leading-relaxed text-muted">{text}</p>
+                  <h3 className="relative mt-2 text-h3 text-secondary">{title}</h3>
+                  <p className="relative mt-3 text-body text-muted">{text}</p>
                 </li>
               ))}
             </ol>
           </div>
-          <div aria-hidden="true" className="mt-10 hidden h-1 overflow-hidden rounded-full bg-white ring-1 ring-line lg:block">
+          <div aria-hidden="true" className="mt-8 hidden h-1 overflow-hidden rounded-full bg-white ring-1 ring-line lg:block">
             <div className="journey-progress h-full origin-left rounded-full bg-gradient-to-r from-accent via-primary to-[#0A97A6]" />
           </div>
         </div>

@@ -1,9 +1,9 @@
 import SiteShell from "@/components/layout/SiteShell";
-import PageHero from "@/components/sections/PageHero";
+import PageBanner from "@/components/sections/PageBanner";
 import CtaBanner from "@/components/sections/CtaBanner";
-import WhyChooseUs from "@/components/legacy/WhyChooseUs";
-import PatientReviews from "@/components/legacy/PatientReviews";
-import TrustStats from "@/components/legacy/TrustStats";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
+import PatientReviews from "@/components/home/PatientReviews";
+import TrustStats from "@/components/home/TrustStats";
 import VisitJourney from "@/components/why/VisitJourney";
 import ComfortGrid from "@/components/why/ComfortGrid";
 import Button from "@/components/common/Button";
@@ -23,7 +23,8 @@ export default async function WhyChooseUsPage() {
 
   return (
     <SiteShell>
-      <PageHero
+      <PageBanner
+        crumb="Why Choose Us"
         eyebrow="Why Patients Choose Us"
         title="Trusted by Families,"
         highlight={`Rated ${clinic.rating.value} on Google.`}
@@ -39,13 +40,13 @@ export default async function WhyChooseUsPage() {
         <Button href="/contact" variant="secondary">
           Plan Your Visit
         </Button>
-      </PageHero>
+      </PageBanner>
       <TrustStats spaced />
       <WhyChooseUs />
       <VisitJourney />
       <ComfortGrid />
       <PatientReviews google={google} />
-      <CtaBanner title="Experience the Difference for Yourself." />
+      <CtaBanner rhythm="hero" bg="white" title="Experience the Difference for Yourself." />
     </SiteShell>
   );
 }
