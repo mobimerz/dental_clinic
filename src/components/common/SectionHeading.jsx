@@ -20,34 +20,50 @@ export function Eyebrow({ children, inverted = false }) {
   );
 }
 
-export default function SectionHeading({ eyebrow, title, description, align = "center", inverted = false, id }) {
+// The one section header used by every section. Rhythm copies the Home hero:
+// eyebrow → title 24px, title → description 28px. Follow it with `header-gap` on the content below.
+// Alignment rule: centred when a full-width grid follows; left when the header sits in a column
+// of a two-column layout.
+//   eyebrowY / descriptionMode / descriptionDelay keep each section's original entrance motion.
+export default function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  align = "center",
+  inverted = false,
+  id,
+  eyebrowY = 16,
+  descriptionMode = "lines",
+  descriptionDelay = 0.2,
+  className = "",
+  children,
+}) {
   const centered = align === "center";
   return (
-    <div className={`flex flex-col gap-4 ${centered ? "mx-auto max-w-2xl items-center text-center" : "max-w-xl items-start"}`}>
+    <div className={`flex flex-col ${centered ? "mx-auto max-w-2xl items-center text-center" : "max-w-xl items-start"} ${className}`}>
       {eyebrow && (
-        <Reveal y={16}>
+        <Reveal y={eyebrowY}>
           <Eyebrow inverted={inverted}>{eyebrow}</Eyebrow>
         </Reveal>
       )}
       <SplitReveal
         as="h2"
         id={id}
-        className={`text-balance text-[1.75rem] font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.85rem] ${
-          inverted ? "text-white" : "text-secondary"
-        }`}
+        className={`text-balance text-h2 ${eyebrow ? "mt-6" : ""} ${inverted ? "text-white" : "text-secondary"}`}
       >
         {title}
       </SplitReveal>
       {description && (
         <SplitReveal
           as="p"
-          mode="lines"
-          delay={0.2}
-          className={`text-base leading-relaxed sm:text-lg ${inverted ? "text-white/70" : "text-muted"}`}
+          mode={descriptionMode}
+          delay={descriptionDelay}
+          className={`mt-7 text-lead ${inverted ? "text-white/70" : "text-muted"}`}
         >
           {description}
         </SplitReveal>
       )}
+      {children}
     </div>
   );
 }

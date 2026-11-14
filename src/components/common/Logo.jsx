@@ -28,6 +28,8 @@ export default function Logo({ inverted = false }) {
         <span className={`text-[1.2rem] font-extrabold tracking-tight ${inverted ? "text-white" : "text-secondary"}`}>
           A-Zee <span className="text-primary">Dental</span>
         </span>
+        {/* Keeps the two lines apart in the text crawlers and screen readers read ("Dental & Implant") */}
+        {" "}
         <span className={`mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.2em] ${inverted ? "text-accent/80" : "text-muted"}`}>
           & Implant Centre
         </span>

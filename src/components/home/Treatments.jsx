@@ -8,6 +8,9 @@ import { ArrowUpRight } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import Button from "@/components/common/Button";
 import Reveal from "@/components/common/Reveal";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import { card, cardFill } from "@/components/ui/styles";
 import Tilt from "@/components/common/Tilt";
 import Magnetic from "@/components/common/Magnetic";
 import { FloatingTooth, Sparkle } from "@/components/common/FloatingShapes";
@@ -38,7 +41,7 @@ function TreatmentCard({ t, i }) {
         initial="rest"
         whileHover="hover"
         animate="rest"
-        className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white p-7 shadow-soft ring-1 ring-line transition-all duration-500 ease-premium hover:-translate-y-2 hover:shadow-lift hover:ring-accent"
+        className={`group relative overflow-hidden ${card} ${cardFill} transition-all duration-500 ease-premium hover:-translate-y-2 hover:shadow-lift hover:ring-accent`}
       >
         {/* Photo bloom: a circular mask grows from the cursor */}
         <span
@@ -76,7 +79,7 @@ function TreatmentCard({ t, i }) {
             </motion.span>
           </span>
         </Magnetic>
-        <span className="absolute right-7 top-8 overflow-hidden text-sm font-semibold text-line transition-colors duration-500 group-hover:text-accent">
+        <span className="absolute right-6 top-7 overflow-hidden text-sm md:right-8 md:top-9 font-semibold text-line transition-colors duration-500 group-hover:text-accent">
           <span className="block transition-transform duration-500 ease-premium group-hover:-translate-y-full">
             {String(i + 1).padStart(2, "0")}
           </span>
@@ -84,10 +87,10 @@ function TreatmentCard({ t, i }) {
             {String(i + 1).padStart(2, "0")}
           </span>
         </span>
-        <h3 className="relative mt-6 text-lg font-bold text-secondary transition-transform duration-500 ease-premium group-hover:translate-x-1">
+        <h3 className="relative mt-6 text-h3 text-secondary transition-transform duration-500 ease-premium group-hover:translate-x-1">
           {t.title}
         </h3>
-        <p className="relative mt-2.5 flex-1 text-[0.92rem] leading-relaxed text-muted">{t.description}</p>
+        <p className="relative mt-2 flex-1 text-small text-muted">{t.description}</p>
         <Link
           href={`/treatments#${t.slug}`}
           className="relative mt-6 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-primary"
@@ -134,13 +137,13 @@ export default function Treatments() {
   );
 
   return (
-    <section id="treatments" aria-labelledby="treatments-title" className="relative overflow-clip bg-soft section-y">
+    <Section bg="soft" id="treatments" aria-labelledby="treatments-title" className="overflow-clip">
       <div aria-hidden="true" className="bg-dots absolute inset-x-0 top-0 h-64 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <FloatingTooth className="left-[4%] top-40 hidden text-primary/20 lg:block" size="h-14 w-14" speed={0.5} />
       <FloatingTooth className="right-[6%] top-[45%] hidden text-accent lg:block" size="h-10 w-10" duration={9} speed={-0.4} />
       <Sparkle className="right-[18%] top-28 hidden h-5 w-5 text-primary/50 md:block" speed={0.3} />
 
-      <div className="container-page relative">
+      <Container className="relative">
         <SectionHeading
           id="treatments-title"
           eyebrow="Our Treatments"
@@ -148,7 +151,7 @@ export default function Treatments() {
           description="From preventive check-ups to implants and smile makeovers, explore the treatments available at A-Zee Dental."
         />
 
-        <ul ref={grid} className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ul ref={grid} className="header-gap grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featuredTreatments.map((t, i) => (
             <li key={t.slug} className="treatment-card">
               <TreatmentCard t={t} i={i} />
@@ -156,13 +159,12 @@ export default function Treatments() {
           ))}
         </ul>
 
-        <Reveal delay={0.1} className="mt-12 flex justify-center">
+        <Reveal delay={0.1} className="header-gap flex justify-center">
           <Button href="/treatments" variant="secondary" arrow>
             View All Treatments
           </Button>
         </Reveal>
-      </div>
-
-    </section>
+      </Container>
+    </Section>
   );
 }

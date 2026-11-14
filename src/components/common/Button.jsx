@@ -31,7 +31,42 @@ export default function Button({
   external = false,
   ...rest
 }) {
-  const classes = `group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3.5 text-[0.95rem] font-semibold transition-all duration-300 ease-premium hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] ${variants[variant]} ${className}`;
+  // "fill": white pill whose teal fill grows out of the arrow circle on hover. Same 51px height as
+  // every other button (6px inset + 39px circle + 6px inset).
+  if (variant === "fill") {
+    const fillClasses = `group relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-white py-1.5 pl-1.5 pr-7 text-[0.95rem] font-semibold text-secondary shadow-soft ring-1 ring-line transition-shadow duration-500 ease-premium hover:shadow-glow hover:ring-primary ${className}`;
+    const fillContent = (
+      <>
+        <span
+          aria-hidden="true"
+          className="absolute inset-y-1.5 left-1.5 w-[39px] rounded-full bg-gradient-to-r from-primary to-[#0A97A6] transition-[width] duration-700 ease-premium group-hover:w-[calc(100%-0.75rem)]"
+        />
+        <span className="relative flex h-[39px] w-[39px] shrink-0 items-center justify-center overflow-hidden rounded-full text-white">
+          <ArrowRight className="h-5 w-5 transition-transform duration-500 ease-premium group-hover:translate-x-8" aria-hidden="true" />
+          <ArrowRight
+            className="absolute h-5 w-5 -translate-x-8 transition-transform duration-500 ease-premium group-hover:translate-x-0"
+            aria-hidden="true"
+          />
+        </span>
+        <span className="relative transition-colors duration-500 group-hover:text-white">{children}</span>
+      </>
+    );
+    return (
+      <Magnetic>
+        {href?.startsWith("/") ? (
+          <Link href={href} className={fillClasses} {...rest}>
+            {fillContent}
+          </Link>
+        ) : (
+          <a href={href} className={fillClasses} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} {...rest}>
+            {fillContent}
+          </a>
+        )}
+      </Magnetic>
+    );
+  }
+
+  const classes = `group/btn relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3.5 text-[0.95rem] font-semibold transition-all duration-300 ease-premium hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-70 ${variants[variant]} ${className}`;
 
   const content = (
     <>
