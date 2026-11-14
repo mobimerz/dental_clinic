@@ -7,14 +7,18 @@
 const ENDPOINT = "https://api.brevo.com/v3/smtp/email";
 const TIMEOUT_MS = 10_000;
 
+// Strip whitespace and invisible characters (e.g. a BOM) that can sneak into env values;
+// a stray non-ASCII character in the api-key header makes every request fail.
+const env = (name) => (process.env[name] || "").replace(/[﻿​]/g, "").trim();
+
 export function brevoConfig() {
-  const apiKey = process.env.BREVO_API_KEY;
-  const senderEmail = process.env.BREVO_SENDER_EMAIL;
-  const inbox = process.env.CLINIC_INBOX_EMAIL;
+  const apiKey = env("BREVO_API_KEY");
+  const senderEmail = env("BREVO_SENDER_EMAIL");
+  const inbox = env("CLINIC_INBOX_EMAIL");
   if (!apiKey || !senderEmail || !inbox) return null;
   return {
     apiKey,
-    sender: { email: senderEmail, name: process.env.BREVO_SENDER_NAME || "A-Zee Dental" },
+    sender: { email: senderEmail, name: env("BREVO_SENDER_NAME") || "A-Zee Dental" },
     inbox,
   };
 }
