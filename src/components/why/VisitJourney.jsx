@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { CalendarCheck, ClipboardList, HeartHandshake, MessageCircle, Stethoscope } from "lucide-react";
+import { ArrowDown, ArrowRight, CalendarCheck, ClipboardList, HeartHandshake, MessageCircle, Stethoscope } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import { card } from "@/components/ui/styles";
 import { GlowOrb } from "@/components/common/FloatingShapes";
@@ -134,8 +134,22 @@ export default function VisitJourney() {
                   <span className="journey-icon relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-[#0A97A6] text-white shadow-glow transition-transform duration-500 ease-premium group-hover:-rotate-[10deg] group-hover:scale-110">
                     <Icon className="h-7 w-7 group-hover:icon-draw" aria-hidden="true" />
                   </span>
-                  <span className="relative mt-auto pt-8 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                  {/* Step label with a cue to the next card: right on desktop (the track scrolls sideways),
+                      down on phones (cards stack). The last step has nothing after it, so no arrow. */}
+                  <span className="relative mt-auto flex items-center gap-3 pt-8 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                     Step {String(i + 1).padStart(2, "0")}
+                    {i < steps.length - 1 && (
+                      <>
+                        <span aria-hidden="true" className="h-px flex-1 bg-gradient-to-r from-accent to-transparent" />
+                        <span
+                          aria-hidden="true"
+                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-soft text-primary ring-1 ring-accent/60 transition-colors duration-500 group-hover:bg-primary group-hover:text-white"
+                        >
+                          <ArrowRight className="anim-nudge-x hidden h-4 w-4 lg:block" />
+                          <ArrowDown className="anim-nudge-y h-4 w-4 lg:hidden" />
+                        </span>
+                      </>
+                    )}
                   </span>
                   <h3 className="relative mt-2 text-h3 text-secondary">{title}</h3>
                   <p className="relative mt-3 text-body text-muted">{text}</p>

@@ -46,7 +46,6 @@ export default function TreatmentsPage() {
   return (
     <SiteShell>
       <PageBanner
-        crumb="Treatments"
         eyebrow="Our Treatments"
         title="Complete Dental Care,"
         highlight="Under One Roof."

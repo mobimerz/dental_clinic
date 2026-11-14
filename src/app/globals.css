@@ -343,6 +343,32 @@ html.lenis body {
   }
 }
 
+/* Small repeating nudge on "next" arrows, so it is clear there is more to scroll to */
+@keyframes nudge-x {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+@keyframes nudge-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 4px, 0);
+  }
+}
+@utility anim-nudge-x {
+  animation: nudge-x 1.6s ease-in-out infinite;
+}
+@utility anim-nudge-y {
+  animation: nudge-y 1.6s ease-in-out infinite;
+}
+
 @utility anim-float-tooth {
   animation: float-tooth 7s ease-in-out infinite;
 }

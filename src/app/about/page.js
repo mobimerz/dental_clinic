@@ -19,7 +19,6 @@ export default function AboutPage() {
   return (
     <SiteShell>
       <PageBanner
-        crumb="About"
         eyebrow={`Since ${clinic.established}`}
         title="Caring for Smiles"
         highlight={`Since ${clinic.established}.`}

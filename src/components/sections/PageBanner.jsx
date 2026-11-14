@@ -2,9 +2,8 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "motion/react";
-import { Award, CalendarCheck, ChevronRight, Clock, MapPin, ShieldCheck, Smile, Star } from "lucide-react";
+import { Award, CalendarCheck, Clock, MapPin, ShieldCheck, Smile, Star } from "lucide-react";
 import { Eyebrow } from "@/components/common/SectionHeading";
 import Tooth3D, { GlassBubble } from "@/components/common/Tooth3D";
 import { FloatingTooth, GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
@@ -21,11 +20,10 @@ const chipIcons = { award: Award, calendar: CalendarCheck, clock: Clock, pin: Ma
 // Motion is unchanged from the original inner-page banner: the title's first line flips in
 // letter by letter, the highlighted second line focuses in, and the photo opens behind two colour
 // curtains with floating chips. Scrolling away lifts the copy and sinks the photo.
-//   crumb      – current page name for the breadcrumb (Home › crumb)
 //   title      – first line of the heading
 //   highlight  – second line, shown in the teal gradient with a drawn underline
 //   chips      – one small floating card on the photo: { icon: "star" | "award" | …, label, value }
-export default function PageBanner({ crumb, eyebrow, title, highlight, description, image, imagePosition = "object-center", chips = [], children }) {
+export default function PageBanner({ eyebrow, title, highlight, description, image, imagePosition = "object-center", chips = [], children }) {
   const root = useRef(null);
 
   useGSAP(
@@ -103,21 +101,6 @@ export default function PageBanner({ crumb, eyebrow, title, highlight, descripti
         <div className="ph-copy-wrap relative max-w-xl xl:max-w-[44rem]">
           <div className="hero-intro lg:flex lg:h-full lg:flex-col lg:justify-center">
             <div className="ph-eyebrow">
-              <nav aria-label="Breadcrumb" className="mb-4">
-                <ol className="flex items-center gap-1.5 text-small font-medium text-muted">
-                  <li>
-                    <Link href="/" className="transition-colors duration-300 hover:text-primary">
-                      Home
-                    </Link>
-                  </li>
-                  <li aria-hidden="true">
-                    <ChevronRight className="h-3.5 w-3.5" />
-                  </li>
-                  <li aria-current="page" className="text-secondary">
-                    {crumb}
-                  </li>
-                </ol>
-              </nav>
               <Eyebrow>{eyebrow}</Eyebrow>
             </div>
 

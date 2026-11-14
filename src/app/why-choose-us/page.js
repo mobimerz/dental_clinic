@@ -24,7 +24,6 @@ export default async function WhyChooseUsPage() {
   return (
     <SiteShell>
       <PageBanner
-        crumb="Why Choose Us"
         eyebrow="Why Patients Choose Us"
         title="Trusted by Families,"
         highlight={`Rated ${clinic.rating.value} on Google.`}
