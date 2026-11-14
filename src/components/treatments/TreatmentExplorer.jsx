@@ -77,7 +77,6 @@ export default function TreatmentExplorer() {
           id="explorer-title"
           eyebrow="Find Your Treatment"
           title="Browse by What You Need."
-          description="Pick a category to narrow things down, then open any treatment to see who it helps and what to expect."
         />
 
         <Reveal delay={0.2} className="header-gap flex justify-center">
