@@ -3,6 +3,7 @@ import PageHero from "@/components/sections/PageHero";
 import FaqSection from "@/components/sections/FaqSection";
 import ContactCards from "@/components/contact/ContactCards";
 import VisitInfo from "@/components/contact/VisitInfo";
+import AppointmentForm from "@/components/contact/AppointmentForm";
 import { clinic } from "@/data/clinic";
 
 export const metadata = {
@@ -45,6 +46,7 @@ export default function ContactPage() {
         description="Call, message or drop by. Whether it's a check-up or a toothache that can't wait, we'll help you find a time that works."
       />
       <ContactCards />
+      <AppointmentForm />
       <VisitInfo />
       <FaqSection
         id="contact-faq"
