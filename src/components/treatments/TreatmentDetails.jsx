@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { CircleCheck } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import { panel } from "@/components/ui/styles";
 import Button from "@/components/common/Button";
 import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import { treatmentIcons } from "@/components/common/treatmentIcons";
@@ -20,7 +23,7 @@ function DetailPanel({ t, index }) {
     <article
       id={t.slug}
       aria-labelledby={`${t.slug}-title`}
-      className="detail-panel group relative scroll-mt-28 overflow-hidden rounded-[2.25rem] bg-white p-7 shadow-soft ring-1 ring-line transition-shadow duration-700 ease-premium hover:shadow-lift sm:p-10"
+      className={`detail-panel group relative scroll-mt-28 overflow-hidden bg-white shadow-soft ring-1 ring-line transition-shadow duration-700 ease-premium hover:shadow-lift ${panel}`}
     >
       <span
         aria-hidden="true"
@@ -39,20 +42,20 @@ function DetailPanel({ t, index }) {
         </span>
         <span>
           <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-primary">{categoryLabel[t.category]}</span>
-          <h3 id={`${t.slug}-title`} className="mt-1 text-2xl font-bold tracking-tight text-secondary sm:text-3xl">
+          <h3 id={`${t.slug}-title`} className="mt-1 text-h3-lg text-secondary">
             {t.title}
           </h3>
         </span>
       </header>
 
-      <p className="detail-copy relative mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-[1.05rem]">{t.summary}</p>
+      <p className="detail-copy relative mt-6 max-w-2xl text-lead text-muted">{t.summary}</p>
 
       <div className="relative mt-8 grid gap-6 md:grid-cols-2">
         <div className="rounded-3xl bg-soft p-6 ring-1 ring-accent/50">
           <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-secondary">{t.helpsWithTitle || "May help if you have"}</h4>
           <ul className="mt-4 space-y-3">
             {t.helpsWith.map((item) => (
-              <li key={item} className="detail-check flex items-start gap-3 text-[0.95rem] text-ink">
+              <li key={item} className="detail-check flex items-start gap-3 text-body text-ink">
                 <CircleCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
                 {item}
               </li>
@@ -65,7 +68,7 @@ function DetailPanel({ t, index }) {
             <span aria-hidden="true" className="absolute bottom-3 left-[13px] top-3 w-px bg-line" />
             <span aria-hidden="true" className="detail-rail absolute bottom-3 left-[13px] top-3 w-px origin-top bg-primary" />
             {t.steps.map((step, i) => (
-              <li key={step} className="detail-step relative flex items-start gap-3 text-[0.95rem] text-ink">
+              <li key={step} className="detail-step relative flex items-start gap-3 text-body text-ink">
                 <span className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-primary ring-1 ring-accent">
                   {i + 1}
                 </span>
@@ -82,7 +85,6 @@ function DetailPanel({ t, index }) {
           href={whatsappLink(`Hello A-Zee Dental, I would like to know more about ${t.title}.`)}
           external
           icon={WhatsAppIcon}
-          className="!py-3"
         >
           Ask About {t.title}
         </Button>
@@ -164,16 +166,17 @@ export default function TreatmentDetails() {
   );
 
   return (
-    <section ref={root} aria-labelledby="details-title" className="relative section-y">
-      <div className="container-page">
+    <Section ref={root} aria-labelledby="details-title">
+      <Container>
         <SectionHeading
+          rhythm="hero"
           id="details-title"
           eyebrow="Treatment Guide"
           title="Everything You'd Want to Know."
           description="A plain-language guide to each treatment: what it's for, who it can help and how your visits usually go."
         />
 
-        <div className="mt-16 grid gap-10 lg:grid-cols-[260px_1fr] lg:gap-14">
+        <div className="header-gap grid gap-12 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-10">
           <nav aria-label="Treatments" className="hidden lg:block">
             <ol className="sticky top-28 space-y-1 rounded-3xl bg-soft p-3 ring-1 ring-line">
               {treatments.map((t, i) => {
@@ -209,7 +212,7 @@ export default function TreatmentDetails() {
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

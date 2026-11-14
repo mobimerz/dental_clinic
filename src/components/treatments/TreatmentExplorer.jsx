@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowDown } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import { card, cardFill } from "@/components/ui/styles";
 import Reveal from "@/components/common/Reveal";
 import Tilt from "@/components/common/Tilt";
 import { FloatingTooth, Sparkle } from "@/components/common/FloatingShapes";
@@ -20,7 +23,7 @@ function ExplorerCard({ t, index }) {
     <Tilt max={9} scale={1.03} className="h-full">
       <a
         href={`#${t.slug}`}
-        className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white p-6 shadow-soft ring-1 ring-line transition-all duration-500 ease-premium hover:-translate-y-1.5 hover:shadow-lift hover:ring-accent"
+        className={`group relative overflow-hidden ${card} ${cardFill} transition-all duration-500 ease-premium hover:-translate-y-1.5 hover:shadow-lift hover:ring-accent`}
       >
         <span
           aria-hidden="true"
@@ -34,15 +37,15 @@ function ExplorerCard({ t, index }) {
             {categoryLabel[t.category]}
           </span>
         </span>
-        <h3 className="relative mt-5 text-lg font-bold text-secondary">{t.title}</h3>
-        <p className="relative mt-2 flex-1 text-[0.9rem] leading-relaxed text-muted">{t.description}</p>
-        <span className="relative mt-5 flex items-center justify-between text-sm font-semibold text-primary">
+        <h3 className="relative mt-6 text-h3 text-secondary">{t.title}</h3>
+        <p className="relative mt-2 flex-1 text-small text-muted">{t.description}</p>
+        <span className="relative mt-6 flex items-center justify-between text-sm font-semibold text-primary">
           <span>Read details</span>
           <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-soft transition-colors duration-500 group-hover:bg-primary group-hover:text-white">
             <ArrowDown className="h-4 w-4 transition-transform duration-500 ease-premium group-hover:translate-y-0.5 group-hover:animate-bounce" aria-hidden="true" />
           </span>
         </span>
-        <span aria-hidden="true" className="absolute right-6 top-[4.6rem] text-xs font-bold text-line transition-colors duration-500 group-hover:text-accent">
+        <span aria-hidden="true" className="absolute right-6 top-[4.6rem] text-xs font-bold md:right-8 md:top-[5.1rem] text-line transition-colors duration-500 group-hover:text-accent">
           {String(index + 1).padStart(2, "0")}
         </span>
       </a>
@@ -64,20 +67,21 @@ export default function TreatmentExplorer() {
   }, [category]);
 
   return (
-    <section id="explorer" aria-labelledby="explorer-title" className="relative overflow-clip bg-soft section-y">
+    <Section bg="soft" id="explorer" aria-labelledby="explorer-title" className="overflow-clip">
       <div aria-hidden="true" className="bg-dots absolute inset-x-0 top-0 h-64 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <FloatingTooth className="left-[4%] top-40 hidden text-primary/20 lg:block" size="h-14 w-14" speed={0.5} />
       <Sparkle className="right-[14%] top-28 hidden h-5 w-5 text-primary/50 md:block" speed={0.3} />
 
-      <div className="container-page relative">
+      <Container className="relative">
         <SectionHeading
+          rhythm="hero"
           id="explorer-title"
           eyebrow="Find Your Treatment"
           title="Browse by What You Need."
           description="Pick a category to narrow things down, then open any treatment to see who it helps and what to expect."
         />
 
-        <Reveal delay={0.2} className="mt-10 flex justify-center">
+        <Reveal delay={0.2} className="header-gap flex justify-center">
           <div
             role="tablist"
             aria-label="Treatment categories"
@@ -110,7 +114,7 @@ export default function TreatmentExplorer() {
           </div>
         </Reveal>
 
-        <motion.ul layout className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <motion.ul layout className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <AnimatePresence mode="popLayout">
             {visible.map((t, i) => (
               <motion.li
@@ -127,7 +131,7 @@ export default function TreatmentExplorer() {
             ))}
           </AnimatePresence>
         </motion.ul>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }
