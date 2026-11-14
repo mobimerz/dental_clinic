@@ -17,9 +17,9 @@ function MenuIcon({ open }) {
   const bar = "absolute left-1/2 h-[2px] w-[18px] -translate-x-1/2 rounded-full bg-current";
   return (
     <span aria-hidden="true" className="relative block h-5 w-5">
-      <motion.span className={bar} style={{ top: 4 }} animate={open ? { y: 5.5, rotate: 45 } : { y: 0, rotate: 0 }} transition={{ duration: 0.45, ease }} />
-      <motion.span className={bar} style={{ top: 9.5 }} animate={open ? { scaleX: 0, opacity: 0 } : { scaleX: 1, opacity: 1 }} transition={{ duration: 0.3, ease }} />
-      <motion.span className={bar} style={{ top: 15 }} animate={open ? { y: -5.5, rotate: -45 } : { y: 0, rotate: 0 }} transition={{ duration: 0.45, ease }} />
+      <motion.span className={`${bar} top-[4px]`} animate={open ? { y: 5.5, rotate: 45 } : { y: 0, rotate: 0 }} transition={{ duration: 0.45, ease }} />
+      <motion.span className={`${bar} top-[9.5px]`} animate={open ? { scaleX: 0, opacity: 0 } : { scaleX: 1, opacity: 1 }} transition={{ duration: 0.3, ease }} />
+      <motion.span className={`${bar} top-[15px]`} animate={open ? { y: -5.5, rotate: -45 } : { y: 0, rotate: 0 }} transition={{ duration: 0.45, ease }} />
     </span>
   );
 }

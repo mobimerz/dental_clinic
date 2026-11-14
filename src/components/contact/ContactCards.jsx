@@ -1,5 +1,7 @@
 "use client";
 
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
 import { motion } from "motion/react";
 import { ArrowUpRight, Navigation, Phone } from "lucide-react";
 import Tilt from "@/components/common/Tilt";
@@ -41,8 +43,8 @@ const ease = [0.22, 1, 0.36, 1];
 // turning its text white, and the arrow flies out and back in.
 export default function ContactCards() {
   return (
-    <section aria-label="Ways to contact us" className="relative z-10 -mt-10 lg:-mt-16">
-      <ul className="container-page grid gap-5 md:grid-cols-3">
+    <Section variant="overlap" spaced aria-label="Ways to contact us">
+      <Container as="ul" className="grid gap-6 md:grid-cols-3">
         {cards.map(({ icon: Icon, label, value, text, href, external, fill }, i) => (
           <motion.li
             key={label}
@@ -55,7 +57,7 @@ export default function ContactCards() {
               <a
                 href={href}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] bg-white p-7 shadow-lift ring-1 ring-line sm:p-8"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] bg-white p-6 shadow-lift ring-1 ring-line md:p-8"
               >
                 <span
                   aria-hidden="true"
@@ -76,17 +78,17 @@ export default function ContactCards() {
                 <span className="relative mt-8 text-sm font-semibold uppercase tracking-[0.16em] text-primary transition-colors duration-500 group-hover:text-white/80">
                   {label}
                 </span>
-                <span className="relative mt-2 text-2xl font-bold tracking-tight text-secondary transition-colors duration-500 group-hover:text-white">
+                <span className="relative mt-2 text-h3-lg text-secondary transition-colors duration-500 group-hover:text-white">
                   {value}
                 </span>
-                <span className="relative mt-3 text-[0.95rem] leading-relaxed text-muted transition-colors duration-500 group-hover:text-white/75">
+                <span className="relative mt-3 text-body text-muted transition-colors duration-500 group-hover:text-white/75">
                   {text}
                 </span>
               </a>
             </Tilt>
           </motion.li>
         ))}
-      </ul>
-    </section>
+      </Container>
+    </Section>
   );
 }

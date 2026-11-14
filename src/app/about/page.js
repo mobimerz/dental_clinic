@@ -42,7 +42,7 @@ export default function AboutPage() {
       <ValuesStack />
       <CareForAll />
       <ClinicGallery />
-      <CtaBanner rhythm="hero" bg="soft" title="Let's Look After Your Smile, Together." />
+      <CtaBanner bg="soft" title="Let's Look After Your Smile, Together." />
     </SiteShell>
   );
 }

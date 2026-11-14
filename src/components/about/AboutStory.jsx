@@ -69,7 +69,6 @@ export default function AboutStory() {
         <TwoColumn layout="media">
           <div className="flex flex-col items-start">
             <SectionHeading
-              rhythm="hero"
               align="left"
               id="story-title"
               eyebrow="Our Story"

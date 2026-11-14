@@ -169,7 +169,6 @@ export default function TreatmentDetails() {
     <Section ref={root} aria-labelledby="details-title">
       <Container>
         <SectionHeading
-          rhythm="hero"
           id="details-title"
           eyebrow="Treatment Guide"
           title="Everything You'd Want to Know."

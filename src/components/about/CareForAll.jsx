@@ -43,7 +43,6 @@ export default function CareForAll() {
     <Section bg="soft" aria-labelledby="care-title">
       <Container>
         <SectionHeading
-          rhythm="hero"
           id="care-title"
           eyebrow="Care for Every Age"
           title="One Clinic for the Whole Family."

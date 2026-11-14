@@ -4,12 +4,21 @@ import { useState } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import Reveal from "@/components/common/Reveal";
+import Button from "@/components/common/Button";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import { panel } from "@/components/ui/styles";
 import { clinic } from "@/data/clinic";
 import { treatments } from "@/data/treatments";
 
 const field =
-  "w-full rounded-2xl bg-soft px-4 py-3.5 text-[0.95rem] text-ink ring-1 ring-line outline-none transition placeholder:text-muted/70 focus:bg-white focus:ring-2 focus:ring-primary";
+  "w-full rounded-2xl bg-soft px-4 py-3.5 text-body text-ink ring-1 ring-line outline-none transition placeholder:text-muted/70 focus:bg-white focus:ring-2 focus:ring-primary";
 const label = "mb-2 block text-sm font-semibold text-secondary";
+
+// Loader icon that spins while the request is sending (passed to Button as its icon).
+function Spinner({ className = "", ...props }) {
+  return <Loader2 className={`${className} animate-spin`} {...props} />;
+}
 
 // Appointment request form. Posts to /api/appointment, which emails the clinic via Brevo.
 export default function AppointmentForm() {
@@ -45,8 +54,8 @@ export default function AppointmentForm() {
   const today = new Date().toISOString().slice(0, 10);
 
   return (
-    <section id="book" aria-labelledby="book-heading" className="section-y">
-      <div className="container-page">
+    <Section bg="soft" id="book" aria-labelledby="book-heading">
+      <Container>
         <SectionHeading
           id="book-heading"
           eyebrow="Book a Visit"
@@ -55,11 +64,11 @@ export default function AppointmentForm() {
         />
 
         <Reveal y={30}>
-          <div className="mx-auto mt-10 max-w-3xl rounded-[2rem] bg-white p-6 shadow-lift ring-1 ring-line sm:p-10">
+          <div className={`header-gap mx-auto max-w-3xl bg-white shadow-lift ring-1 ring-line ${panel}`}>
             {status === "sent" ? (
               <div role="status" className="flex flex-col items-center py-10 text-center">
                 <CheckCircle2 className="h-14 w-14 text-primary" aria-hidden="true" />
-                <h3 className="mt-5 text-2xl font-bold text-secondary">Request received</h3>
+                <h3 className="mt-6 text-h3-lg text-secondary">Request received</h3>
                 <p className="mt-3 max-w-md text-muted">
                   Thank you. We'll call you shortly to confirm your appointment. Need us sooner? Call{" "}
                   <a href={clinic.phone.tel} className="font-semibold text-primary">
@@ -76,7 +85,7 @@ export default function AppointmentForm() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={onSubmit} noValidate className="grid gap-5 sm:grid-cols-2">
+              <form onSubmit={onSubmit} noValidate className="grid gap-6 sm:grid-cols-2">
                 {/* Honeypot for bots */}
                 <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
@@ -125,25 +134,17 @@ export default function AppointmentForm() {
                   <p role="alert" className="text-sm font-medium text-red-600 sm:col-span-2">{error}</p>
                 )}
 
-                <div className="sm:col-span-2">
-                  <button
-                    type="submit"
-                    disabled={status === "sending"}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-white shadow-glow transition hover:bg-primary-dark disabled:opacity-70 sm:w-auto"
-                  >
-                    {status === "sending" ? (
-                      <Loader2 className="h-[18px] w-[18px] animate-spin" aria-hidden="true" />
-                    ) : (
-                      <Send className="h-[18px] w-[18px]" aria-hidden="true" />
-                    )}
+                {/* Full width on phones (the column stretches it), natural width from 640px */}
+                <div className="flex flex-col sm:col-span-2 sm:flex-row">
+                  <Button type="submit" disabled={status === "sending"} icon={status === "sending" ? Spinner : Send}>
                     {status === "sending" ? "Sending…" : "Request Appointment"}
-                  </button>
+                  </Button>
                 </div>
               </form>
             )}
           </div>
         </Reveal>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

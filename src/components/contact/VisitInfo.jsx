@@ -7,6 +7,10 @@ import Button from "@/components/common/Button";
 import SectionHeading from "@/components/common/SectionHeading";
 import Reveal from "@/components/common/Reveal";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
+import Section from "@/components/ui/Section";
+import Container from "@/components/ui/Container";
+import TwoColumn from "@/components/ui/TwoColumn";
+import { card, photo, photoMaskRadius } from "@/components/ui/styles";
 import { clinic } from "@/data/clinic";
 
 // Monday to Saturday share the same hours, so they are listed as one row (day 0 = Sunday).
@@ -96,7 +100,7 @@ export default function VisitInfo() {
         tl.fromTo(
           q(".map-frame"),
           { clipPath: "inset(12% 12% 12% 12% round 48px)" },
-          { clipPath: "inset(0% 0% 0% 0% round 32px)", duration: 1.5, ease: "expo.inOut" }
+          { clipPath: `inset(0% 0% 0% 0% round ${photoMaskRadius})`, duration: 1.5, ease: "expo.inOut" }
         )
           .fromTo(q(".map-curtain"), { scaleY: 1 }, { scaleY: 0, duration: 1.1, ease: "expo.inOut" }, "-=0.9")
           .from(q(".map-pin"), { y: -80, opacity: 0, duration: 1, ease: "bounce.out" }, "-=0.4");
@@ -107,8 +111,9 @@ export default function VisitInfo() {
   );
 
   return (
-    <section ref={root} aria-labelledby="visit-title" className="relative section-y">
-      <div className="container-page grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
+    <Section ref={root} aria-labelledby="visit-title">
+      <Container>
+        <TwoColumn layout="aside">
         <div>
           <SectionHeading
             id="visit-title"
@@ -118,8 +123,8 @@ export default function VisitInfo() {
             align="left"
           />
 
-          <Reveal delay={0.15} className="mt-10">
-            <div className="rounded-[2rem] bg-white p-6 shadow-soft ring-1 ring-line sm:p-8">
+          <Reveal delay={0.15} className="mt-8">
+            <div className={card}>
               <div className="flex gap-4">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-soft text-primary ring-1 ring-accent/60">
                   <MapPin className="h-5 w-5" aria-hidden="true" />
@@ -167,13 +172,13 @@ export default function VisitInfo() {
                   )}
                 </div>
 
-                <ul className="mt-5 space-y-1">
+                <ul className="mt-6 space-y-1">
                   {DAY_GROUPS.map(({ label, days }) => {
                     const today = days.includes(status?.day);
                     return (
                       <li
                         key={label}
-                        className={`flex items-start justify-between gap-4 rounded-xl px-3 py-2 text-[0.95rem] transition-colors ${
+                        className={`flex items-start justify-between gap-4 rounded-xl px-3 py-2 text-body transition-colors ${
                           today ? "bg-soft font-semibold text-secondary ring-1 ring-accent/60" : "text-ink"
                         }`}
                       >
@@ -198,9 +203,9 @@ export default function VisitInfo() {
           </Reveal>
         </div>
 
-        {/* Desktop: the map matches the height of the address and timings column */}
+        {/* The map has the photo frame: fixed 4:3 ratio, capped at 520px, never stretched to the text column */}
         <div className="relative">
-          <div className="map-frame relative h-[420px] overflow-hidden rounded-[2rem] bg-accent shadow-lift ring-1 ring-line sm:h-[520px] lg:h-full lg:min-h-[480px]">
+          <div className={`map-frame ring-1 ring-line ${photo} aspect-[4/3] max-h-[520px] w-full`}>
             <iframe
               title={`Map showing ${clinic.name}`}
               src={clinic.links.mapEmbed}
@@ -208,7 +213,7 @@ export default function VisitInfo() {
               referrerPolicy="no-referrer-when-downgrade"
               className="absolute inset-0 h-full w-full border-0 grayscale-[30%] transition-[filter] duration-700 hover:grayscale-0"
             />
-            <div aria-hidden="true" className="map-curtain absolute inset-0 origin-top bg-primary" style={{ transform: "scaleY(0)" }} />
+            <div aria-hidden="true" className="map-curtain absolute inset-0 origin-top bg-primary [transform:scaleY(0)]" />
             <div className="map-pin pointer-events-none absolute left-4 top-4 flex items-center gap-3 rounded-2xl bg-white/95 p-3 pr-5 shadow-lift ring-1 ring-line backdrop-blur">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white">
                 <MapPin className="h-5 w-5" aria-hidden="true" />
@@ -219,13 +224,14 @@ export default function VisitInfo() {
               </span>
             </div>
             <div className="absolute bottom-4 left-4 right-4 flex justify-end">
-              <Button href={clinic.links.directions} external icon={Navigation} className="!py-3">
+              <Button href={clinic.links.directions} external icon={Navigation}>
                 Get Directions
               </Button>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+        </TwoColumn>
+      </Container>
+    </Section>
   );
 }

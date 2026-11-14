@@ -109,7 +109,6 @@ export default function VisitJourney() {
         <GlowOrb className="-right-40 top-10 h-[460px] w-[460px] bg-accent/70" />
         <div className="container-page relative">
           <SectionHeading
-            rhythm="hero"
             id="journey-title"
             eyebrow="Your Visit, Step by Step"
             title="No Surprises. Just Clear, Gentle Care."

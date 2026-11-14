@@ -48,7 +48,6 @@ export default function ComfortGrid() {
     <Section aria-labelledby="comfort-title" className="overflow-hidden">
       <Container>
         <SectionHeading
-          rhythm="hero"
           id="comfort-title"
           eyebrow="The Little Things"
           title="Small Details That Make a Big Difference."

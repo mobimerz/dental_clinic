@@ -46,7 +46,7 @@ export default async function WhyChooseUsPage() {
       <VisitJourney />
       <ComfortGrid />
       <PatientReviews google={google} />
-      <CtaBanner rhythm="hero" bg="white" title="Experience the Difference for Yourself." />
+      <CtaBanner bg="white" title="Experience the Difference for Yourself." />
     </SiteShell>
   );
 }

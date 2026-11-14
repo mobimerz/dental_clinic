@@ -144,7 +144,7 @@ export default function Treatments() {
       <Sparkle className="right-[18%] top-28 hidden h-5 w-5 text-primary/50 md:block" speed={0.3} />
 
       <Container className="relative">
-        <SectionHeading rhythm="hero"
+        <SectionHeading
           id="treatments-title"
           eyebrow="Our Treatments"
           title="Complete Dental Care, All Under One Roof."

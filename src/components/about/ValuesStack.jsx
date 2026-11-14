@@ -86,7 +86,6 @@ export default function ValuesStack() {
     <Section ref={root} aria-labelledby="values-title">
       <Container>
         <SectionHeading
-          rhythm="hero"
           id="values-title"
           eyebrow="Our Philosophy"
           title="Preventive. Comfortable. Personalized."
