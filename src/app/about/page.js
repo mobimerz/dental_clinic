@@ -1,11 +1,11 @@
 import SiteShell from "@/components/layout/SiteShell";
-import PageHero from "@/components/sections/PageHero";
+import PageBanner from "@/components/sections/PageBanner";
 import CtaBanner from "@/components/sections/CtaBanner";
 import AboutStory from "@/components/about/AboutStory";
 import DoctorSpotlight from "@/components/about/DoctorSpotlight";
 import ValuesStack from "@/components/about/ValuesStack";
 import CareForAll from "@/components/about/CareForAll";
-import ClinicGallery from "@/components/legacy/ClinicGallery";
+import ClinicGallery from "@/components/home/ClinicGallery";
 import Button from "@/components/common/Button";
 import { clinic, clinicImages } from "@/data/clinic";
 
@@ -18,7 +18,8 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <SiteShell>
-      <PageHero
+      <PageBanner
+        crumb="About"
         eyebrow={`Since ${clinic.established}`}
         title="Caring for Smiles"
         highlight={`Since ${clinic.established}.`}
@@ -35,13 +36,13 @@ export default function AboutPage() {
         <Button href="/contact" variant="secondary">
           Visit the Clinic
         </Button>
-      </PageHero>
+      </PageBanner>
       <AboutStory />
       <DoctorSpotlight />
       <ValuesStack />
       <CareForAll />
       <ClinicGallery />
-      <CtaBanner title="Let's Look After Your Smile, Together." flushTop />
+      <CtaBanner rhythm="hero" bg="soft" title="Let's Look After Your Smile, Together." />
     </SiteShell>
   );
 }

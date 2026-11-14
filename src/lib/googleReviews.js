@@ -38,7 +38,8 @@ function shorten(text) {
 export function mapPlace(place) {
   const reviews = (place.reviews ?? [])
     .map((r) => {
-      const raw = (r.originalText?.text ?? r.text?.text ?? "").trim();
+      // Reviewers often type "Dr.Aysha"; add the missing space after the title.
+      const raw = (r.originalText?.text ?? r.text?.text ?? "").trim().replace(/\bDr\.(?=[A-Z])/g, "Dr. ");
       if (!raw) return null;
       const { text, truncated } = shorten(raw);
       return {
