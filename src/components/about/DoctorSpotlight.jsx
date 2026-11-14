@@ -103,7 +103,6 @@ export default function DoctorSpotlight() {
 
         <div className="flex flex-col items-start">
           <SectionHeading
-            rhythm="hero"
             align="left"
             id="doctor-title"
             eyebrow="Meet Your Dentist"

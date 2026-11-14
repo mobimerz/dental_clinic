@@ -120,7 +120,7 @@ export default function WhyChooseUs({ linkToPage = false, backdrop = "bg-white" 
         <Container className="relative">
           <TwoColumn layout="aside" align="start">
           <div className="lg:sticky lg:top-32 lg:self-start">
-            <SectionHeading rhythm="hero"
+            <SectionHeading
               id="why-title"
               eyebrow="Why Choose A-Zee Dental?"
               title="Your Comfort Comes First."

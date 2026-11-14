@@ -100,26 +100,6 @@
   }
 }
 
-/* Legacy rhythm (80px step at 640px) for pages not yet moved onto the system. Remove when the last page is migrated. */
-@utility section-y {
-  padding-block: 4rem;
-  @media (width >= 40rem) {
-    padding-block: 5rem;
-  }
-  @media (width >= 64rem) {
-    padding-block: 6rem;
-  }
-}
-@utility section-pb {
-  padding-bottom: 4rem;
-  @media (width >= 40rem) {
-    padding-bottom: 5rem;
-  }
-  @media (width >= 64rem) {
-    padding-bottom: 6rem;
-  }
-}
-
 /* Overlap pattern: a card band that pulls up into the banner above it (Trust bar, Contact cards).
    One pull-up value everywhere: the Home Trust bar's original 24px / 40px. */
 @utility overlap-up {

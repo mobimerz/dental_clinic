@@ -74,7 +74,6 @@ export default function TreatmentExplorer() {
 
       <Container className="relative">
         <SectionHeading
-          rhythm="hero"
           id="explorer-title"
           eyebrow="Find Your Treatment"
           title="Browse by What You Need."

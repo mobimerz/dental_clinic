@@ -1,5 +1,5 @@
 import SiteShell from "@/components/layout/SiteShell";
-import PageHero from "@/components/sections/PageHero";
+import PageBanner from "@/components/sections/PageBanner";
 import FaqSection from "@/components/sections/FaqSection";
 import ContactCards from "@/components/contact/ContactCards";
 import VisitInfo from "@/components/contact/VisitInfo";
@@ -38,7 +38,8 @@ const faqs = [
 export default function ContactPage() {
   return (
     <SiteShell>
-      <PageHero
+      <PageBanner
+        crumb="Contact"
         eyebrow="Get in Touch"
         title="We're Here to Help"
         highlight="Your Smile Shine."

@@ -67,13 +67,12 @@ export default function TreatmentsPage() {
       <TreatmentExplorer />
       <TreatmentDetails />
       <FaqSection
-        rhythm="hero"
         id="treatment-faq"
         title="Questions About Treatment?"
         description="A few things patients often ask before their first visit. Anything else, just message us."
         items={faqs}
       />
-      <CtaBanner rhythm="hero" bg="white" title="Not Sure Where to Start? Let's Talk." message="Hello A-Zee Dental, I would like to book a consultation." />
+      <CtaBanner bg="white" title="Not Sure Where to Start? Let's Talk." message="Hello A-Zee Dental, I would like to book a consultation." />
     </SiteShell>
   );
 }
