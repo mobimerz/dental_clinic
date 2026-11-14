@@ -5,7 +5,7 @@ import AboutStory from "@/components/about/AboutStory";
 import DoctorSpotlight from "@/components/about/DoctorSpotlight";
 import ValuesStack from "@/components/about/ValuesStack";
 import CareForAll from "@/components/about/CareForAll";
-import ClinicGallery from "@/components/home/ClinicGallery";
+import ClinicGallery from "@/components/legacy/ClinicGallery";
 import Button from "@/components/common/Button";
 import { clinic, clinicImages } from "@/data/clinic";
 

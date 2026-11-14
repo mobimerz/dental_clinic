@@ -104,7 +104,7 @@ export default function ClinicGallery() {
         <TwoColumn layout="aside" align="stretch">
         <div className="flex flex-col gap-8 lg:justify-between">
           <div className="flex flex-col items-start">
-            <SectionHeading id="gallery-title" eyebrow="Inside the Clinic" title="A Welcoming Space for Better Dental Care." align="left" />
+            <SectionHeading rhythm="hero" id="gallery-title" eyebrow="Inside the Clinic" title="A Welcoming Space for Better Dental Care." align="left" />
             <Reveal delay={0.15} className="mt-7 flex max-w-xl flex-col items-start gap-8">
               <p className="text-lead text-muted">
                 Step inside A-Zee Dental: a calm reception, well-equipped treatment rooms and a team focused on making

@@ -79,7 +79,7 @@
 
 /* Section rhythm: only two section sizes besides the hero.
    Sections own their padding, so adjacent sections never rely on each other's margins. */
-@utility section-y {
+@utility section-default {
   /* default: 64 / 80 / 96px */
   padding-block: 4rem;
   @media (width >= 48rem) {
@@ -97,6 +97,26 @@
   }
   @media (width >= 64rem) {
     padding-block: 3.5rem;
+  }
+}
+
+/* Legacy rhythm (80px step at 640px) for pages not yet moved onto the system. Remove when the last page is migrated. */
+@utility section-y {
+  padding-block: 4rem;
+  @media (width >= 40rem) {
+    padding-block: 5rem;
+  }
+  @media (width >= 64rem) {
+    padding-block: 6rem;
+  }
+}
+@utility section-pb {
+  padding-bottom: 4rem;
+  @media (width >= 40rem) {
+    padding-bottom: 5rem;
+  }
+  @media (width >= 64rem) {
+    padding-bottom: 6rem;
   }
 }
 

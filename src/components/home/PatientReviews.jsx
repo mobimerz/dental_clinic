@@ -308,7 +308,7 @@ export default function PatientReviews({ google = null }) {
     <Section bg="soft" id="reviews" aria-labelledby="reviews-title" className="overflow-hidden">
       <div aria-hidden="true" data-speed="0.2" className="bg-dots absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
       <Container className="relative">
-        <SectionHeading
+        <SectionHeading rhythm="hero"
           id="reviews-title"
           eyebrow="Patient Reviews"
           title="What Our Patients Say."

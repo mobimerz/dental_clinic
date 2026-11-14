@@ -4,7 +4,7 @@
 //   spaced   – overlap only: keeps the compact gap below when the next section has a different surface
 // `ref` and any other props (id, aria-*) pass straight through to the <section>.
 const variants = {
-  default: "section-y",
+  default: "section-default",
   compact: "section-compact",
   overlap: "overlap-up",
 };

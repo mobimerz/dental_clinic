@@ -91,7 +91,7 @@ export default function AboutClinic() {
 
           {/* Copy */}
           <div className="flex flex-col items-start">
-            <SectionHeading
+            <SectionHeading rhythm="hero"
               id="about-title"
               align="left"
               eyebrow="About the Clinic"

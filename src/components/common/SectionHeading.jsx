@@ -25,6 +25,8 @@ export function Eyebrow({ children, inverted = false }) {
 // Alignment rule: centred when a full-width grid follows; left when the header sits in a column
 // of a two-column layout.
 //   eyebrowY / descriptionMode / descriptionDelay keep each section's original entrance motion.
+//   rhythm="hero" opts a section into the layout system. Without it the header keeps its original
+//   spacing (16px gaps, 16/18px description), so pages not yet migrated look exactly as before.
 export default function SectionHeading({
   eyebrow,
   title,
@@ -36,11 +38,13 @@ export default function SectionHeading({
   descriptionMode = "lines",
   descriptionDelay = 0.2,
   className = "",
+  rhythm = "legacy",
   children,
 }) {
   const centered = align === "center";
+  const hero = rhythm === "hero";
   return (
-    <div className={`flex flex-col ${centered ? "mx-auto max-w-2xl items-center text-center" : "max-w-xl items-start"} ${className}`}>
+    <div className={`flex flex-col ${hero ? "" : "gap-4"} ${centered ? "mx-auto max-w-2xl items-center text-center" : "max-w-xl items-start"} ${className}`}>
       {eyebrow && (
         <Reveal y={eyebrowY}>
           <Eyebrow inverted={inverted}>{eyebrow}</Eyebrow>
@@ -49,7 +53,7 @@ export default function SectionHeading({
       <SplitReveal
         as="h2"
         id={id}
-        className={`text-balance text-h2 ${eyebrow ? "mt-6" : ""} ${inverted ? "text-white" : "text-secondary"}`}
+        className={`text-balance text-h2 ${hero && eyebrow ? "mt-6" : ""} ${inverted ? "text-white" : "text-secondary"}`}
       >
         {title}
       </SplitReveal>
@@ -58,7 +62,7 @@ export default function SectionHeading({
           as="p"
           mode={descriptionMode}
           delay={descriptionDelay}
-          className={`mt-7 text-lead ${inverted ? "text-white/70" : "text-muted"}`}
+          className={`${hero ? "mt-7 text-lead" : "text-base leading-relaxed sm:text-lg"} ${inverted ? "text-white/70" : "text-muted"}`}
         >
           {description}
         </SplitReveal>
