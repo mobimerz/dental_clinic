@@ -6,19 +6,25 @@ import { gsap, ScrollTrigger, MOTION_OK } from "@/lib/gsap";
 import { jumpTo, setLenis } from "@/lib/lenis";
 
 // Lenis smooth scrolling driven by GSAP's ticker, plus the site-wide `data-speed` parallax.
+// Starts when the browser is idle after first render, so it never competes with page load.
+// Touch devices skip Lenis entirely: it doesn't smooth touch scrolling, it only adds a per-frame
+// loop. In-page links still glide there via jumpTo's native smooth-scroll fallback.
 export default function SmoothScroll() {
   useEffect(() => {
     const mm = gsap.matchMedia();
 
-    mm.add(MOTION_OK, () => {
-      const lenis = new Lenis({
-        duration: 1.15,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        touchMultiplier: 1.4,
-      });
+    const start = () => mm.add(MOTION_OK, () => {
+      const touch = window.matchMedia("(pointer: coarse)").matches;
+      const lenis = touch
+        ? null
+        : new Lenis({
+            duration: 1.15,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            touchMultiplier: 1.4,
+          });
       setLenis(lenis);
 
-      lenis.on("scroll", ScrollTrigger.update);
+      lenis?.on("scroll", ScrollTrigger.update);
 
       // Same-page #links (side menus, "Read details" cards, footer links) always scroll through Lenis.
       // A native hash jump moves the page behind Lenis's back, and the next wheel scroll pulls it
@@ -48,8 +54,10 @@ export default function SmoothScroll() {
       };
       const hashTimer = setTimeout(landOnHash, 400);
       const tick = (time) => lenis.raf(time * 1000);
-      gsap.ticker.add(tick);
-      gsap.ticker.lagSmoothing(0);
+      if (lenis) {
+        gsap.ticker.add(tick);
+        gsap.ticker.lagSmoothing(0);
+      }
 
       // Any element with data-speed drifts against the scroll. It animates the CSS
       // `translate` property, so it stacks with Motion/Tailwind transforms on the same node.
@@ -70,16 +78,22 @@ export default function SmoothScroll() {
         document.removeEventListener("click", onClick, true);
         clearTimeout(hashTimer);
         gsap.ticker.remove(tick);
-        lenis.destroy();
+        lenis?.destroy();
         setLenis(null);
       };
     });
+
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(start, { timeout: 1500 })
+      : window.setTimeout(start, 300);
 
     const refresh = () => ScrollTrigger.refresh();
     window.addEventListener("load", refresh);
     document.fonts?.ready.then(refresh);
 
     return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
       window.removeEventListener("load", refresh);
       mm.revert();
     };
