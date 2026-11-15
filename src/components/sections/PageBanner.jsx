@@ -7,7 +7,7 @@ import { Award, CalendarCheck, Clock, MapPin, ShieldCheck, Smile, Star } from "l
 import { Eyebrow } from "@/components/common/SectionHeading";
 import Tooth3D, { GlassBubble } from "@/components/common/Tooth3D";
 import { FloatingTooth, GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
-import { gsap, SplitText, useGSAP, MOTION_OK } from "@/lib/gsap";
+import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 const ease = [0.22, 1, 0.36, 1];
 
@@ -29,46 +29,14 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
   useGSAP(
     () => {
       const q = gsap.utils.selector(root);
-      gsap.set(q(".hero-intro"), { visibility: "visible" });
-
+      // The entrance itself is CSS (.intro classes) so the heading paints before JS loads.
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        const chars = SplitText.create(q(".ph-line-1"), { type: "words,chars", charsClass: "inline-block" });
-        const copy = SplitText.create(q(".ph-copy"), { type: "words" });
-
-        const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-        tl.from(q(".ph-eyebrow"), { y: -18, scale: 0.85, opacity: 0, duration: 0.9 })
-          .from(
-            chars.chars,
-            {
-              yPercent: 90,
-              rotateX: -95,
-              opacity: 0,
-              filter: "blur(10px)",
-              transformOrigin: "50% 100% -20px",
-              stagger: 0.028,
-              duration: 1.2,
-            },
-            "-=0.6"
-          )
-          .from(
-            q(".ph-line-2"),
-            { yPercent: 70, opacity: 0, scale: 1.06, letterSpacing: "0.08em", filter: "blur(14px)", duration: 1.4 },
-            "-=0.95"
-          )
-          .from(copy.words, { y: 16, opacity: 0, filter: "blur(6px)", duration: 0.8, stagger: 0.02 }, "-=1")
-          .from(q(".ph-extra > *"), { y: 30, opacity: 0, scale: 0.94, stagger: 0.1, duration: 0.9 }, "-=0.8");
-
         const out = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
         // Both columns lift by the same distance so they stay aligned while the hero scrolls away.
         gsap.to(q(".ph-copy-wrap"), { y: -70, opacity: 0.4, ease: "none", scrollTrigger: out });
         gsap.to(q(".ph-visual"), { y: -70, scale: 0.95, ease: "none", scrollTrigger: out });
         gsap.to(q(".ph-photo"), { yPercent: 10, ease: "none", scrollTrigger: out });
-
-        return () => {
-          chars.revert();
-          copy.revert();
-        };
       });
       return () => mm.revert();
     },
@@ -100,7 +68,7 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
       >
         <div className="ph-copy-wrap relative max-w-xl xl:max-w-[44rem]">
           <div className="hero-intro lg:flex lg:h-full lg:flex-col lg:justify-center">
-            <div className="ph-eyebrow">
+            <div className="ph-eyebrow intro">
               <Eyebrow>{eyebrow}</Eyebrow>
             </div>
 
@@ -108,9 +76,9 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
               id="page-title"
               className="mt-6 text-balance text-[clamp(2.2rem,11.4vw,2.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] min-[400px]:text-[3.25rem] sm:text-6xl lg:text-[4.1rem]"
             >
-              <span className="ph-line-1 inline-block">{title}</span>
+              <span className="ph-line-1 intro inline-block [--d:0.08]">{title}</span>
               <br />
-              <span className="relative inline-block">
+              <span className="intro relative inline-block [--d:0.16]">
                 <span className="ph-line-2 inline-block bg-gradient-to-r from-primary via-[#0A97A6] to-primary bg-clip-text text-transparent text-shimmer">
                   {highlight}
                 </span>
@@ -134,11 +102,11 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
               </span>
             </h1>
 
-            <p className="ph-copy mt-7 max-w-md text-[1.05rem] leading-relaxed text-muted sm:text-lg">
+            <p className="ph-copy intro [--d:0.24] mt-7 max-w-md text-[1.05rem] leading-relaxed text-muted sm:text-lg">
               {description}
             </p>
 
-            {children && <div className="ph-extra mt-8 flex flex-col gap-3 min-[420px]:flex-row">{children}</div>}
+            {children && <div className="ph-extra intro [--d:0.32] mt-8 flex flex-col gap-3 min-[420px]:flex-row">{children}</div>}
           </div>
         </div>
 
@@ -168,19 +136,9 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
               <div className="anim-spin-slow h-full w-full rounded-full border-2 border-dashed border-primary/25" />
             </motion.div>
 
-            <motion.div
-              initial={{ clipPath: "inset(100% 0% 0% 0% round 44px)" }}
-              animate={{ clipPath: "inset(0% 0% 0% 0% round 44px)" }}
-              transition={{ duration: 1.3, ease, delay: 0.25 }}
-              className="relative aspect-[4/3] overflow-hidden rounded-[2.75rem] bg-accent shadow-lift lg:aspect-auto lg:h-full"
-            >
+            <div className="intro-photo relative aspect-[4/3] overflow-hidden rounded-[2.75rem] bg-accent shadow-lift lg:aspect-auto lg:h-full">
               <div className="ph-photo absolute inset-x-0 -inset-y-[6%]">
-                <motion.div
-                  initial={{ scale: 1.3, rotate: 2 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ duration: 2.2, ease, delay: 0.25 }}
-                  className="absolute inset-0"
-                >
+                <div className="intro-photo-settle absolute inset-0">
                   <Image
                     src={image.src}
                     alt={image.alt}
@@ -189,24 +147,12 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
                     sizes="(min-width: 1024px) 420px, (min-width: 640px) 460px, 92vw"
                     className={`object-cover ${imagePosition}`}
                   />
-                </motion.div>
+                </div>
               </div>
-              <motion.div
-                aria-hidden="true"
-                initial={{ scaleY: 1 }}
-                animate={{ scaleY: 0 }}
-                transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.55 }}
-                className="absolute inset-0 z-[1] origin-top bg-primary"
-              />
-              <motion.div
-                aria-hidden="true"
-                initial={{ scaleY: 1 }}
-                animate={{ scaleY: 0 }}
-                transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.8 }}
-                className="absolute inset-0 origin-top bg-accent"
-              />
+              <div aria-hidden="true" className="intro-curtain absolute inset-0 z-[1] bg-primary [--d:0.25]" />
+              <div aria-hidden="true" className="intro-curtain absolute inset-0 bg-accent [--d:0.4]" />
               <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-secondary/60 to-transparent" />
-            </motion.div>
+            </div>
 
             <div className="pointer-events-none absolute inset-0">
               <Tooth3D className="-right-5 top-[42%] sm:-right-12" size={60} delay={1.5} />

@@ -215,14 +215,11 @@ function MobileDrawer({ open, active, onClose }) {
                     href={link.href}
                     aria-current={active === link.href ? "page" : undefined}
                     onClick={onClose}
-                    className={`flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-semibold transition-colors duration-200 active:bg-soft ${
+                    className={`block rounded-2xl px-4 py-3.5 text-lg font-semibold transition-colors duration-200 active:bg-soft ${
                       active === link.href ? "bg-soft text-primary" : "text-secondary hover:bg-soft"
                     }`}
                   >
                     {link.label}
-                    <span aria-hidden="true" className="text-sm font-medium text-accent">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                   </Link>
                 </motion.li>
               ))}

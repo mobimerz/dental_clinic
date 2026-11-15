@@ -9,7 +9,7 @@ import StarRating from "@/components/common/StarRating";
 import Tilt from "@/components/common/Tilt";
 import Tooth3D, { GlassBubble } from "@/components/common/Tooth3D";
 import { FloatingTooth, GlowOrb, Sparkle } from "@/components/common/FloatingShapes";
-import { gsap, SplitText, useGSAP, MOTION_OK } from "@/lib/gsap";
+import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { clinic, clinicImages, whatsappLink } from "@/data/clinic";
 
 const ease = [0.22, 1, 0.36, 1];
@@ -57,48 +57,15 @@ export default function Hero() {
   useGSAP(
     () => {
       const q = gsap.utils.selector(root);
-      gsap.set(q(".hero-intro"), { visibility: "visible" });
-
+      // The entrance itself is CSS (.intro classes) so the headline paints before JS loads.
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        const chars = SplitText.create(q(".hero-line-1"), { type: "chars", charsClass: "inline-block" });
-        const copy = SplitText.create(q(".hero-copy"), { type: "words" });
-
-        const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-        tl.from(q(".hero-badge"), { y: -24, scale: 0.85, opacity: 0, duration: 1 })
-          .from(q(".hero-badge-icon"), { rotate: -200, scale: 0, duration: 1.1, ease: "back.out(2)" }, "<0.1")
-          .from(
-            chars.chars,
-            {
-              yPercent: 90,
-              rotateX: -95,
-              opacity: 0,
-              filter: "blur(10px)",
-              transformOrigin: "50% 100% -20px",
-              stagger: 0.035,
-              duration: 1.3,
-            },
-            "-=0.7"
-          )
-          .from(
-            q(".hero-line-2"),
-            { yPercent: 70, opacity: 0, scale: 1.08, letterSpacing: "0.1em", filter: "blur(14px)", duration: 1.5 },
-            "-=1"
-          )
-          .from(copy.words, { y: 18, opacity: 0, filter: "blur(6px)", duration: 0.9, stagger: 0.025 }, "-=1.1")
-          .from(q(".hero-cta > *"), { y: 34, opacity: 0, scale: 0.9, stagger: 0.12, duration: 1 }, "-=0.85");
-
         // Scrolling away: both columns lift together by the same distance (so they stay aligned
         // and nothing slides toward the next section); the copy fades, the portrait shrinks a touch.
         const out = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
         gsap.to(q(".hero-copy-wrap"), { y: -80, opacity: 0.35, ease: "none", scrollTrigger: out });
         gsap.to(q(".hero-visual"), { y: -80, scale: 0.94, ease: "none", scrollTrigger: out });
         gsap.to(q(".hero-photo"), { yPercent: 12, ease: "none", scrollTrigger: out });
-
-        return () => {
-          chars.revert();
-          copy.revert();
-        };
       });
       return () => mm.revert();
     },
@@ -139,7 +106,7 @@ export default function Hero() {
             <div className="hero-intro lg:flex lg:h-full lg:flex-col lg:justify-center">
               {/* Address and Mon–Sat timings share one two-line pill, so adding the timings
                   does not push the heading down. Narrower screens stack them, icons in one column. */}
-              <div className="hero-badge">
+              <div className="hero-badge intro">
                 <span className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[1.25rem] xl:flex-nowrap bg-white/80 py-1.5 pl-1.5 pr-4 text-[0.8rem] font-semibold leading-snug text-secondary shadow-soft ring-1 ring-line backdrop-blur">
                   <span className="flex min-w-0 basis-full items-center gap-2.5 xl:flex-1 xl:basis-auto">
                     <span className="hero-badge-icon inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white">
@@ -163,9 +130,9 @@ export default function Hero() {
                 id="hero-title"
                 className="mt-6 text-[clamp(2.2rem,11.4vw,2.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] min-[400px]:text-[3.25rem] sm:text-6xl lg:text-[4.1rem]"
               >
-                <span className="hero-line-1 inline-block">Your Smile,</span>
+                <span className="hero-line-1 intro inline-block [--d:0.08]">Your Smile,</span>
                 <br />
-                <span className="relative inline-block">
+                <span className="intro relative inline-block [--d:0.16]">
                   <span className="hero-line-2 inline-block bg-gradient-to-r from-primary via-[#0A97A6] to-primary bg-clip-text text-transparent text-shimmer">
                     Our Priority.
                   </span>
@@ -189,11 +156,11 @@ export default function Hero() {
                 </span>
               </h1>
 
-              <p className="hero-copy mt-7 max-w-md text-[1.05rem] leading-relaxed text-muted sm:text-lg">
+              <p className="hero-copy intro [--d:0.24] mt-7 max-w-md text-[1.05rem] leading-relaxed text-muted sm:text-lg">
                 Experience comfortable, personalized dental care designed to keep your smile healthy, confident and beautiful.
               </p>
 
-              <div className="hero-cta mt-8 flex flex-col gap-3 min-[420px]:flex-row">
+              <div className="hero-cta intro [--d:0.32] mt-8 flex flex-col gap-3 min-[420px]:flex-row">
                 <Button href={whatsappLink()} external icon={CalendarCheck}>
                   Book Your Appointment
                 </Button>
@@ -242,19 +209,9 @@ export default function Hero() {
             </Depth>
             {/* Image reveal: mask opens upward, then two colour curtains lift off the photo */}
             <Depth depth={8} className="relative lg:h-full">
-              <motion.div
-                initial={{ clipPath: "inset(100% 0% 0% 0% round 44px)" }}
-                animate={{ clipPath: "inset(0% 0% 0% 0% round 44px)" }}
-                transition={{ duration: 1.3, ease, delay: 0.25 }}
-                className="relative aspect-[4/5] overflow-hidden rounded-[2.75rem] bg-accent shadow-lift lg:aspect-auto lg:h-full"
-              >
+              <div className="intro-photo relative aspect-[4/5] overflow-hidden rounded-[2.75rem] bg-accent shadow-lift lg:aspect-auto lg:h-full">
                 <div className="hero-photo absolute inset-x-0 -inset-y-[6%]">
-                  <motion.div
-                    initial={{ scale: 1.3, rotate: 2 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ duration: 2.2, ease, delay: 0.25 }}
-                    className="absolute inset-0"
-                  >
+                  <div className="intro-photo-settle absolute inset-0">
                     <Image
                       src={img.src}
                       alt={img.alt}
@@ -263,22 +220,10 @@ export default function Hero() {
                       sizes="(min-width: 1024px) 420px, (min-width: 640px) 460px, 92vw"
                       className="object-cover object-[50%_22%]"
                     />
-                  </motion.div>
+                  </div>
                 </div>
-                <motion.div
-                  aria-hidden="true"
-                  initial={{ scaleY: 1 }}
-                  animate={{ scaleY: 0 }}
-                  transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.55 }}
-                  className="absolute inset-0 z-[1] origin-top bg-primary"
-                />
-                <motion.div
-                  aria-hidden="true"
-                  initial={{ scaleY: 1 }}
-                  animate={{ scaleY: 0 }}
-                  transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.8 }}
-                  className="absolute inset-0 origin-top bg-accent"
-                />
+                <div aria-hidden="true" className="intro-curtain absolute inset-0 z-[1] bg-primary [--d:0.25]" />
+                <div aria-hidden="true" className="intro-curtain absolute inset-0 bg-accent [--d:0.4]" />
                 <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-secondary/70 to-transparent" />
                 <motion.div
                   initial={{ opacity: 0, y: 16 }}
@@ -289,7 +234,7 @@ export default function Hero() {
                   <p className="text-sm font-bold">Dr. Aysha Aslam</p>
                   <p className="text-[0.72rem] text-white/80">A-Zee Dental &amp; Implant Centre</p>
                 </motion.div>
-              </motion.div>
+              </div>
             </Depth>
             {/* 3D teeth orbiting the portrait */}
             <Depth depth={42} className="pointer-events-none absolute inset-0">
