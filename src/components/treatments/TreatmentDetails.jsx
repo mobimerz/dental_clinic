@@ -50,6 +50,18 @@ function DetailPanel({ t, index }) {
 
       <p className="detail-copy relative mt-6 max-w-2xl text-lead text-muted">{t.summary}</p>
 
+      {/* The enquiry button sits right under the summary so it is visible as soon as a panel is opened. */}
+      <div className="relative mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-5">
+        <Button
+          href={whatsappLink(`Hello A-Zee Dental, I would like to know more about ${t.title}.`)}
+          external
+          icon={WhatsAppIcon}
+        >
+          Ask About {t.title}
+        </Button>
+        <p className="text-sm text-muted">Suitability is confirmed at your consultation.</p>
+      </div>
+
       <div className="relative mt-8 grid gap-6 md:grid-cols-2">
         <div className="rounded-3xl bg-soft p-6 ring-1 ring-accent/50">
           <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-secondary">{t.helpsWithTitle || "May help if you have"}</h4>
@@ -77,17 +89,6 @@ function DetailPanel({ t, index }) {
             ))}
           </ol>
         </div>
-      </div>
-
-      <div className="relative mt-8 flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-muted">Suitability is confirmed at your consultation.</p>
-        <Button
-          href={whatsappLink(`Hello A-Zee Dental, I would like to know more about ${t.title}.`)}
-          external
-          icon={WhatsAppIcon}
-        >
-          Ask About {t.title}
-        </Button>
       </div>
     </article>
   );

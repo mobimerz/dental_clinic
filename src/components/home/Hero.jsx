@@ -3,7 +3,7 @@
 import { createContext, useContext, useRef } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
-import { CalendarCheck, Clock, MapPin } from "lucide-react";
+import { CalendarCheck } from "lucide-react";
 import Button from "@/components/common/Button";
 import StarRating from "@/components/common/StarRating";
 import Tilt from "@/components/common/Tilt";
@@ -14,8 +14,6 @@ import { clinic, clinicImages, whatsappLink } from "@/data/clinic";
 
 const ease = [0.22, 1, 0.36, 1];
 
-// Monday to Saturday share one set of timings; Sunday's shorter hours are listed on the Contact page.
-const weekdayHours = clinic.hours[0];
 
 // Smoothed pointer position across the hero, from -1 to 1 on each axis.
 const PointerContext = createContext(null);
@@ -104,31 +102,9 @@ export default function Hero() {
           {/* Copy */}
           <div className="hero-copy-wrap relative max-w-xl xl:max-w-[44rem]">
             <div className="hero-intro lg:flex lg:h-full lg:flex-col lg:justify-center">
-              {/* Address and Mon–Sat timings share one two-line pill, so adding the timings
-                  does not push the heading down. Narrower screens stack them, icons in one column. */}
-              <div className="hero-badge intro">
-                <span className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1.5 rounded-[1.25rem] xl:flex-nowrap bg-white/80 py-1.5 pl-1.5 pr-4 text-[0.8rem] font-semibold leading-snug text-secondary shadow-soft ring-1 ring-line backdrop-blur">
-                  <span className="flex min-w-0 basis-full items-center gap-2.5 xl:flex-1 xl:basis-auto">
-                    <span className="hero-badge-icon inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-                      <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
-                    </span>
-                    <span className="text-balance">{clinic.address.full}</span>
-                  </span>
-                  <span className="flex shrink-0 items-center gap-2.5 xl:border-l xl:border-line xl:pl-3">
-                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-soft text-primary ring-1 ring-accent/60">
-                      <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-                    </span>
-                    <span>
-                      <span className="block">{weekdayHours.days}</span>
-                      <span className="block font-medium text-muted">{weekdayHours.slots.map((s) => s.replace(/:00/g, "")).join(" · ")}</span>
-                    </span>
-                  </span>
-                </span>
-              </div>
-
               <h1
                 id="hero-title"
-                className="mt-6 text-[clamp(2.2rem,11.4vw,2.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] min-[400px]:text-[3.25rem] sm:text-6xl lg:text-[4.1rem]"
+                className="text-[clamp(2.2rem,11.4vw,2.85rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-secondary [perspective:700px] min-[400px]:text-[3.25rem] sm:text-6xl lg:text-[4.1rem]"
               >
                 <span className="hero-line-1 intro inline-block [--d:0.08]">Your Smile,</span>
                 <br />
