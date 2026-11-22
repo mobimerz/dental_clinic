@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { CalendarCheck, Phone } from "lucide-react";
+import { CalendarCheck, Phone, X } from "lucide-react";
 import Logo from "@/components/common/Logo";
 import Button from "@/components/common/Button";
 import { clinic, navLinks, whatsappLink } from "@/data/clinic";
@@ -28,11 +29,13 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+  const active = usePathname();
   // A section link stays highlighted on its sub-pages too (Blog on /blog/<article>).
-  const isCurrent = (href) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`));
+  const isCurrent = (href) => (href === "/" ? active === "/" : active === href || active.startsWith(`${href}/`));
   const [hovered, setHovered] = useState(null);
   const lastY = useRef(0);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -49,19 +52,14 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // While the menu is open the page behind it is locked; closing it (or leaving the page) unlocks it.
   useEffect(() => {
-    if (!open) return;
+    document.body.style.overflow = open ? "hidden" : "";
     const lenis = getLenis();
-    document.body.style.overflow = "hidden";
-    lenis?.stop();
+    if (open) lenis?.stop();
+    else lenis?.start();
     const onKey = (e) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = "";
-      lenis?.start();
-      window.removeEventListener("keydown", onKey);
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   return (
@@ -69,7 +67,7 @@ export default function Header() {
       animate={{ y: hidden && !open ? "-110%" : "0%" }}
       transition={{ duration: 0.55, ease }}
       className={`sticky top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-premium ${
-        scrolled || open
+        scrolled
           ? "bg-white/85 shadow-[0_1px_0_rgb(11_52_64/0.06),0_10px_30px_-18px_rgb(11_52_64/0.25)] backdrop-blur-xl"
           : "bg-transparent"
       }`}
@@ -154,76 +152,92 @@ export default function Header() {
         </motion.div>
       </div>
 
-      {/* The menu drops over the page (absolute, below the header bar) instead of pushing it down,
-          so nothing behind it moves or scrolls while it opens and closes. Tapping the dimmed page closes it. */}
-      <AnimatePresence>
-        {open && (
+      {/* Portalled to <body>: the header itself is transformed (hide-on-scroll), which would
+          otherwise trap a position:fixed drawer inside it. */}
+      {mounted && createPortal(<MobileDrawer open={open} isCurrent={isCurrent} onClose={() => setOpen(false)} />, document.body)}
+    </motion.header>
+  );
+}
+
+// Off-canvas menu that slides in from the right over the page. Only transform and opacity
+// animate (GPU-composited), so it opens instantly on phones and never pushes content.
+function MobileDrawer({ open, isCurrent, onClose }) {
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    if (open) closeRef.current?.focus({ preventScroll: true });
+  }, [open]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <div className="fixed inset-0 z-[60] lg:hidden">
           <motion.div
-            key="menu-backdrop"
             aria-hidden="true"
-            onClick={() => setOpen(false)}
+            onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="absolute inset-x-0 top-full h-[100dvh] bg-secondary/30 backdrop-blur-[2px] lg:hidden"
+            transition={{ duration: 0.25 }}
+            className="absolute inset-0 bg-secondary/45"
           />
-        )}
-        {open && (
           <motion.nav
-            key="menu"
             id="mobile-menu"
             aria-label="Mobile"
-            data-lenis-prevent
-            initial={{ opacity: 0, clipPath: "circle(0% at 92% 0%)" }}
-            animate={{ opacity: 1, clipPath: "circle(150% at 92% 0%)" }}
-            exit={{ opacity: 0, clipPath: "circle(0% at 92% 0%)" }}
-            transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
-            className="absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain border-t border-line bg-white shadow-lift lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.32, ease }}
+            className="absolute inset-y-0 right-0 flex h-dvh w-[min(85vw,360px)] flex-col overflow-y-auto bg-white shadow-[-20px_0_60px_-20px_rgb(11_52_64/0.35)] will-change-transform"
           >
-            <ul className="container-page flex flex-col gap-1 py-5">
-              {navLinks.map((link, i) => (
-                <li key={link.label} className="overflow-hidden">
-                  <motion.div
-                    initial={{ y: "110%", rotate: 4, opacity: 0 }}
-                    animate={{ y: "0%", rotate: 0, opacity: 1 }}
-                    exit={{ y: "60%", opacity: 0, transition: { duration: 0.2 } }}
-                    transition={{ duration: 0.7, delay: 0.15 + 0.06 * i, ease }}
-                    className="origin-left"
-                  >
-                    <Link
-                      href={link.href}
-                      aria-current={isCurrent(link.href) ? "page" : undefined}
-                      onClick={() => setOpen(false)}
-                      className={`group flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-semibold transition-all duration-300 active:scale-[0.98] ${
-                        isCurrent(link.href) ? "bg-soft text-primary" : "text-secondary hover:bg-soft hover:pl-6"
-                      }`}
-                    >
-                      {link.label}
-                      <span aria-hidden="true" className="text-sm font-medium text-accent transition-transform duration-300 group-hover:translate-x-1">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </Link>
-                  </motion.div>
-                </li>
-              ))}
-              <motion.li
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 + navLinks.length * 0.06, ease }}
-                className="mt-3 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2"
+            <div className="flex h-20 shrink-0 items-center justify-between border-b border-line px-5">
+              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Menu</span>
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={onClose}
+                aria-label="Close menu"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-soft active:scale-90"
               >
-                <Button href={whatsappLink()} external icon={CalendarCheck} onClick={() => setOpen(false)}>
-                  Book Appointment
-                </Button>
-                <Button href={clinic.phone.tel} variant="secondary" icon={Phone}>
-                  Call Now
-                </Button>
-              </motion.li>
+                <X className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
+
+            <ul className="flex flex-col gap-1 px-3 py-4">
+              {navLinks.map((link, i) => (
+                <motion.li
+                  key={link.label}
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.06 + 0.03 * i, ease }}
+                >
+                  <Link
+                    href={link.href}
+                    aria-current={isCurrent(link.href) ? "page" : undefined}
+                    onClick={onClose}
+                    className={`block rounded-2xl px-4 py-3.5 text-lg font-semibold transition-colors duration-200 active:bg-soft ${
+                      isCurrent(link.href) ? "bg-soft text-primary" : "text-secondary hover:bg-soft"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.li>
+              ))}
             </ul>
+
+            <div className="mt-auto grid gap-3 border-t border-line p-5">
+              <Button href={whatsappLink()} external icon={CalendarCheck} onClick={onClose} className="w-full">
+                Book Appointment
+              </Button>
+              <Button href={clinic.phone.tel} variant="secondary" icon={Phone} className="w-full">
+                Call Now
+              </Button>
+            </div>
           </motion.nav>
-        )}
-      </AnimatePresence>
-    </motion.header>
+        </div>
+      )}
+    </AnimatePresence>
   );
 }

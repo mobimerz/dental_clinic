@@ -209,14 +209,66 @@ html.lenis body {
 
 /* Hero: hidden until the GSAP intro takes over, so there's no flash of final state.
    If scripts are slow to arrive, the copy appears on its own after a moment. */
-@keyframes show-late {
+/* First-screen entrance (Home hero + inner page banners). Pure CSS, so it starts on first paint
+   instead of waiting for JavaScript to download and hydrate: the headline and photo are visible
+   within a fraction of a second, which keeps Largest Contentful Paint low on phones.
+   Stagger with --d (seconds). */
+@keyframes intro-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
   to {
-    visibility: visible;
+    opacity: 1;
+    transform: none;
   }
 }
-.hero-intro {
-  visibility: hidden;
-  animation: show-late 0s linear 1.2s forwards;
+@keyframes photo-reveal {
+  from {
+    clip-path: inset(100% 0% 0% 0% round 44px);
+  }
+  to {
+    clip-path: inset(0% 0% 0% 0% round 44px);
+  }
+}
+@keyframes photo-settle {
+  from {
+    transform: scale(1.15);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes curtain-lift {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0);
+  }
+}
+.intro {
+  animation: intro-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--d, 0) * 1s) both;
+}
+.intro-photo {
+  animation: photo-reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+.intro-photo-settle {
+  animation: photo-settle 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+.intro-curtain {
+  transform-origin: top;
+  animation: curtain-lift 0.8s cubic-bezier(0.76, 0, 0.24, 1) calc(var(--d, 0.3) * 1s) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro,
+  .intro-photo,
+  .intro-photo-settle {
+    animation: none;
+  }
+  .intro-curtain {
+    display: none;
+  }
 }
 
 /* Slowly drifting gradient wash. Moved with transform (GPU), never repainted. */

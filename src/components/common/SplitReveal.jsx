@@ -1,7 +1,31 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText, useGSAP, MOTION_OK } from "@/lib/gsap";
+
+// Splitting text forces layout reads, so doing it for every heading on page load blocks the
+// main thread. Each instance waits until it is about to scroll into view (well before its
+// reveal trigger at 85–88%), then splits and sets its start state while still off screen.
+function useNearViewport(ref) {
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || near) return;
+    if (typeof IntersectionObserver === "undefined") return setNear(true);
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setNear(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px 400px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref, near]);
+  return near;
+}
 
 // Splits text with GSAP SplitText and reveals it as it scrolls into view.
 //   mode="words"  – words rise out of line masks with a slight rotation (headings)
@@ -9,9 +33,11 @@ import { gsap, SplitText, useGSAP, MOTION_OK } from "@/lib/gsap";
 //   mode="scrub"  – words brighten one by one, tied to scroll position
 export default function SplitReveal({ as: Tag = "div", mode = "words", delay = 0, className = "", children, ...rest }) {
   const ref = useRef(null);
+  const near = useNearViewport(ref);
 
   useGSAP(
     () => {
+      if (!near) return;
       const el = ref.current;
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
@@ -51,7 +77,7 @@ export default function SplitReveal({ as: Tag = "div", mode = "words", delay = 0
       });
       return () => mm.revert();
     },
-    { scope: ref }
+    { scope: ref, dependencies: [near] }
   );
 
   return (
