@@ -74,6 +74,7 @@ export const navLinks = [
   { label: "About", href: "/about" },
   { label: "Treatments", href: "/treatments" },
   { label: "Why Choose Us", href: "/why-choose-us" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
 

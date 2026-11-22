@@ -5,9 +5,23 @@ import Lenis from "lenis";
 import { gsap, ScrollTrigger, MOTION_OK } from "@/lib/gsap";
 import { jumpTo, setLenis } from "@/lib/lenis";
 
+// This component mounts again on every page (it lives in SiteShell). Remember whether a page has
+// already mounted, and whether the browser's back / forward buttons caused this one.
+let mountedBefore = false;
+let backForward = false;
+if (typeof window !== "undefined") window.addEventListener("popstate", () => (backForward = true));
+
 // Lenis smooth scrolling driven by GSAP's ticker, plus the site-wide `data-speed` parallax.
 export default function SmoothScroll() {
   useEffect(() => {
+    // Arriving through a link inside the site: start at the top. Without this the new page opened as
+    // far down as the old one was scrolled. Back / forward keeps the browser's restored position, and
+    // a #hash link is handled by landOnHash below.
+    const clientNav = mountedBefore && !backForward;
+    mountedBefore = true;
+    backForward = false;
+    if (clientNav && window.location.hash.length < 2) window.scrollTo(0, 0);
+
     const mm = gsap.matchMedia();
 
     mm.add(MOTION_OK, () => {

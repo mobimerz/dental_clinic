@@ -28,7 +28,9 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const active = usePathname();
+  const pathname = usePathname();
+  // A section link stays highlighted on its sub-pages too (Blog on /blog/<article>).
+  const isCurrent = (href) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`));
   const [hovered, setHovered] = useState(null);
   const lastY = useRef(0);
 
@@ -47,14 +49,19 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // While the menu is open the page behind it is locked; closing it (or leaving the page) unlocks it.
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
     const lenis = getLenis();
-    if (open) lenis?.stop();
-    else lenis?.start();
+    document.body.style.overflow = "hidden";
+    lenis?.stop();
     const onKey = (e) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      lenis?.start();
+      window.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   return (
@@ -75,7 +82,7 @@ export default function Header() {
         <nav aria-label="Primary" className="hidden lg:block">
           <ul className="flex items-center gap-1" onMouseLeave={() => setHovered(null)}>
             {navLinks.map((link, i) => {
-              const isActive = active === link.href;
+              const isActive = isCurrent(link.href);
               return (
                 <motion.li
                   key={link.label}
@@ -87,7 +94,7 @@ export default function Header() {
                     href={link.href}
                     aria-current={isActive ? "page" : undefined}
                     onMouseEnter={() => setHovered(link.href)}
-                    className={`relative block rounded-full px-4 py-2 text-[0.92rem] font-medium transition-colors duration-300 ${
+                    className={`relative block whitespace-nowrap rounded-full px-3 py-2 text-[0.92rem] xl:px-4 font-medium transition-colors duration-300 ${
                       isActive ? "text-primary" : "text-ink/80 hover:text-primary"
                     }`}
                   >
@@ -147,16 +154,32 @@ export default function Header() {
         </motion.div>
       </div>
 
+      {/* The menu drops over the page (absolute, below the header bar) instead of pushing it down,
+          so nothing behind it moves or scrolls while it opens and closes. Tapping the dimmed page closes it. */}
       <AnimatePresence>
         {open && (
+          <motion.div
+            key="menu-backdrop"
+            aria-hidden="true"
+            onClick={() => setOpen(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="absolute inset-x-0 top-full h-[100dvh] bg-secondary/30 backdrop-blur-[2px] lg:hidden"
+          />
+        )}
+        {open && (
           <motion.nav
+            key="menu"
             id="mobile-menu"
             aria-label="Mobile"
-            initial={{ height: 0, opacity: 0, clipPath: "circle(0% at 92% 0%)" }}
-            animate={{ height: "auto", opacity: 1, clipPath: "circle(150% at 92% 0%)" }}
-            exit={{ height: 0, opacity: 0, clipPath: "circle(0% at 92% 0%)" }}
+            data-lenis-prevent
+            initial={{ opacity: 0, clipPath: "circle(0% at 92% 0%)" }}
+            animate={{ opacity: 1, clipPath: "circle(150% at 92% 0%)" }}
+            exit={{ opacity: 0, clipPath: "circle(0% at 92% 0%)" }}
             transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
-            className="overflow-hidden border-t border-line bg-white lg:hidden"
+            className="absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain border-t border-line bg-white shadow-lift lg:hidden"
           >
             <ul className="container-page flex flex-col gap-1 py-5">
               {navLinks.map((link, i) => (
@@ -170,10 +193,10 @@ export default function Header() {
                   >
                     <Link
                       href={link.href}
-                      aria-current={active === link.href ? "page" : undefined}
+                      aria-current={isCurrent(link.href) ? "page" : undefined}
                       onClick={() => setOpen(false)}
                       className={`group flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-semibold transition-all duration-300 active:scale-[0.98] ${
-                        active === link.href ? "bg-soft text-primary" : "text-secondary hover:bg-soft hover:pl-6"
+                        isCurrent(link.href) ? "bg-soft text-primary" : "text-secondary hover:bg-soft hover:pl-6"
                       }`}
                     >
                       {link.label}
