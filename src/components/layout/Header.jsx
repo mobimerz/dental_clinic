@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { CalendarCheck, Phone, X } from "lucide-react";
 import Logo from "@/components/common/Logo";
 import Button from "@/components/common/Button";
-import { clinic, navLinks, whatsappLink } from "@/data/clinic";
+import { clinic, navLinks } from "@/data/clinic";
 import { getLenis } from "@/lib/lenis";
 
 const ease = [0.22, 1, 0.36, 1];
@@ -137,7 +137,7 @@ export default function Header() {
           className="flex items-center gap-2"
         >
           <div className="hidden sm:block">
-            <Button href={whatsappLink()} external icon={CalendarCheck} className="!px-5 !py-3">
+            <Button href="/contact" icon={CalendarCheck} className="!px-5 !py-3">
               Book Appointment
             </Button>
           </div>
@@ -233,7 +233,7 @@ function MobileDrawer({ open, isCurrent, onClose }) {
             </ul>
 
             <div className="mt-auto grid gap-3 border-t border-line p-5">
-              <Button href={whatsappLink()} external icon={CalendarCheck} onClick={onClose} className="w-full">
+              <Button href="/contact" icon={CalendarCheck} onClick={onClose} className="w-full">
                 Book Appointment
               </Button>
               <Button href={clinic.phone.tel} variant="secondary" icon={Phone} className="w-full">
