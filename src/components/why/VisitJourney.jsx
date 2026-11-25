@@ -75,28 +75,8 @@ export default function VisitJourney() {
             },
           }
         );
-        q(".journey-card").forEach((card) => {
-          gsap.from(card.querySelector(".journey-icon"), {
-            scale: 0,
-            rotate: -120,
-            ease: "back.out(2)",
-            duration: 0.9,
-            scrollTrigger: { trigger: card, containerAnimation: tween, start: "left 85%", once: true },
-          });
-        });
       });
 
-      mm.add("(max-width: 1023px) and (prefers-reduced-motion: no-preference)", () => {
-        q(".journey-card").forEach((card) => {
-          gsap.from(card, {
-            y: 60,
-            opacity: 0,
-            duration: 1,
-            ease: "expo.out",
-            scrollTrigger: { trigger: card, start: "top 88%", once: true },
-          });
-        });
-      });
       return () => mm.revert();
     },
     { scope: root }

@@ -6,11 +6,10 @@ import { Clock, Copy, Check, MapPin, Navigation } from "lucide-react";
 import Button from "@/components/common/Button";
 import SectionHeading from "@/components/common/SectionHeading";
 import Reveal from "@/components/common/Reveal";
-import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import Section from "@/components/ui/Section";
 import Container from "@/components/ui/Container";
 import TwoColumn from "@/components/ui/TwoColumn";
-import { card, photo, photoMaskRadius } from "@/components/ui/styles";
+import { card, photo } from "@/components/ui/styles";
 import { clinic } from "@/data/clinic";
 
 // Monday to Saturday share the same hours, so they are listed as one row (day 0 = Sunday).
@@ -90,25 +89,6 @@ function CopyAddress() {
 export default function VisitInfo() {
   const root = useRef(null);
   const status = useClinicStatus();
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(root);
-      const mm = gsap.matchMedia();
-      mm.add(MOTION_OK, () => {
-        const tl = gsap.timeline({ scrollTrigger: { trigger: q(".map-frame")[0], start: "top 80%", once: true } });
-        tl.fromTo(
-          q(".map-frame"),
-          { clipPath: "inset(12% 12% 12% 12% round 48px)" },
-          { clipPath: `inset(0% 0% 0% 0% round ${photoMaskRadius})`, duration: 1.5, ease: "expo.inOut" }
-        )
-          .fromTo(q(".map-curtain"), { scaleY: 1 }, { scaleY: 0, duration: 1.1, ease: "expo.inOut" }, "-=0.9")
-          .from(q(".map-pin"), { y: -80, opacity: 0, duration: 1, ease: "bounce.out" }, "-=0.4");
-      });
-      return () => mm.revert();
-    },
-    { scope: root }
-  );
 
   return (
     <Section ref={root} aria-labelledby="visit-title">

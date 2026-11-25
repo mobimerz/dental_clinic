@@ -51,13 +51,6 @@ export default function DoctorSpotlight() {
       const q = gsap.utils.selector(root);
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        const tl = gsap.timeline({ scrollTrigger: { trigger: q(".doc-frame")[0], start: "top 78%", once: true } });
-        tl.fromTo(
-          q(".doc-frame"),
-          { clipPath: "circle(0% at 50% 60%)" },
-          { clipPath: "circle(75% at 50% 50%)", duration: 1.6, ease: "expo.inOut" }
-        ).fromTo(q(".doc-frame img"), { scale: 1.35 }, { scale: 1, duration: 2.2, ease: "expo.out" }, "<0.2");
-
         gsap.to(q(".doc-photo"), {
           yPercent: 8,
           ease: "none",
@@ -79,9 +72,8 @@ export default function DoctorSpotlight() {
         <div className="relative mx-auto w-full max-w-[460px] lg:max-w-none">
           <motion.div
             aria-hidden="true"
-            initial={{ opacity: 0, rotate: -14, scale: 0.85 }}
-            whileInView={{ opacity: 1, rotate: -6, scale: 1 }}
-            viewport={{ once: true }}
+            initial={false}
+            animate={{ opacity: 1, rotate: -6, scale: 1 }}
             transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0 -translate-x-5 translate-y-5 rounded-[2.75rem] bg-gradient-to-br from-primary/30 to-accent"
           />

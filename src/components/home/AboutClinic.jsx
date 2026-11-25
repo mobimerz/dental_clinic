@@ -33,7 +33,7 @@ export default function AboutClinic() {
           {/* Images: main photo in the hero's frame, inset photo hanging off its corner */}
           <div className="relative mx-auto w-full max-w-[460px] pb-12 pr-12 lg:max-w-none">
             {/* The observer sits on an unclipped wrapper: a fully clipped target never reports as in view */}
-            <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }}>
+            <motion.div initial={false} animate="show">
               <motion.div
                 variants={{
                   hidden: { clipPath: `inset(0% 100% 0% 0% round ${photoMaskRadius})` },
@@ -58,10 +58,9 @@ export default function AboutClinic() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 60, rotate: 6, scale: 0.85 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
+              initial={false}
+              animate={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
               whileHover={{ scale: 1.05, rotate: -2 }}
-              viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.1, delay: 0.35, ease }}
               data-speed="0.3"
               className="absolute bottom-0 right-0 w-[44%] overflow-hidden rounded-[2rem] border-[6px] border-white shadow-lift"
@@ -72,10 +71,9 @@ export default function AboutClinic() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.6, x: -30 }}
-              whileInView={{ opacity: 1, scale: 1, x: 0 }}
+              initial={false}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
               whileHover={{ scale: 1.06 }}
-              viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
               data-speed="-0.25"
               className="absolute -left-3 top-8 rounded-2xl bg-white px-4 py-3 shadow-lift ring-1 ring-line sm:-left-8"

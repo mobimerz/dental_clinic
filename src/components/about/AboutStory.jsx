@@ -11,7 +11,6 @@ import Container from "@/components/ui/Container";
 import TwoColumn from "@/components/ui/TwoColumn";
 import { card, photo, photoFrame } from "@/components/ui/styles";
 import { FloatingTooth, Sparkle } from "@/components/common/FloatingShapes";
-import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { clinic, clinicImages } from "@/data/clinic";
 
 const yearsOpen = new Date().getFullYear() - clinic.established;
@@ -23,45 +22,9 @@ const stats = [
   { icon: MessageSquareText, value: <Counter value={clinic.rating.count} suffix="+" />, label: "Google reviews" },
 ];
 
-// "Our story": the clinic's own description brightening word by word, a pair of photos that slide apart, and a row of counting stats.
+// "Our story": the clinic's own description, a pair of photos and a row of clinic stats.
 export default function AboutStory() {
   const root = useRef(null);
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(root);
-      const mm = gsap.matchMedia();
-      mm.add(MOTION_OK, () => {
-        const tl = gsap.timeline({ scrollTrigger: { trigger: q(".story-photos")[0], start: "top 80%", once: true } });
-        tl.fromTo(
-          q(".story-photo-a"),
-          { clipPath: "inset(0% 0% 100% 0% round 44px)" },
-          { clipPath: "inset(0% 0% 0% 0% round 44px)", duration: 1.4, ease: "expo.inOut" }
-        )
-          .fromTo(q(".story-photo-a img"), { scale: 1.4 }, { scale: 1, duration: 2, ease: "expo.out" }, "<0.3")
-          .fromTo(
-            q(".story-photo-b"),
-            { clipPath: "inset(100% 0% 0% 0% round 32px)", y: 60 },
-            { clipPath: "inset(0% 0% 0% 0% round 32px)", y: 0, duration: 1.4, ease: "expo.inOut" },
-            "-=1.6"
-          )
-          .from(q(".story-badge"), { scale: 0, rotate: -40, duration: 1, ease: "back.out(2)" }, "-=0.6");
-
-        gsap.from(q(".story-stat"), {
-          y: 50,
-          opacity: 0,
-          rotateX: -40,
-          transformPerspective: 900,
-          stagger: 0.12,
-          duration: 1.1,
-          ease: "expo.out",
-          scrollTrigger: { trigger: q(".story-stats")[0], start: "top 88%", once: true },
-        });
-      });
-      return () => mm.revert();
-    },
-    { scope: root }
-  );
 
   return (
     <Section ref={root} aria-labelledby="story-title" className="overflow-hidden">

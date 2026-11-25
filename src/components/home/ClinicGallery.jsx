@@ -31,20 +31,6 @@ function RevealImage({ image, className, sizes, delay = 0, caption, position = "
       const q = gsap.utils.selector(ref);
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
-        const tl = gsap.timeline({
-          delay,
-          defaults: { ease: "expo.inOut" },
-          scrollTrigger: { trigger: ref.current, start: "top 85%", once: true },
-        });
-        tl.fromTo(
-          ref.current,
-          { clipPath: masks[from] },
-          { clipPath: "inset(0% 0% 0% 0% round 44px)", duration: 1.4 }
-        )
-          .fromTo(q(".g-curtain"), { scaleX: 1 }, { scaleX: 0, duration: 1.1 }, "-=0.75")
-          .fromTo(q(".g-zoom"), { scale: 1.45, rotate: from === "center" ? 0 : 2 }, { scale: 1, rotate: 0, duration: 2, ease: "expo.out" }, "<-0.3")
-          .from(q("figcaption"), { y: 30, opacity: 0, duration: 0.9, ease: "expo.out" }, "-=1.2");
-
         gsap.fromTo(
           q(".g-parallax"),
           { yPercent: -7 },

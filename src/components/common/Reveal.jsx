@@ -4,11 +4,12 @@ import { motion } from "motion/react";
 
 const ease = [0.22, 1, 0.36, 1];
 
-// Scroll-triggered entrance used across sections.
+// Wrapper that used to animate sections in on scroll. It now renders them in their final state
+// on page load (initial={false}), so nothing waits for the reader to scroll to it.
 //   variant="fade"  – fade-up (default)
 //   variant="clip"  – inset mask opens out from the centre
 //   variant="tilt"  – rises while un-tilting from a 3D angle
-export default function Reveal({ children, delay = 0, y = 28, variant = "fade", className, as = "div", ...rest }) {
+export default function Reveal({ children, delay = 0, y = 28, variant = "fade", className, as = "div", viewport, ...rest }) {
   const Component = motion[as];
   const states = {
     fade: {
@@ -28,10 +29,9 @@ export default function Reveal({ children, delay = 0, y = 28, variant = "fade", 
   return (
     <Component
       className={className}
-      initial="hidden"
-      whileInView="show"
+      initial={false}
+      animate="show"
       variants={states}
-      viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: variant === "clip" ? 1.2 : 0.9, delay, ease }}
       {...rest}
     >

@@ -58,9 +58,8 @@ export default function ComfortGrid() {
           {features.map(({ icon: Icon, title, text }, i) => (
             <motion.li
               key={title}
-              initial={{ opacity: 0, y: 60, scale: 0.94 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-60px" }}
+              initial={false}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 1, delay: (i % 3) * 0.1, ease }}
             >
               <article className={`group relative h-full overflow-hidden ${card} transition-all duration-500 ease-premium hover:-translate-y-1.5 hover:shadow-lift hover:ring-accent`}>

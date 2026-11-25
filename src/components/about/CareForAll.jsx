@@ -53,9 +53,8 @@ export default function CareForAll() {
           {groups.map(({ icon: Icon, title, tag, text, slugs }, i) => (
             <motion.li
               key={title}
-              initial={{ opacity: 0, y: 80, rotate: i === 0 ? -4 : i === 2 ? 4 : 0 }}
-              whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
+              initial={false}
+              animate={{ opacity: 1, y: 0, rotate: 0 }}
               transition={{ duration: 1.1, delay: i * 0.12, ease }}
             >
               <Tilt max={8} scale={1.02} className="h-full">

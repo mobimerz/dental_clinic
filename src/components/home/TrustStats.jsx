@@ -52,16 +52,15 @@ export default function TrustStats({ spaced = false }) {
         {/* The card sits on the first screen, so it must reveal as soon as any of it is visible
             (the default -80px margin would leave it hidden until the user scrolls).
             Phones: 2 columns, the hours card spans the last row. Desktop: 5 columns, icon above the text. */}
-        <Reveal variant="tilt" delay={0.3} viewport={{ once: true, margin: "0px" }} className="grid grid-cols-2 overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-line lg:grid-cols-5">
+        <Reveal variant="tilt" delay={0.3} className="grid grid-cols-2 overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-line lg:grid-cols-5">
           {stats.map(({ icon: Icon, value, label, href }, i) => {
             const Tag = href ? motion.a : motion.div;
             const external = href?.startsWith("http");
             return (
               <Tag
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
+                initial={false}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.25 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                 {...(href ? { href, ...(external ? { target: "_blank", rel: "noopener noreferrer" } : {}) } : {})}
                 className={`group relative flex flex-col items-start gap-4 border-line p-6 transition-colors duration-300 hover:bg-soft sm:flex-row sm:items-center sm:p-8 lg:flex-col lg:items-start lg:p-6 ${
@@ -70,9 +69,8 @@ export default function TrustStats({ spaced = false }) {
               >
                 <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-accent to-primary transition-transform duration-700 ease-premium group-hover:scale-x-100" />
                 <motion.span
-                  initial={{ scale: 0, rotate: -120 }}
-                  whileInView={{ scale: 1, rotate: 0 }}
-                  viewport={{ once: true }}
+                  initial={false}
+                  animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", stiffness: 200, damping: 14, delay: 0.4 + i * 0.12 }}
                   className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-soft text-primary ring-1 ring-accent/60 transition-all duration-500 ease-premium group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-primary group-hover:text-white group-hover:shadow-glow"
                 >

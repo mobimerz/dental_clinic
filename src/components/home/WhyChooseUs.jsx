@@ -72,24 +72,8 @@ export default function WhyChooseUs({ linkToPage = false, backdrop = "bg-white" 
           { scaleY: 1, ease: "none", scrollTrigger: { trigger: list, start: "top 60%", end: "bottom 60%", scrub: true } }
         );
 
-        // Each step slides in, then lights up while it sits at the reading line
+        // Each step lights up while it sits at the reading line
         q(".why-item").forEach((item) => {
-          const body = item.querySelector(".why-body");
-          const node = item.querySelector(".why-node");
-          gsap.from(body, {
-            x: 70,
-            opacity: 0,
-            ease: "expo.out",
-            duration: 1.2,
-            scrollTrigger: { trigger: item, start: "top 88%", once: true },
-          });
-          gsap.from(node, {
-            scale: 0,
-            rotate: -90,
-            ease: "back.out(2)",
-            duration: 0.9,
-            scrollTrigger: { trigger: item, start: "top 88%", once: true },
-          });
           gsap.set(item, { "--dim": 0.4 });
           ScrollTrigger.create({
             trigger: item,

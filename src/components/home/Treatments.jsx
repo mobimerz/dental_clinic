@@ -15,7 +15,6 @@ import Tilt from "@/components/common/Tilt";
 import Magnetic from "@/components/common/Magnetic";
 import { FloatingTooth, Sparkle } from "@/components/common/FloatingShapes";
 import { treatmentIcons as icons } from "@/components/common/treatmentIcons";
-import { gsap, ScrollTrigger, useGSAP, MOTION_OK } from "@/lib/gsap";
 import { featuredTreatments } from "@/data/treatments";
 import { clinicImages } from "@/data/clinic";
 
@@ -117,24 +116,6 @@ function TreatmentCard({ t, i }) {
 
 export default function Treatments() {
   const grid = useRef(null);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add(MOTION_OK, () => {
-        const cards = gsap.utils.toArray(".treatment-card", grid.current);
-        gsap.set(cards, { opacity: 0, y: 90, rotateX: -32, transformPerspective: 1000, transformOrigin: "50% 0%" });
-        ScrollTrigger.batch(cards, {
-          start: "top 92%",
-          once: true,
-          onEnter: (batch) =>
-            gsap.to(batch, { opacity: 1, y: 0, rotateX: 0, duration: 1.2, stagger: 0.1, ease: "expo.out", overwrite: true }),
-        });
-      });
-      return () => mm.revert();
-    },
-    { scope: grid }
-  );
 
   return (
     <Section bg="soft" id="treatments" aria-labelledby="treatments-title" className="overflow-clip">

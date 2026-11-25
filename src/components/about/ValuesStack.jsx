@@ -67,15 +67,6 @@ export default function ValuesStack() {
             scrollTrigger: { trigger: next, start: "top 85%", end: "top 20%", scrub: true },
           });
         });
-        cards.forEach((card) => {
-          gsap.from(card.querySelector(".value-word"), {
-            xPercent: 30,
-            opacity: 0,
-            ease: "expo.out",
-            duration: 1.4,
-            scrollTrigger: { trigger: card, start: "top 75%", once: true },
-          });
-        });
       });
       return () => mm.revert();
     },

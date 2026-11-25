@@ -99,23 +99,19 @@ function DetailPanel({ t, index }) {
 export default function TreatmentDetails() {
   const root = useRef(null);
   const [active, setActive] = useState(treatments[0].slug);
-  const reveals = useRef({});
   const jumping = useRef(false);
 
   // A jump to a panel (side menu or a "Read details" card; the scroll itself runs in SmoothScroll):
-  // highlight it straight away, keep the panels passed on the way from flickering the highlight, and
-  // start its entrance now so it has finished building in by the time the scroll arrives.
+  // highlight it straight away and keep the panels passed on the way from flickering the highlight.
   useEffect(() => {
     let timer;
     const onJump = (e) => {
       const { id, duration } = e.detail;
-      const tl = reveals.current[id];
-      if (!tl) return;
+      if (!document.getElementById(id)?.classList.contains("detail-panel")) return;
       setActive(id);
       jumping.current = true;
       clearTimeout(timer);
       timer = setTimeout(() => (jumping.current = false), duration * 1000 + 200);
-      if (tl.progress() === 0 && !tl.isActive()) tl.play(0);
     };
     window.addEventListener(JUMP_EVENT, onJump);
     return () => {
@@ -141,19 +137,6 @@ export default function TreatmentDetails() {
       mm.add(MOTION_OK, () => {
         panels.forEach((panel) => {
           const q = gsap.utils.selector(panel);
-          const tl = gsap.timeline({
-            defaults: { ease: "expo.out" },
-            scrollTrigger: { trigger: panel, start: "top 82%", once: true },
-          });
-          reveals.current[panel.id] = tl;
-          tl.from(panel, { y: 80, opacity: 0, scale: 0.96, duration: 1.2 })
-            .from(q(".detail-icon"), { scale: 0, rotate: -120, duration: 1, ease: "back.out(1.8)" }, "-=0.9")
-            .from(q(".detail-num"), { xPercent: 40, opacity: 0, duration: 1.4 }, "<")
-            .from(q(".detail-copy"), { y: 20, opacity: 0, duration: 0.9 }, "-=1.1")
-            .from(q(".detail-check"), { x: -24, opacity: 0, stagger: 0.08, duration: 0.8 }, "-=0.7")
-            .from(q(".detail-step"), { x: 24, opacity: 0, stagger: 0.09, duration: 0.8 }, "<")
-            .fromTo(q(".detail-rail"), { scaleY: 0 }, { scaleY: 1, duration: 1.2, ease: "power2.inOut" }, "<0.1");
-
           gsap.to(q(".detail-glow"), {
             yPercent: 60,
             ease: "none",
