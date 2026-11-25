@@ -29,13 +29,18 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const active = usePathname();
-  // A section link stays highlighted on its sub-pages too (Blog on /blog/<article>).
-  const isCurrent = (href) => (href === "/" ? active === "/" : active === href || active.startsWith(`${href}/`));
+  const pathname = usePathname();
   const [hovered, setHovered] = useState(null);
   const lastY = useRef(0);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  // The active link is only known on the client: the prerendered HTML can be built without the route,
+  // so highlighting during hydration produced a mismatch (React error #418) and a full client re-render.
+  // Waiting for mount keeps the first client render identical to the server HTML.
+  const active = mounted ? pathname : null;
+  // A section link stays highlighted on its sub-pages too (Blog on /blog/<article>).
+  const isCurrent = (href) =>
+    active != null && (href === "/" ? active === "/" : active === href || active.startsWith(`${href}/`));
 
   useEffect(() => {
     const onScroll = () => {
