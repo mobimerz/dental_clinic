@@ -1,9 +1,11 @@
 import MotionProvider from "@/components/common/MotionProvider";
 import FloatingContact from "@/components/common/FloatingContact";
+import ScrollHint from "@/components/common/ScrollHint";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
-// Shared frame for every page: motion layer, header, footer and the floating contact button.
+// Shared frame for every page: motion layer, header, footer, the floating contact button and the
+// "scroll to explore" cue.
 // It lives in each page (not the root layout) so smooth scroll and parallax re-initialise per route.
 export default function SiteShell({ children }) {
   return (
@@ -18,6 +20,7 @@ export default function SiteShell({ children }) {
       <main id="main">{children}</main>
       <Footer />
       <FloatingContact />
+      <ScrollHint />
     </MotionProvider>
   );
 }

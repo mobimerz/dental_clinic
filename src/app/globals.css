@@ -102,6 +102,15 @@
 
 /* Overlap pattern: a card band that pulls up into the banner above it (Trust bar, Contact cards).
    One pull-up value everywhere: the Home Trust bar's original 24px / 40px. */
+/* The section straight after an inner-page banner starts closer to it, so its heading is
+   already on screen when the page opens (the banner's own bottom padding gives the gap). */
+[data-page-banner] + .section-default {
+  padding-top: 2rem;
+  @media (width >= 64rem) {
+    padding-top: 2.5rem;
+  }
+}
+
 @utility overlap-up {
   position: relative;
   z-index: 10;
