@@ -26,9 +26,22 @@ const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2
 
 // Smooth in-page jump. Ease-in-out with a distance-based duration, so long jumps don't crawl through
 // the last stretch (the site's ease-out scroll curve made them look like they stopped one item early).
+// A target with data-jump-show="<id>" also brings that element (e.g. a form) fully into view:
+// the page stops lower when needed, but never past that element's own top.
+function scrollTarget(el) {
+  let target = layoutTop(el) + HEADER_OFFSET;
+  const show = el.dataset.jumpShow && document.getElementById(el.dataset.jumpShow);
+  if (show) {
+    const showTop = layoutTop(show);
+    const needed = showTop + show.offsetHeight + 24 - window.innerHeight;
+    if (needed > target) target = Math.min(needed, showTop + HEADER_OFFSET - 16);
+  }
+  return Math.max(0, target);
+}
+
 export function jumpTo(el, { immediate = false } = {}) {
   if (!el) return;
-  const target = Math.max(0, layoutTop(el) + HEADER_OFFSET);
+  const target = scrollTarget(el);
   if (!instance) {
     window.scrollTo({ top: target, behavior: immediate ? "auto" : "smooth" });
     return;

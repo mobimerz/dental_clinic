@@ -15,6 +15,28 @@ const field =
   "w-full rounded-2xl bg-soft px-4 py-3.5 text-body text-ink ring-1 ring-line outline-none transition placeholder:text-muted/70 focus:bg-white focus:ring-2 focus:ring-primary";
 const label = "mb-2 block text-sm font-semibold text-secondary";
 
+// Time slots per day, built from the clinic timings so the form never offers a closed session.
+// Sunday has a single morning session; Monday–Saturday have a morning and an evening one.
+const [weekdayHours, sundayHours] = clinic.hours;
+const sessionNames = ["Morning", "Evening"];
+const slotLabels = (slots) => slots.map((slot, i) => `${sessionNames[i]} (${slot})`);
+const weekdaySlots = slotLabels(weekdayHours.slots);
+const sundaySlots = slotLabels(sundayHours.slots);
+
+// "YYYY-MM-DD" of a local date (toISOString would give yesterday's date before 5:30 AM in India).
+function localISODate(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+// Weekday of a "YYYY-MM-DD" value, read as a local date (0 = Sunday).
+function weekdayOf(value) {
+  const [y, m, d] = value.split("-").map(Number);
+  return new Date(y, m - 1, d).getDay();
+}
+
+// Treatment dropdown: A–Z, with "Others" added last in the markup.
+const treatmentOptions = treatments.map((t) => t.title).sort((a, b) => a.localeCompare(b, "en"));
+
 // Loader icon that spins while the request is sending (passed to Button as its icon).
 function Spinner({ className = "", ...props }) {
   return <Loader2 className={`${className} animate-spin`} {...props} />;
@@ -25,6 +47,18 @@ export default function AppointmentForm() {
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  // No date picked yet: show every session. A Sunday only offers the Sunday session.
+  const timeSlots = date && weekdayOf(date) === 0 ? sundaySlots : weekdaySlots;
+
+  function onDateChange(e) {
+    const next = e.target.value;
+    setDate(next);
+    const slots = next && weekdayOf(next) === 0 ? sundaySlots : weekdaySlots;
+    if (time && !slots.includes(time)) setTime("");
+  }
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -44,6 +78,8 @@ export default function AppointmentForm() {
         throw new Error(json.error || "Something went wrong.");
       }
       form.reset();
+      setDate("");
+      setTime("");
       setStatus("sent");
     } catch (err) {
       setError(err.message || `Something went wrong. Please call ${clinic.phone.display}.`);
@@ -51,10 +87,10 @@ export default function AppointmentForm() {
     }
   }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localISODate();
 
   return (
-    <Section bg="soft" id="book" aria-labelledby="book-heading">
+    <Section bg="soft" id="book" data-jump-show="book-form" aria-labelledby="book-heading">
       <Container>
         <SectionHeading
           id="book-heading"
@@ -64,7 +100,7 @@ export default function AppointmentForm() {
         />
 
         <Reveal y={30}>
-          <div className={`header-gap mx-auto max-w-3xl bg-white shadow-lift ring-1 ring-line ${panel}`}>
+          <div id="book-form" className={`header-gap mx-auto max-w-3xl bg-white shadow-lift ring-1 ring-line ${panel}`}>
             {status === "sent" ? (
               <div role="status" className="flex flex-col items-center py-10 text-center">
                 <CheckCircle2 className="h-14 w-14 text-primary" aria-hidden="true" />
@@ -107,22 +143,24 @@ export default function AppointmentForm() {
                 <div>
                   <label htmlFor="ap-treatment" className={label}>Treatment</label>
                   <select id="ap-treatment" name="treatment" defaultValue="" className={field}>
-                    <option value="">Not sure / general check-up</option>
-                    {treatments.map((t) => (
-                      <option key={t.slug} value={t.title}>{t.title}</option>
+                    <option value="" disabled hidden>Select a treatment</option>
+                    {treatmentOptions.map((title) => (
+                      <option key={title} value={title}>{title}</option>
                     ))}
+                    <option value="Others">Others</option>
                   </select>
                 </div>
                 <div>
                   <label htmlFor="ap-date" className={label}>Preferred date</label>
-                  <input id="ap-date" name="date" type="date" min={today} className={field} />
+                  <input id="ap-date" name="date" type="date" min={today} value={date} onChange={onDateChange} className={field} />
                 </div>
                 <div>
                   <label htmlFor="ap-time" className={label}>Preferred time</label>
-                  <select id="ap-time" name="time" defaultValue="" className={field}>
+                  <select id="ap-time" name="time" value={time} onChange={(e) => setTime(e.target.value)} className={field}>
                     <option value="">Any time</option>
-                    <option>Morning (10:30 AM – 2:00 PM)</option>
-                    <option>Evening (5:00 PM – 9:00 PM)</option>
+                    {timeSlots.map((slot) => (
+                      <option key={slot} value={slot}>{slot}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="sm:col-span-2">

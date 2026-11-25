@@ -119,7 +119,7 @@ function requestRows(d, { forClinic }) {
     rows.push(["Phone", `<a href="tel:+${digits(d.phone)}" style="color:${C.primary};font-weight:600;text-decoration:none">${escapeHtml(d.phone)}</a>`]);
     rows.push(["Email", d.email ? `<a href="mailto:${escapeHtml(d.email)}" style="color:${C.primary};text-decoration:none">${escapeHtml(d.email)}</a>` : `<span style="color:${C.muted}">Not provided</span>`]);
   }
-  rows.push(["Treatment", escapeHtml(d.treatment || "General check-up / not sure")]);
+  rows.push(["Treatment", escapeHtml(d.treatment || "Not specified")]);
   rows.push(["Preferred date", escapeHtml(formatDate(d.date) || "Any day")]);
   rows.push(["Preferred time", escapeHtml(d.time || "Any time")]);
   if (d.message) rows.push(["Message", nl2br(d.message)]);
@@ -139,7 +139,7 @@ export function clinicNotificationEmail(d) {
   ].join("");
 
   const html = layout({
-    preheader: `${d.name} · ${d.phone} · ${d.treatment || "General check-up"} · ${formatDate(d.date) || "Any day"}`,
+    preheader: `${d.name} · ${d.phone} · ${d.treatment || "Treatment not specified"} · ${formatDate(d.date) || "Any day"}`,
     eyebrow: "New website request",
     title: `New appointment request from ${escapeHtml(d.name)}`,
     body: `${p(`Received ${escapeHtml(receivedAt())} via the website Contact page. Please call the patient to confirm a slot.`, `color:${C.muted}`)}
@@ -156,7 +156,7 @@ ${d.email ? p(`Replying to this email goes straight to ${escapeHtml(d.email)}.`,
     `Name: ${d.name}`,
     `Phone: ${d.phone}`,
     `Email: ${d.email || "Not provided"}`,
-    `Treatment: ${d.treatment || "General check-up / not sure"}`,
+    `Treatment: ${d.treatment || "Not specified"}`,
     `Preferred date: ${formatDate(d.date) || "Any day"}`,
     `Preferred time: ${d.time || "Any time"}`,
     d.message ? `Message: ${d.message}` : "",
@@ -201,7 +201,7 @@ ${p(`Warm regards,<br><strong style="color:${C.secondary}">The ${escapeHtml(clin
     "This is a request, not a confirmed booking yet.",
     "",
     "Your request",
-    `Treatment: ${d.treatment || "General check-up / not sure"}`,
+    `Treatment: ${d.treatment || "Not specified"}`,
     `Preferred date: ${formatDate(d.date) || "Any day"}`,
     `Preferred time: ${d.time || "Any time"}`,
     d.message ? `Message: ${d.message}` : "",
