@@ -27,11 +27,9 @@ function MenuIcon({ open }) {
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const [hovered, setHovered] = useState(null);
-  const lastY = useRef(0);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   // The active link is only known on the client: the prerendered HTML can be built without the route,
@@ -44,13 +42,8 @@ export default function Header() {
 
   useEffect(() => {
     const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 24);
-      // Tuck the header away while scrolling down, bring it back on any upward scroll
-      if (Math.abs(y - lastY.current) > 6) {
-        setHidden(y > lastY.current && y > 320);
-        lastY.current = y;
-      }
+      // The header stays pinned to the top on every scroll; it only gains a white backdrop once off the top.
+      setScrolled(window.scrollY > 24);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -69,8 +62,6 @@ export default function Header() {
 
   return (
     <motion.header
-      animate={{ y: hidden && !open ? "-110%" : "0%" }}
-      transition={{ duration: 0.55, ease }}
       className={`sticky top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-premium ${
         scrolled
           ? "bg-white/85 shadow-[0_1px_0_rgb(11_52_64/0.06),0_10px_30px_-18px_rgb(11_52_64/0.25)] backdrop-blur-xl"
@@ -157,8 +148,8 @@ export default function Header() {
         </motion.div>
       </div>
 
-      {/* Portalled to <body>: the header itself is transformed (hide-on-scroll), which would
-          otherwise trap a position:fixed drawer inside it. */}
+      {/* Portalled to <body>: the header's backdrop-filter would otherwise trap a
+          position:fixed drawer inside it. */}
       {mounted && createPortal(<MobileDrawer open={open} isCurrent={isCurrent} onClose={() => setOpen(false)} />, document.body)}
     </motion.header>
   );
