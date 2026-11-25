@@ -10,9 +10,10 @@ import Container from "@/components/ui/Container";
 import { panel } from "@/components/ui/styles";
 import { clinic } from "@/data/clinic";
 import { treatments } from "@/data/treatments";
+import { validateAppointment } from "@/lib/appointmentValidation";
 
 const field =
-  "w-full rounded-2xl bg-soft px-4 py-3.5 text-body text-ink ring-1 ring-line outline-none transition placeholder:text-muted/70 focus:bg-white focus:ring-2 focus:ring-primary";
+  "w-full rounded-2xl bg-soft px-4 py-3.5 text-body text-ink ring-1 ring-line outline-none transition placeholder:text-muted/70 focus:bg-white focus:ring-2 focus:ring-primary aria-[invalid=true]:bg-red-50/60 aria-[invalid=true]:ring-red-400";
 const label = "mb-2 block text-sm font-semibold text-secondary";
 
 // Time slots per day, built from the clinic timings so the form never offers a closed session.
@@ -63,6 +64,18 @@ export default function AppointmentForm() {
   async function onSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
+    const values = Object.fromEntries(new FormData(form));
+
+    // Check here first so mistakes show instantly; the server runs the same checks.
+    const errors = validateAppointment(values);
+    if (Object.keys(errors).length) {
+      setFieldErrors(errors);
+      setError("");
+      setStatus("idle");
+      form.elements[Object.keys(errors)[0]]?.focus();
+      return;
+    }
+
     setStatus("sending");
     setError("");
     setFieldErrors({});
@@ -70,7 +83,7 @@ export default function AppointmentForm() {
       const res = await fetch("/api/appointment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        body: JSON.stringify(values),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -88,6 +101,22 @@ export default function AppointmentForm() {
   }
 
   const today = localISODate();
+
+  // After a field has shown an error, re-check it as the user edits so the message clears once fixed.
+  function recheck(e) {
+    const { name, value } = e.target;
+    if (!fieldErrors[name]) return;
+    const errs = validateAppointment({ name: "xx", phone: "9999999999", email: "", [name]: value });
+    setFieldErrors((prev) => ({ ...prev, [name]: errs[name] }));
+  }
+
+  // Check a field when the user leaves it, but only once they've typed something.
+  function checkOnBlur(e) {
+    const { name, value } = e.target;
+    if (!value.trim()) return;
+    const errs = validateAppointment({ name: "xx", phone: "9999999999", email: "", [name]: value });
+    setFieldErrors((prev) => ({ ...prev, [name]: errs[name] }));
+  }
 
   return (
     <Section bg="soft" id="book" data-jump-show="book-form" aria-labelledby="book-heading">
@@ -127,18 +156,18 @@ export default function AppointmentForm() {
 
                 <div>
                   <label htmlFor="ap-name" className={label}>Full name *</label>
-                  <input id="ap-name" name="name" required autoComplete="name" className={field} aria-invalid={!!fieldErrors.name} />
-                  {fieldErrors.name && <p className="mt-1.5 text-sm text-red-600">{fieldErrors.name}</p>}
+                  <input id="ap-name" name="name" required autoComplete="name" maxLength={80} onChange={recheck} onBlur={checkOnBlur} className={field} aria-invalid={!!fieldErrors.name} aria-describedby={fieldErrors.name ? "ap-name-error" : undefined} />
+                  {fieldErrors.name && <p id="ap-name-error" className="mt-1.5 text-sm text-red-600">{fieldErrors.name}</p>}
                 </div>
                 <div>
                   <label htmlFor="ap-phone" className={label}>Phone *</label>
-                  <input id="ap-phone" name="phone" type="tel" required autoComplete="tel" placeholder="+91" className={field} aria-invalid={!!fieldErrors.phone} />
-                  {fieldErrors.phone && <p className="mt-1.5 text-sm text-red-600">{fieldErrors.phone}</p>}
+                  <input id="ap-phone" name="phone" type="tel" inputMode="tel" required autoComplete="tel" maxLength={20} placeholder="10-digit mobile number" onChange={recheck} onBlur={checkOnBlur} className={field} aria-invalid={!!fieldErrors.phone} aria-describedby={fieldErrors.phone ? "ap-phone-error" : undefined} />
+                  {fieldErrors.phone && <p id="ap-phone-error" className="mt-1.5 text-sm text-red-600">{fieldErrors.phone}</p>}
                 </div>
                 <div>
                   <label htmlFor="ap-email" className={label}>Email</label>
-                  <input id="ap-email" name="email" type="email" autoComplete="email" className={field} aria-invalid={!!fieldErrors.email} />
-                  {fieldErrors.email && <p className="mt-1.5 text-sm text-red-600">{fieldErrors.email}</p>}
+                  <input id="ap-email" name="email" type="email" inputMode="email" autoComplete="email" maxLength={120} onChange={recheck} onBlur={checkOnBlur} className={field} aria-invalid={!!fieldErrors.email} aria-describedby={fieldErrors.email ? "ap-email-error" : undefined} />
+                  {fieldErrors.email && <p id="ap-email-error" className="mt-1.5 text-sm text-red-600">{fieldErrors.email}</p>}
                 </div>
                 <div>
                   <label htmlFor="ap-treatment" className={label}>Treatment</label>
