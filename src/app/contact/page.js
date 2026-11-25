@@ -4,6 +4,7 @@ import FaqSection from "@/components/sections/FaqSection";
 import ContactCards from "@/components/contact/ContactCards";
 import VisitInfo from "@/components/contact/VisitInfo";
 import AppointmentForm from "@/components/contact/AppointmentForm";
+import { Clock } from "lucide-react";
 import { clinic } from "@/data/clinic";
 
 export const metadata = {
@@ -35,6 +36,33 @@ const faqs = [
   },
 ];
 
+// Clinic timings card for the right side of the banner.
+function TimingsCard() {
+  return (
+    <div className="rounded-[2rem] bg-white p-6 shadow-lift ring-1 ring-line sm:p-8">
+      <div className="flex items-center gap-4">
+        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-soft text-primary ring-1 ring-accent/60">
+          <Clock className="h-6 w-6" aria-hidden="true" />
+        </span>
+        <h2 className="text-xl font-bold text-secondary">Clinic Timings</h2>
+      </div>
+      <dl className="mt-6 divide-y divide-line">
+        {clinic.hours.map(({ days, slots }) => (
+          <div key={days} className="py-4 first:pt-0 last:pb-0">
+            <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{days}</dt>
+            {slots.map((slot) => (
+              <dd key={slot} className="mt-1.5 text-lg font-semibold text-secondary">
+                {slot}
+              </dd>
+            ))}
+          </div>
+        ))}
+      </dl>
+      <p className="mt-5 text-sm text-muted">{clinic.hoursNote}</p>
+    </div>
+  );
+}
+
 export default function ContactPage() {
   return (
     <SiteShell>
@@ -43,6 +71,7 @@ export default function ContactPage() {
         title="We're Here to Help"
         highlight="Your Smile Shine."
         description="Call, message or drop by. Whether it's a check-up or a toothache that can't wait, we'll help you find a time that works."
+        aside={<TimingsCard />}
       />
       <ContactCards />
       <AppointmentForm />

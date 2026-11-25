@@ -22,8 +22,9 @@ const chipIcons = { award: Award, calendar: CalendarCheck, clock: Clock, pin: Ma
 // curtains with floating chips. Scrolling away lifts the copy and sinks the photo.
 //   title      – first line of the heading
 //   highlight  – second line, shown in the teal gradient with a drawn underline
+//   aside      – optional node shown in the right column when there is no photo (e.g. clinic timings)
 //   chips      – one small floating card on the photo: { icon: "star" | "award" | …, label, value }
-export default function PageBanner({ eyebrow, title, highlight, description, image, imagePosition = "object-center", chips = [], children }) {
+export default function PageBanner({ eyebrow, title, highlight, description, image, imagePosition = "object-center", chips = [], aside, children }) {
   const root = useRef(null);
 
   useGSAP(
@@ -63,7 +64,7 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
       {/* Same container, padding and gaps as the Home hero */}
       <div
         className={`container-page grid gap-12 pb-16 pt-8 sm:pt-12 lg:grid-rows-[minmax(440px,auto)] lg:items-stretch lg:gap-10 lg:pb-16 lg:pt-6 ${
-          image ? "lg:grid-cols-[minmax(0,1fr)_420px]" : ""
+          image || aside ? "lg:grid-cols-[minmax(0,1fr)_420px]" : ""
         }`}
       >
         <div className="ph-copy-wrap relative max-w-xl xl:max-w-[44rem]">
@@ -109,6 +110,10 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
             {children && <div className="ph-extra intro [--d:0.32] mt-8 flex flex-col gap-3 min-[420px]:flex-row">{children}</div>}
           </div>
         </div>
+
+        {!image && aside && (
+          <div className="ph-visual intro [--d:0.3] mx-auto w-full max-w-[460px] lg:mr-0 lg:max-w-[420px] lg:self-center">{aside}</div>
+        )}
 
         {image && (
           <div className="ph-visual relative mx-auto w-full max-w-[460px] lg:mr-0 lg:max-w-[420px] lg:self-stretch">

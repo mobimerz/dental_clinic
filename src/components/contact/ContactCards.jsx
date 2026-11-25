@@ -3,12 +3,20 @@
 import Section from "@/components/ui/Section";
 import Container from "@/components/ui/Container";
 import { motion } from "motion/react";
-import { ArrowUpRight, Navigation, Phone } from "lucide-react";
+import { ArrowUpRight, CalendarCheck, Navigation, Phone } from "lucide-react";
 import Tilt from "@/components/common/Tilt";
 import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import { clinic, whatsappLink } from "@/data/clinic";
 
 const cards = [
+  {
+    icon: CalendarCheck,
+    label: "Request an Appointment",
+    value: "Book a visit",
+    text: "Fill in the short form and we will confirm your slot.",
+    href: "#book",
+    fill: "from-secondary to-[#0e4252]",
+  },
   {
     icon: Phone,
     label: "Call the Clinic",
@@ -39,12 +47,12 @@ const cards = [
 
 const ease = [0.22, 1, 0.36, 1];
 
-// Three ways to get in touch. On hover a colour fill sweeps up through the card,
+// Four ways to get in touch. On hover a colour fill sweeps up through the card,
 // turning its text white, and the arrow flies out and back in.
 export default function ContactCards() {
   return (
     <Section variant="overlap" spaced aria-label="Ways to contact us">
-      <Container as="ul" className="grid gap-6 md:grid-cols-3">
+      <Container as="ul" className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
         {cards.map(({ icon: Icon, label, value, text, href, external, fill }, i) => (
           <motion.li
             key={label}
@@ -57,7 +65,7 @@ export default function ContactCards() {
               <a
                 href={href}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] bg-white p-6 shadow-lift ring-1 ring-line md:p-8"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] bg-white p-6 shadow-lift ring-1 ring-line md:p-8 lg:p-6 xl:p-7"
               >
                 <span
                   aria-hidden="true"
@@ -75,7 +83,7 @@ export default function ContactCards() {
                     />
                   </span>
                 </span>
-                <span className="relative mt-8 text-sm font-semibold uppercase tracking-[0.16em] text-primary transition-colors duration-500 group-hover:text-white/80">
+                <span className="relative mt-8 text-sm font-semibold uppercase tracking-[0.16em] lg:min-h-[2.75rem] text-primary transition-colors duration-500 group-hover:text-white/80">
                   {label}
                 </span>
                 <span className="relative mt-2 text-h3-lg text-secondary transition-colors duration-500 group-hover:text-white">
