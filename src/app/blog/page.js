@@ -1,6 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Clock } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import SiteShell from "@/components/layout/SiteShell";
 import PageBanner from "@/components/sections/PageBanner";
 import CtaBanner from "@/components/sections/CtaBanner";
@@ -17,49 +16,43 @@ export const metadata = {
   alternates: { canonical: "/blog" },
 };
 
-function PostMeta({ post }) {
+// Card header: a clean brand gradient with the topic, instead of the dense infographic
+// (which every post currently shares). The infographic stays on the article page.
+function CardHeader({ category }) {
   return (
-    <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
-      <span className="inline-flex items-center gap-1.5">
-        <CalendarDays className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-        <time dateTime={post.date}>{formatDate(post.date)}</time>
+    <div className="relative flex h-40 items-center justify-center overflow-hidden bg-gradient-to-br from-secondary via-[#0e4252] to-primary px-6">
+      <div aria-hidden="true" className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent/20 blur-2xl" />
+      <div aria-hidden="true" className="absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-primary/40 blur-2xl" />
+      <span className="relative text-center text-2xl font-extrabold tracking-[-0.02em] text-white transition-transform duration-700 ease-premium group-hover:scale-105">
+        {category}
       </span>
-      <span className="inline-flex items-center gap-1.5">
-        <Clock className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-        {readingMinutes(post)} min read
-      </span>
-    </p>
+    </div>
   );
 }
 
-// Compact card so several fit in a row and readers can scan by topic. The whole card is one link.
-// Images are 3:2 infographics with text, so they are never cropped.
+// One link per card: topic header, category, title, short excerpt, then date and "Read more".
 function PostCard({ post }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
       className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-line transition-[translate,box-shadow] duration-500 ease-premium hover:-translate-y-1 hover:shadow-lift hover:ring-accent"
     >
-      <div className="relative aspect-[3/2] overflow-hidden bg-soft">
-        <Image
-          src={post.image.src}
-          alt={post.image.alt}
-          fill
-          sizes="(min-width: 1280px) 300px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-contain transition-transform duration-700 ease-premium group-hover:scale-[1.02]"
-        />
-      </div>
-      <div className="flex flex-1 flex-col p-5">
-        <span className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-primary">{post.category}</span>
-        <h3 className="mt-2 line-clamp-3 text-base font-bold leading-snug text-secondary">
+      <CardHeader category={post.category} />
+      <div className="flex flex-1 flex-col p-6">
+        <span className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{post.category}</span>
+        <h3 className="mt-3 line-clamp-3 text-lg font-bold leading-snug text-secondary">
           {post.title} {post.highlight}
         </h3>
-        <p className="mt-2 line-clamp-2 text-sm text-muted">{post.excerpt}</p>
-        <div className="mt-auto pt-4">
-          <PostMeta post={post} />
-          <span className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-            Read the article
-            <ArrowRight className="h-4 w-4 transition-transform duration-500 ease-premium group-hover:translate-x-1" aria-hidden="true" />
+        <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">{post.excerpt}</p>
+        <div className="mt-auto flex items-center justify-between gap-4 pt-6 text-sm">
+          <span className="flex flex-wrap gap-x-1.5 text-muted">
+            <time dateTime={post.date} className="whitespace-nowrap">{formatDate(post.date)}</time>
+            <span aria-hidden="true">·</span>
+            <span className="whitespace-nowrap">{readingMinutes(post)} min read</span>
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1.5 font-semibold text-secondary transition-colors duration-500 group-hover:text-primary">
+            Read more
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-500 ease-premium group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
           </span>
         </div>
       </div>
@@ -87,7 +80,7 @@ export default function BlogPage() {
       <Section aria-labelledby="posts-title">
         <Container>
           <SectionHeading id="posts-title" eyebrow="Latest Articles" title="Read, Then Ask Us Anything." />
-          <ul className="header-gap grid gap-5 sm:grid-cols-[repeat(auto-fit,minmax(15rem,17rem))] sm:justify-center">
+          <ul className="header-gap grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <li key={post.slug}>
                 <PostCard post={post} />
