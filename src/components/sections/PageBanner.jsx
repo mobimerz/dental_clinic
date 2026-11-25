@@ -16,8 +16,7 @@ const chipIcons = { award: Award, calendar: CalendarCheck, clock: Clock, pin: Ma
 
 // Opening banner for inner pages: a shorter version of the Home hero. Same container, grid
 // (text | 420px photo), padding, H1 size, text rhythm and photo treatment; the row is a fixed
-// 360px on desktop so every inner banner has the same height, with or without a photo. Kept short
-// so the next section's heading shows on the first screen and visitors can see the page goes on.
+// 420px on desktop so every inner banner has the same height, with or without a photo.
 // Motion is unchanged from the original inner-page banner: the title's first line flips in
 // letter by letter, the highlighted second line focuses in, and the photo opens behind two colour
 // curtains with floating chips. Scrolling away lifts the copy and sinks the photo.
@@ -65,7 +64,7 @@ export default function PageBanner({ eyebrow, title, highlight, description, ima
 
       {/* Same container, padding and gaps as the Home hero */}
       <div
-        className={`container-page grid gap-10 pb-10 pt-8 sm:pt-10 lg:grid-rows-[minmax(360px,auto)] lg:items-stretch lg:gap-10 lg:pb-6 lg:pt-4 ${
+        className={`container-page grid gap-12 pb-14 pt-8 sm:pt-12 lg:grid-rows-[minmax(420px,auto)] lg:items-stretch lg:gap-10 lg:pb-16 lg:pt-6 ${
           image || aside ? "lg:grid-cols-[minmax(0,1fr)_420px]" : ""
         }`}
       >
