@@ -85,7 +85,7 @@ export default function BlogPage() {
           <div className="header-gap">
             <PostCard post={latest} featured />
             {rest.length > 0 && (
-              <ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <ul className={`mt-6 grid gap-6 md:grid-cols-2 ${rest.length === 2 ? "" : "lg:grid-cols-3"}`}>
                 {rest.map((post) => (
                   <li key={post.slug}>
                     <PostCard post={post} />
