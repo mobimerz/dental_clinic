@@ -1,11 +1,10 @@
 "use client";
 
-import { useRef } from "react";
-import { ArrowDown, ArrowRight, CalendarCheck, ClipboardList, HeartHandshake, MessageCircle, Stethoscope } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowLeft, ArrowRight, CalendarCheck, ClipboardList, HeartHandshake, MessageCircle, Stethoscope } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import { card } from "@/components/ui/styles";
 import { GlowOrb } from "@/components/common/FloatingShapes";
-import { gsap, useGSAP } from "@/lib/gsap";
 
 const steps = [
   {
@@ -35,59 +34,46 @@ const steps = [
   },
 ];
 
-// "Your visit, step by step". On desktop the section pins and the steps travel sideways
-// as you scroll, with a progress line filling beneath; on smaller screens it's a vertical list.
+// "Your visit, step by step". On desktop the steps sit in a sideways row the reader moves through
+// with the left/right arrows (or a trackpad swipe); the page itself scrolls normally the whole
+// time, nothing is pinned. A progress line under the row shows how far along it is.
+// On smaller screens the steps simply stack.
 export default function VisitJourney() {
-  const root = useRef(null);
+  const track = useRef(null);
+  const [edges, setEdges] = useState({ start: true, end: false });
+  const [progress, setProgress] = useState(0);
 
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(root);
-      const mm = gsap.matchMedia();
+  const update = useCallback(() => {
+    const el = track.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setEdges({ start: el.scrollLeft <= 4, end: el.scrollLeft >= max - 4 });
+    setProgress(max > 0 ? el.scrollLeft / max : 1);
+  }, []);
 
-      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
-        const track = q(".journey-track")[0];
-        const distance = () => track.scrollWidth - track.parentElement.clientWidth;
-        const tween = gsap.to(track, {
-          x: () => -distance(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: q(".journey-pin")[0],
-            start: "top top",
-            end: () => `+=${distance()}`,
-            pin: true,
-            scrub: 0.8,
-            invalidateOnRefresh: true,
-          },
-        });
-        gsap.fromTo(
-          q(".journey-progress"),
-          { scaleX: 0 },
-          {
-            scaleX: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: q(".journey-pin")[0],
-              start: "top top",
-              end: () => `+=${distance()}`,
-              scrub: true,
-              invalidateOnRefresh: true,
-            },
-          }
-        );
-      });
+  useEffect(() => {
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [update]);
 
-      return () => mm.revert();
-    },
-    { scope: root }
-  );
+  // One card (plus the gap) per click.
+  const step = (dir) => {
+    const el = track.current;
+    const first = el?.querySelector("li");
+    if (!el || !first) return;
+    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+    el.scrollBy({ left: dir * (first.offsetWidth + gap), behavior: "smooth" });
+  };
+
+  const arrow =
+    "flex h-12 w-12 items-center justify-center rounded-full bg-white text-secondary shadow-soft ring-1 ring-line transition-all duration-300 hover:bg-primary hover:text-white hover:ring-primary disabled:pointer-events-none disabled:opacity-35";
 
   return (
-    <section ref={root} aria-labelledby="journey-title" className="relative overflow-clip bg-soft">
-      {/* Pinned on desktop while the track scrolls sideways, so this wrapper keeps its full-screen height */}
-      <div className="journey-pin relative flex flex-col justify-center section-default lg:min-h-screen">
+    <section aria-labelledby="journey-title" className="relative overflow-clip bg-soft">
+      <div className="relative section-default">
         <GlowOrb className="-right-40 top-10 h-[460px] w-[460px] bg-accent/70" />
-        <div className="container-page relative">
+        <div className="container-page relative lg:flex lg:items-end lg:justify-between lg:gap-10">
           <SectionHeading
             id="journey-title"
             eyebrow="Your Visit, Step by Step"
@@ -95,15 +81,29 @@ export default function VisitJourney() {
             description="Here's what a typical journey looks like at A-Zee Dental, from your first message to your follow-up."
             align="left"
           />
+          <div className="hidden shrink-0 gap-3 lg:flex">
+            <button type="button" onClick={() => step(-1)} disabled={edges.start} aria-label="Previous step" aria-controls="journey-track" className={arrow}>
+              <ArrowLeft className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button type="button" onClick={() => step(1)} disabled={edges.end} aria-label="Next step" aria-controls="journey-track" className={arrow}>
+              <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
         </div>
 
         <div className="container-page header-gap relative">
-          <div className="lg:overflow-visible">
-            <ol className="journey-track flex flex-col gap-6 lg:w-max lg:flex-row lg:pr-[10vw]">
+          {/* Extra vertical padding inside the scroller so the cards' hover lift and shadow aren't clipped */}
+          <div
+            ref={track}
+            id="journey-track"
+            onScroll={update}
+            className="lg:-mx-4 lg:-my-6 lg:snap-x lg:snap-mandatory lg:overflow-x-auto lg:scroll-px-4 lg:px-4 lg:py-6 lg:[scrollbar-width:none] lg:[&::-webkit-scrollbar]:hidden"
+          >
+            <ol className="journey-track flex flex-col gap-6 lg:w-max lg:flex-row">
               {steps.map(({ icon: Icon, title, text }, i) => (
                 <li
                   key={title}
-                  className={`journey-card group relative flex flex-col overflow-hidden ${card} transition-[translate,box-shadow] duration-500 ease-premium hover:-translate-y-2 hover:shadow-lift hover:ring-accent lg:h-[340px] lg:w-[360px]`}
+                  className={`journey-card group relative flex flex-col overflow-hidden ${card} transition-[translate,box-shadow] duration-500 ease-premium hover:-translate-y-2 hover:shadow-lift hover:ring-accent lg:h-[340px] lg:w-[360px] lg:snap-start`}
                 >
                   <span
                     aria-hidden="true"
@@ -114,9 +114,9 @@ export default function VisitJourney() {
                   <span className="journey-icon relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-[#0A97A6] text-white shadow-glow transition-transform duration-500 ease-premium group-hover:-rotate-[10deg] group-hover:scale-110">
                     <Icon className="h-7 w-7 group-hover:icon-draw" aria-hidden="true" />
                   </span>
-                  {/* Step label with a cue to the next card: right on desktop (the track scrolls sideways),
+                  {/* Step label with a cue to the next card: right on desktop (the row scrolls sideways),
                       down on phones (cards stack). The last step has nothing after it, so no arrow. */}
-                  <span className="relative mt-auto flex items-center gap-3 pt-8 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                  <span className="relative flex min-h-[4.25rem] items-center gap-3 pt-8 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
                     Step {String(i + 1).padStart(2, "0")}
                     {i < steps.length - 1 && (
                       <>
@@ -138,7 +138,10 @@ export default function VisitJourney() {
             </ol>
           </div>
           <div aria-hidden="true" className="mt-8 hidden h-1 overflow-hidden rounded-full bg-white ring-1 ring-line lg:block">
-            <div className="journey-progress h-full origin-left rounded-full bg-gradient-to-r from-accent via-primary to-[#0A97A6]" />
+            <div
+              className="journey-progress h-full origin-left rounded-full bg-gradient-to-r from-accent via-primary to-[#0A97A6] transition-transform duration-300"
+              style={{ transform: `scaleX(${Math.max(progress, 0.08)})` }}
+            />
           </div>
         </div>
       </div>
